@@ -1,0 +1,9 @@
+node_modules
+
+
+# Environment varibales
+.env*
+!.env*.example
+
+yarn.lock
+package-lock.json

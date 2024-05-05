@@ -1,0 +1,1121 @@
+# For Swagger API Documentation
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+        role:
+          type: string
+          enum: [user, admin]
+        username:
+          type: string
+        bio:
+          type: string
+        country:
+          type: string
+        phoneNumber:
+          type: string
+        gender:
+          type: string
+          enum: [male, female, other]
+      example:
+        id: 5ebac534954b54139806c112
+        email: fake@example.com
+        firstName: fake
+        lastName: User
+        role: user
+        username: fakeusername
+        bio: fakebio
+        country: US
+        phoneNumber: 01231234
+        dateOfBirth:  2019-07-04T13:33:03.969Z ,
+        gender: male
+        profileImage:  base64encodedImage ,
+        profileBanner:  base64encodedImage ,
+        createdAt: 2022-11-16T07:46:18.588Z ,
+        updatedAt: 2022-11-16T07:46:18.588Z ,
+
+    Build:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+          example:
+        type:
+          type: number
+          description: (legacy or current)
+        description:
+          type: string
+        userId:
+          type: string
+        year:
+          type: object
+          properties:
+            value:
+              type: string
+            privacy:
+              type: number
+          trim:
+            type: object
+            properties:
+              value:
+                type: string
+              privacy:
+                type: number
+          engine:
+            type: object
+            properties:
+              value:
+                type: string
+              privacy:
+                type: number
+          driveTrain:
+            type: object
+            properties:
+              value:
+                type: string
+              privacy:
+                type: number
+          transmission:
+            type: object
+            properties:
+              value:
+                type: string
+              privacy:
+                type: number
+          horsepower:
+            type: object
+            properties:
+              value:
+                type: string
+              privacy:
+                type: number
+          make:
+            type: string
+          model:
+            type: string
+          bannerImage:
+            type: string
+          vin:
+            type: string
+          engineType:
+            type: string
+          engineCylinders:
+            type: string
+          transmissionType:
+            type: string
+          transmissionSpeed:
+            type: string
+      example:
+        _id: 63e50f2ecb1d6bcd83d457a8
+        userId: 5ebac534954b54139806c112
+        name: Lamborghini Urus
+        type: 1
+        year:
+          value: 2018
+          privacy: 1
+        trim:
+          value: 2018
+          privacy: 1
+        engine:
+          value: 8VTTG4.0
+          privacy: 1
+        driveTrain:
+          value: AWD
+          privacy: 1
+        transmission:
+          value: 8-Speed Automatic
+          privacy: 1
+        horsepower:
+          value: 641
+          privacy: 1
+        make: Lamborghini
+        model: Urus SUV
+        bannerImage: pathtofile
+        vin: ZPBUA1ZL9KLA00848
+        engineType: optional
+        engineCylinders: optional
+        transmissionType: optional
+        transmissionSpeed: optional
+    Post:
+      type: object
+      properties:
+        status:
+          type: Number
+          enum: [0,1]
+          example: 1
+        _id:
+          type: string
+          example: 63a41c5c1e09a7b9a256ce56
+        title:
+          type: string
+          example: "Title Of Post"
+        type:
+          type: Number
+          enum: [1, 2, 3, 4, 5, 6]
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eu convallis orci. Cras feugiat ex sit amet sapien
+        link:
+          type: string
+          example: https://www.google.com/
+        hashtags:
+          type: array
+          items:
+            type: string
+            example: tag1
+        buildId:
+          type: string
+          example: 14b41c5c1e09a7b9a256cx23
+        userId:
+          type: string
+          example: 63a41c5c1e09a7b9a256ce56
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+        metadata:
+          $ref: '#/components/schemas/PostMetaData'
+
+    Category:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 63ece170748ccf565e584beb
+        name:
+          type: string
+          example: Engine
+        type:
+          type: number
+          example: 2
+        componentsCount:
+          type: number
+          example: 4
+        components:
+          type: array
+          items:
+            $ref: '#components/schemas/Component'
+    Component:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 63ee1565eeed084463772050
+        name:
+          type: string
+          example: Fuel Injector
+        productSku:
+          type: string
+          example: XYZ12345
+        tagInstaller:
+          type: string
+          example: Sample text
+    BuildRating:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 63ee1565eeed084463772050
+        description:
+          type: string
+          example: what an average build honestly, a kid could've done better with his toys
+        buildId:
+          type: string
+          example: 63ee1565eeed084463772050
+        userId:
+          type: string
+          example: 63ee1565eeed084463772050
+        rating:
+          type: number
+          example: 3
+        build:
+          type: object
+          properties:
+            name:
+              type: string
+              example: A very Maybachly Maybach
+        user:
+          type: object
+          properties:
+            firstName:
+              type: string
+              example: John
+            lastName:
+              type: string
+              example: Doe
+            username:
+              type: string
+              example: johndoe
+            profileImage:
+              type: string
+              example: path/to/file
+        createdAt:
+          type: string
+          example: 2022-11-16T07:46:18.588Z
+        updatedAt:
+          type: string
+          example: 2022-11-16T07:46:18.588Z
+
+
+    ComponentCreated:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Success
+        data:
+          type: object
+          properties:
+            component:
+              $ref: '#/components/schemas/Component'
+    PostCreated:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Post Created Successfully
+        data:
+          type: object
+          properties:
+            post:
+              $ref: '#/components/schemas/Post'
+
+    BuildCreated:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Build Stored Successfully
+        data:
+          type: object
+          properties:
+            post:
+              $ref: '#/components/schemas/Build'
+    RatingCreated:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Rating Stored Successfully
+        data:
+          type: object
+          properties:
+            post:
+              $ref: '#/components/schemas/BuildRating'
+    RatingUpdated:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Rating Updated Successfully
+        data:
+          type: object
+          properties:
+            post:
+              $ref: '#/components/schemas/BuildRating'
+
+
+    BuildUpdated:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Build Updated Successfully
+        data:
+          type: object
+          properties:
+            post:
+              $ref: '#/components/schemas/Build'
+
+    Media:
+      type: object
+      properties:
+        path:
+          type: string
+          example: pathToFile
+        type:
+          type: number
+          example: 1
+        tags:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+                example: 4
+              locationX:
+                type: number
+                example: 74.66666666666667
+              locationY:
+                type: number
+                example: 12.479473922052994
+              userId:
+                type: string
+                example: 63da53d2a88908d7ceb87b06
+
+
+
+    PostMetaData:
+      type: object
+      properties:
+        imageCount:
+          type: number
+          example: 4
+        videoCount:
+          type: number
+          example: 3
+
+    AuthUser:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+        role:
+          type: string
+          enum: [ user, admin ]
+        username:
+          type: string
+        bio:
+          type: string
+        country:
+          type: string
+        phoneNumber:
+          type: string
+        gender:
+          type: string
+          enum: [ male, female, other ]
+      example:
+        id: 5ebac534954b54139806c112
+        email: fake@example.com
+        firstName: fake
+        lastName: Name
+        gender: male
+        role: user
+        username: fakeusername
+        bio: fakebio
+        country: US
+        phoneNumber: 01231234
+
+    Detail:
+      type: object
+      properties:
+        _id:
+          type: string
+        dateOfBirth:
+          type: string
+        profileImage:
+          type: string
+        profileBanner:
+          type: string
+        bio:
+          type: string
+        country:
+          type: string
+        userId:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    Social:
+      type: array
+      items:
+        type: object
+        properties:
+          network:
+            type: string
+            enum: [ Facebook, Instagram, Twitter, Youtube ]
+          url:
+            type: string
+
+    Hashtag:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 63b837b08066d93e182c3fa4
+        name:
+          type: string
+          example: suspension
+        postCount:
+          type: number
+          example: 3
+
+    UserCreated:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: User Created Successfully
+        data:
+          type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/User'
+
+    UserRegistered:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: User Registered Successfully
+        data:
+          type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/User'
+            tokens:
+              $ref: '#/components/schemas/AuthTokens'
+
+    LoginSuccess:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Login Successful
+        data:
+          type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/AuthUser'
+            tokens:
+              $ref: '#/components/schemas/AuthTokens'
+
+    UserResponse:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Success
+        data:
+          type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/User'
+
+    MultipleUsersResponse:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Success
+        data:
+          type: array
+          items:
+              $ref: '#/components/schemas/User'
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 10
+        totalPages:
+          type: integer
+          example: 1
+        totalResults:
+          type: integer
+          example: 1
+
+    PostResponse:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Success
+        data:
+          type: object
+          properties:
+            post:
+              $ref: '#/components/schemas/Post'
+
+    MultiplePostsResponse:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Success
+        data:
+          type: object
+          properties:
+            docs:
+              type: array
+              items:
+                $ref: '#/components/schemas/Post'
+            page:
+              type: number
+              example: 1
+            limit:
+              type: integer
+              example: 10
+            totalPages:
+              type: integer
+              example: 1
+            totalDocs:
+              type: integer
+              example: 1
+            pagingCounter:
+              type: integer
+              example: 1
+            hasPrevPage:
+              type: Boolean
+              example: false
+            hasNextPage:
+              type: Boolean
+              example: true
+            prevPage:
+              type: integer
+              example: 0
+            nextPage:
+              type: integer
+              example: 2
+
+    HashtagsListResponse:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Success
+        data:
+          type: object
+          properties:
+            hashtags:
+              type: array
+              items:
+                $ref: '#/components/schemas/Hashtag'
+    MultipleRatingsResponse:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Success
+        data:
+          type: object
+          properties:
+            ratings:
+              type: array
+              items:
+                $ref: '#/components/schemas/BuildRating'
+
+    Token:
+      type: object
+      properties:
+        token:
+          type: string
+        expires:
+          type: string
+          format: date-time
+      example:
+        token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWJhYzUzNDk1NGI1NDEzOTgwNmMxMTIiLCJpYXQiOjE1ODkyOTg0ODQsImV4cCI6MTU4OTMwMDI4NH0.m1U63blB0MLej_WfB7yC2FTMnCziif9X8yzwDEfJXAg
+        expires: 2020-05-12T16:18:04.793Z
+
+    AuthTokens:
+      type: object
+      properties:
+        access:
+          $ref: '#/components/schemas/Token'
+        refresh:
+          $ref: '#/components/schemas/Token'
+
+    ForgotPassword:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Success
+        data:
+          type: object
+          properties:
+            userId:
+              type: string
+              example: userId
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+
+    FollowList:
+      type: array
+      items:
+        type: object
+        properties:
+          _id:
+            type: string
+            example: 6374954a231be6009ff83d33
+          name:
+            type: string
+            example: John Doe
+
+    FollowCount:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Success
+        data:
+          type: object
+          properties:
+            followerCount:
+              type: number
+              example: 50
+            followingCount:
+              type: number
+              example: 100
+
+    FollowRequestCount:
+      type: object
+      properties:
+        requestsCount:
+          type: number
+          example: 50
+
+    MultipleBuildsResponse:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Success
+        data:
+          type: object
+          properties:
+            docs:
+              type: array
+              items:
+                $ref: '#/components/schemas/Build'
+            page:
+              type: number
+              example: 1
+            limit:
+              type: integer
+              example: 10
+            totalPages:
+              type: integer
+              example: 1
+            totalDocs:
+              type: integer
+              example: 1
+            pagingCounter:
+              type: integer
+              example: 1
+            hasPrevPage:
+              type: Boolean
+              example: false
+            hasNextPage:
+              type: Boolean
+              example: true
+            prevPage:
+              type: integer
+              example: 0
+            nextPage:
+              type: integer
+              example: 2
+
+    MultipleSubCategory:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Success
+        data:
+          type: object
+          properties:
+            docs:
+              type: array
+              items:
+                $ref: '#/components/schemas/Category'
+    
+    PostComment:
+        type: object
+        properties:
+          _id:
+            type: string
+            example: 63a41c5c1e09a7b9a256ce56
+          commentText:
+            type: string
+            example: "This a comment on Post"
+          postId:
+            type: string
+            example: 63a41c5c1e09a7b9a256ce56
+          parentCommentId:
+            type: string
+            example: 63a41c5c1e09a7b9a256ce56
+    PostReaction:
+        type: object
+        properties:
+          _id:
+            type: string
+            example: 63a41c5c1e09a7b9a256ce56
+          reactionType:
+            type: number
+            example: 1
+          postId:
+            type: string
+            example: 63a41c5c1e09a7b9a256ce56
+          parentCommentId:
+            type: string
+            example: 63a41c5c1e09a7b9a256ce56            
+  responses:
+    ForgotPassword:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ForgotPassword'
+
+    DuplicateEmail:
+      description: Email already taken
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Email already taken
+
+    BadRequest:
+      description: Invalid Input
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Invalid Input
+
+    OK:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 200
+            message: Success
+
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Please authenticate
+
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Not found
+
+    UserCreated:
+      description: User Created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserCreated'
+
+    UserRegistered:
+      description: User Registered
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserRegistered'
+
+    LoginSuccess:
+      description: User Login Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginSuccess'
+
+    UserResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserResponse'
+
+    MultipleUsersResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MultipleUsersResponse'
+
+    PostCreated:
+      description: Post Created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PostCreated'
+
+    PostResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PostResponse'
+
+    MultiplePostsResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MultiplePostsResponse'
+
+    HashtagsListResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HashtagsListResponse'
+
+    MultipleRatingsResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MultipleRatingsResponse'
+
+    SocialsResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+                example:
+              data:
+                $ref: '#/components/schemas/Social'
+
+    FollowCountResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FollowCount'
+
+    FollowRequestCountResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FollowRequestCount'
+
+
+    FollowListResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FollowList'
+
+
+    MultipleBuildsResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MultipleBuildsResponse'
+
+    BuildCreated:
+      description: Build Created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BuildCreated'
+
+    RatingCreated:
+      description: Build Rating Stored Successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RatingCreated'
+
+    RatingUpdated:
+      description: Build Rating Updated Successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RatingUpdated'
+
+    BuildUpdated:
+      description: Build Updated
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BuildUpdated'
+
+    ComponentCreated:
+      description: Component Created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ComponentCreated'
+
+    MultipleSubCategory:
+      description: Sub Categories Found Successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MultipleSubCategory'
+    CommentCreated:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Comment Created Successfully
+        data:
+          type: object
+          properties:
+            postComment:
+              $ref: '#/components/schemas/PostComment'
+    MultiplePostComments:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MultiplePostComments'
+    ReactionCreated:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Reaction Created Successfully
+        data:
+          type: object
+          properties:
+            postReaction:
+              $ref: '#/components/schemas/PostReaction'
+  
+    ReactionResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReactionResponse'
+    MultiplePostReactions:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MultiplePostReactions' 
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+      
+  
+
+        
+            
+      
