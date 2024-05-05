@@ -1,12 +1,10 @@
-const mongoose = require('mongoose');
-const validator = require('validator');
-const bcrypt = require('bcryptjs');
-const uuid = require('uuid');
-const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
-const { toJSON, paginate } = require('./plugins');
-const userConfig = require('../config/user');
-
-
+const mongoose = require("mongoose");
+const validator = require("validator");
+const bcrypt = require("bcryptjs");
+const uuid = require("uuid");
+const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
+const { toJSON, paginate } = require("./plugins");
+const userConfig = require("../config/user");
 
 const socialsSchema = mongoose.Schema({
   instagram: String,
@@ -33,7 +31,7 @@ const userSchema = mongoose.Schema(
       lowercase: true,
       validate(value) {
         if (!validator.isEmail(value)) {
-          throw new Error('Invalid email');
+          throw new Error("Invalid email");
         }
       },
     },
@@ -43,7 +41,9 @@ const userSchema = mongoose.Schema(
       minlength: 8,
       validate(value) {
         if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
-          throw new Error('Password must contain at least one letter and one number');
+          throw new Error(
+            "Password must contain at least one letter and one number"
+          );
         }
       },
       private: true, // used by the toJSON plugin
@@ -58,27 +58,38 @@ const userSchema = mongoose.Schema(
       sparse: true,
       trim: true,
     },
-    phoneNumber: String,
-    // isPhoneVerified: {
-    //   type: Boolean,
-    //   default: true,
-    // },
-    dateOfBirth: Date,
-    profileImage: String,
-    bio: {
-      type: String,
-      trim: true,
-    },
-    country: {
+    age: {
       type: String,
     },
-    isLocation: {
-      type: Boolean,
-      default: true,
+    height: {
+      type: Number,
     },
-    gender: String,
-    pronouns: String,
 
+    weight: {
+      type: Number,
+    },
+    city: {
+      type: String,
+    },
+    postalCode: {
+      type: String,
+    },
+    gender: {
+      enum: userConfig.genderEnum,
+      type: Number,
+    },
+    religion: {
+      enum: userConfig.religionEnum,
+      type: Number,
+    },
+    relationshipIntention: {
+      enum: userConfig.intentionEnum,
+      type: Number,
+    },
+    personalityVector: [String],
+    inMatch:{
+      type:Boolean
+    },
     // Unique Identifier for on of the settings screen
     uuid: String,
 
@@ -102,7 +113,7 @@ const userSchema = mongoose.Schema(
     facebookId: String,
     googleId: String,
     appleId: String,
-    user_preferences: [String],
+   
   },
 
   {
@@ -116,14 +127,8 @@ userSchema.plugin(paginate);
 userSchema.plugin(aggregatePaginate);
 
 // Set Object and Json property to true. Default is set to false
-userSchema.set('toObject', { virtuals: true, versionKey: false });
-userSchema.set('toJSON', { virtuals: true, versionKey: false });
-
-// userSchema.virtual('socials', {
-//   ref: 'Social', // The Model to use
-//   localField: '_id', // Find in Model, where localField
-//   foreignField: 'userId', // is equal to foreignField
-// });
+userSchema.set("toObject", { virtuals: true, versionKey: false });
+userSchema.set("toJSON", { virtuals: true, versionKey: false });
 
 /**
  * Check if email is taken
@@ -147,26 +152,26 @@ userSchema.methods.isPasswordMatch = async function (password) {
 };
 
 // Check if password is updated and hash password while saving
-userSchema.pre('save', async function (next) {
+userSchema.pre("save", async function (next) {
   const user = this;
-  if (user.isModified('password')) {
+  if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);
   }
   next();
 });
 
 // Username Unique validation
-userSchema.pre('save', function (next) {
+userSchema.pre("save", function (next) {
   const self = this;
   if (!this.uuid) {
     this.uuid = uuid.v4();
   }
-  if (self.isModified('username')) {
+  if (self.isModified("username")) {
     User.find({ username: self.username }, function (err, docs) {
       if (!docs.length) {
         next();
       } else {
-        next(new Error('Username already exists!'));
+        next(new Error("Username already exists!"));
       }
     });
   }
@@ -176,6 +181,6 @@ userSchema.pre('save', function (next) {
 /**
  * @typedef User
  */
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

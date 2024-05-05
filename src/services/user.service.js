@@ -17,18 +17,20 @@ const { otpTypes } = require('../config/otp');
  */
 const _filterUserData = (data) => {
   return {
-    firstName: data.firstName,
-    lastName: data.lastName,
-    email: data.email,
-    password: data.password,
-    username: data.username,
-    phoneNumber: data.phoneNumber,
-    dateOfBirth: data.dateOfBirth,
-    profileImage: data.profileImage,
-    profileBanner: data.profileBanner,
-    bio: data.bio,
-    country: data.country,
-    user_preferences:data?.user_preferences,
+    firstName: data?.firstName,
+    lastName: data?.lastName,
+    email: data?.email,
+    password: data?.password,
+    username: data?.username,
+    age: data?.age,
+    height:data?.height,
+    weight:data?.weight,
+    city:data?.city,
+    postalCode:data?.postalCode,
+    gender:data?.gender,
+    religion:data?.religion,
+    relationshipIntention:data?.relationshipIntention,
+    personalityVector:data?.personalityVector
   };
 };
 
