@@ -6,7 +6,8 @@ const auth = require('../../middlewares/auth');
 
 const router = express.Router();
 
-router.post('/register', validate(authValidation.register), authController.register);
+// router.post('/register', validate(authValidation.register), authController.register);
+router.post('/register', authController.register);
 router.post('/login/social', validate(authValidation.loginSocial), authController.loginSocial);
 router.post('/login', validate(authValidation.login), authController.login);
 router.post('/logout', validate(authValidation.logout), authController.logout);
@@ -34,11 +35,8 @@ module.exports = router;
  *           schema:
  *             type: object
  *             required:
- *               - firstName
- *               - lastName
  *               - email
  *               - password
- *               - username
  *             properties:
  *               firstName:
  *                 type: string
@@ -55,15 +53,38 @@ module.exports = router;
  *                 description: At least one number and one letter
  *               username:
  *                  type: string
- *               phoneNumber:
+ *               age:
+ *                  type: integer
+ *               height:
+ *                  type: float
+ *               weight:
+ *                  type: float
+ *               city:
  *                  type: string
+ *               postalCode:
+ *                  type: string
+ *               gender:
+ *                  type: integer
+ *               religion:
+ *                  type: integer
+ *               relationshipIntention:
+ *                  type: integer
  *             example:
  *               firstName: fake
  *               lastName: Name
  *               email: fake@example.com
  *               password: password1
  *               username: fakeusername
- *               phoneNumber: "1231234"
+ *               age: 22
+ *               height: 24.5
+ *               weight: 54.6
+ *               city: Lahore
+ *               postalCode: 20456
+ *               gender: 0
+ *               religion: 2
+ *               relationshipIntention: 2
+ * 
+ * 
  *     responses:
  *       "200":
  *         $ref: '#components/responses/UserRegistered'
