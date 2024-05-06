@@ -93,18 +93,6 @@ const userSchema = mongoose.Schema(
     // Unique Identifier for on of the settings screen
     uuid: String,
 
-    // User Statuses: pending for incomplete signup, active for completed signup
-    status: {
-      type: Number,
-      enum: userConfig.getStatuses,
-      default: userConfig.status.active,
-    },
-    // User Types: Standard, facebook, google, apple
-    type: {
-      type: Number,
-      enum: userConfig.getTypes,
-      default: userConfig.types.STANDARD,
-    },
     socials: {
       type: socialsSchema,
     },
