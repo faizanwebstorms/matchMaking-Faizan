@@ -1,7 +1,7 @@
 const passport = require('passport');
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
-const userHelper = require('../utils/user.helper');
+// const userHelper = require('../utils/user.helper');
 
 // Middleware to check for authentication
 
@@ -11,13 +11,13 @@ const verifyCallback = (req, resolve, reject, requiredRight, resource) => async 
   }
   req.user = user;
   if (requiredRight && resource) {
-    const roles = await userHelper.getRoles(user._id);
-    if (!roles.includes('admin')) {
-      const permission = userHelper.hasPermission(roles, resource, requiredRight);
-      if (!permission.granted) {
-        return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
-      }
-    }
+    // const roles = await userHelper.getRoles(user._id);
+    // if (!roles.includes('admin')) {
+    //   const permission = userHelper.hasPermission(roles, resource, requiredRight);
+    //   if (!permission.granted) {
+    //     return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
+    //   }
+    // }
   }
   resolve();
 };

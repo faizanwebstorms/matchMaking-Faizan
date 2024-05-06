@@ -41,41 +41,6 @@ const logout = {
   }),
 };
 
-const refreshTokens = {
-  body: Joi.object().keys({
-    refreshToken: Joi.string().required(),
-  }),
-};
-
-const forgotPassword = {
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-  }),
-};
-
-const verifyResetPasswordOTP = {
-  body: Joi.object().keys({
-    userId: Joi.string().required(),
-    otp: Joi.string().length(6).custom(numeric).required().messages({
-      'string.empty': 'OTP cannot be empty',
-      'any.required': 'OTP is required and cannot be empty',
-      'string.length': 'OTP length should be six digits',
-    }),
-  }),
-};
-
-const resetPassword = {
-  body: Joi.object().keys({
-    password: Joi.string().required().custom(password),
-    userId: Joi.string().required(),
-  }),
-};
-
-const verifyEmail = {
-  query: Joi.object().keys({
-    token: Joi.string().required(),
-  }),
-};
 
 const checkEmail = {
   body: Joi.object().keys({
@@ -89,46 +54,13 @@ const checkUserName = {
   }),
 };
 
-const sendPhoneOTP = {
-  params: Joi.object().keys({
-    phoneNumber: Joi.string().required().custom(phoneNumber),
-  }),
-};
-
-const verifyOTP = {
-  body: Joi.object().keys({
-    phoneNumber: Joi.string().required().custom(phoneNumber),
-    otp: Joi.string().length(6).custom(numeric).required().messages({
-      'string.empty': 'OTP cannot be empty',
-      'any.required': 'OTP is required and cannot be empty',
-      'string.length': 'OTP length should be six digits',
-    }),
-  }),
-};
-
-const verifyTFACode = {
-  body: Joi.object().keys({
-    otp: Joi.string().length(6).custom(numeric).required().messages({
-      'string.empty': 'OTP cannot be empty',
-      'any.required': 'OTP is required and cannot be empty',
-      'string.length': 'OTP length should be six digits',
-    }),
-  }),
-};
 
 module.exports = {
   register,
   login,
   loginSocial,
   logout,
-  refreshTokens,
-  forgotPassword,
-  resetPassword,
-  verifyEmail,
   checkEmail,
   checkUserName,
-  sendPhoneOTP,
-  verifyOTP,
-  verifyTFACode,
-  verifyResetPasswordOTP,
+
 };

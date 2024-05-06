@@ -1,13 +1,12 @@
-const httpStatus = require('http-status');
-const bcrypt = require('bcryptjs');
-const { User, Role, } = require('../models');
-const ApiError = require('../utils/ApiError');
-const helper = require('../utils/Helper');
-const roles = require('../config/roles');
-const messages = require('../config/messages');
+const httpStatus = require("http-status");
+const bcrypt = require("bcryptjs");
+const { User, Role } = require("../models");
+const ApiError = require("../utils/ApiError");
+const helper = require("../utils/Helper");
+const messages = require("../config/messages");
 // const otpService = require('./otp.service');
-const userConfig = require('../config/user');
-const { otpTypes } = require('../config/otp');
+const userConfig = require("../config/user");
+const { otpTypes } = require("../config/otp");
 
 /**
  * filter User Data from request
@@ -23,14 +22,14 @@ const _filterUserData = (data) => {
     password: data?.password,
     username: data?.username,
     age: data?.age,
-    height:data?.height,
-    weight:data?.weight,
-    city:data?.city,
-    postalCode:data?.postalCode,
-    gender:data?.gender,
-    religion:data?.religion,
-    relationshipIntention:data?.relationshipIntention,
-    personalityVector:data?.personalityVector
+    height: data?.height,
+    weight: data?.weight,
+    city: data?.city,
+    postalCode: data?.postalCode,
+    gender: data?.gender,
+    religion: data?.religion,
+    relationshipIntention: data?.relationshipIntention,
+    personalityVector: data?.personalityVector,
   };
 };
 
@@ -99,8 +98,8 @@ const validateEmailandUsername = async (userBody) => {
 
   // Check if email/username already exists
   if (!emailExists || !userNameExists) {
-    let message = !emailExists ? 'Email' : '';
-    message += !userNameExists ? ' Username' : '';
+    let message = !emailExists ? "Email" : "";
+    message += !userNameExists ? " Username" : "";
 
     throw new ApiError(httpStatus.BAD_REQUEST, `${message} already Exists`);
   }
@@ -114,7 +113,11 @@ const validateEmailandUsername = async (userBody) => {
 const fetchRole = async (role) => {
   const userRole = await Role.findOne({ name: role });
 
-  if (!userRole) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, messages.api.userStoreError);
+  if (!userRole)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      messages.api.userStoreError
+    );
 
   return userRole;
 };
@@ -131,10 +134,6 @@ const findByClause = async (filters, multiple = false) => {
   }
   return User.findOne(filters);
 };
-
-
-
-
 
 /**
  * Create a user
@@ -153,7 +152,7 @@ const createUser = async (userBody) => {
 
     return { ...item.toObject() };
   } catch (error) {
-    console.log('error', error);
+    console.log("error", error);
     return false;
   }
 };
@@ -164,21 +163,18 @@ const createUser = async (userBody) => {
  * @returns {*}
  */
 const createSocialUser = async (userBody) => {
-  // try {
-  // Upload user images
-  // const userData = await uploadUserImages(userBody);
+  try {
+    // Create User
+    const item = await User.create(_filterSocialUserData(userBody));
 
-  // Create User
-  const item = await User.create(_filterSocialUserData(userBody));
+    if (!item) {
+      throw new Error();
+    }
 
-  if (!item) {
-    throw new Error();
+    return { ...item.toObject() };
+  } catch (error) {
+    throw error;
   }
-
-  return { ...item.toObject() };
-  // } catch (e) {
-  //   return false;
-  // }
 };
 
 /**
@@ -188,19 +184,19 @@ const createSocialUser = async (userBody) => {
  */
 const registerUser = async (userBody) => {
   await validateEmailandUsername(userBody);
-  const role = await fetchRole(roles.user);
 
   // Create User
   const item = await User.create(_filterRegisterData(userBody, role._id));
 
   if (!item) {
-    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, messages.api.userStoreError);
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      messages.api.userStoreError
+    );
   }
 
   return { ...item.toObject() };
 };
-
-
 
 /**
  * Check if email exists
@@ -229,7 +225,6 @@ const checkUsernameValidity = async (username) => {
     return false;
   }
 };
-
 
 module.exports = {
   findByClause,

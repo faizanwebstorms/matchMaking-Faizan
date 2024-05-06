@@ -4,45 +4,31 @@ const { authService, userService, tokenService, emailService, otpService } = req
 const ApiError = require('../../utils/ApiError');
 const Helper = require('../../utils/Helper');
 const messages = require('../../config/messages');
-const { otpTypes } = require('../../config/otp');
-const roles = require('../../config/roles');
-const { UserRole, Role, OTP } = require('../../models');
 
 /**
  * Register User
  * @type {(function(*, *, *): void)|*}
  */
 const register = catchAsync(async (req, res) => {
-  // const verified = await otpService.checkPhoneVerificationStatus(req.body.phoneNumber);
-  // await userService.validateEmailandUsername(req.body);
-  // const role = await Role.findOne({ name: roles.user });
 
-  // if (!role) {
-  //   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, messages.api.internalServerError);
-  // }
-  // if (!verified) {
-  //   throw new ApiError(httpStatus.BAD_REQUEST, messages.api.phoneNotVerified);
-  // }
   const user = await userService.createUser(req.body);
 
   if (!user) {
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, messages.api.userStoreError);
   }
 
-  // await UserRole.create({
-  //   userId: user._id,
-  //   roleId: role._id,
-  // });
 
-  // const tokens = await tokenService.generateAuthTokens(user);
 
-  // if (!tokens) {
-  //   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, messages.api.internalServerError);
-  // }
+  const tokens = await tokenService.generateAuthTokens(user);
+
+  if (!tokens) {
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, messages.api.internalServerError);
+  }
 
   res.send(
     Helper.apiResponse(httpStatus.OK, messages.api.success, {
       user,
+      tokens
     })
   );
 });
@@ -53,11 +39,6 @@ const register = catchAsync(async (req, res) => {
  */
 const loginSocial = catchAsync(async (req, res) => {
   let user = await userService.findByClause({ email: req.body.email });
-  const role = await Role.findOne({ name: roles.user });
-
-  if (!role) {
-    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, messages.api.internalServerError);
-  }
 
   if (!user) {
     const emailExists = await userService.checkEmailValidity(req.body.email);
@@ -69,10 +50,7 @@ const loginSocial = catchAsync(async (req, res) => {
     if (!user) {
       throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, messages.api.userStoreError);
     }
-    await UserRole.create({
-      userId: user._id,
-      roleId: role._id,
-    });
+
   }
 
   // Check if Social ID in request matches to the one stored in DB

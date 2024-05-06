@@ -55,21 +55,7 @@ app.get('/', function (req, res) {
   res.redirect('/v1/docs');
 });
 
-// Seeders
-// roleSeeder();
-// userSeeder();
-// categorySeeder();
 
-// Queries to manage staging DB
-// removePosts();
-// removeUserPost();
-// removeFollowers();
-// removeBuildFollowers();
-// dropBuildFollowIndex();
-// dropUserFollowIndex();
-// dropUsername();
-
-// send back a 404 error for any unknown api request
 app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
 });
