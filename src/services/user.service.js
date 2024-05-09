@@ -166,7 +166,6 @@ const createSocialUser = async (userBody) => {
   try {
     // Create User
     const item = await User.create(_filterSocialUserData(userBody));
-
     if (!item) {
       throw new Error();
     }
