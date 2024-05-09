@@ -60,8 +60,9 @@ const loginSocial = catchAsync(async (req, res) => {
     (user.appleId !== null && user.appleId === req.appleId)
   ) {
     // Update Token in case of a new token from Social App
+
     Object.assign(user, req.body);
-    await user.save();
+    // await user.save();
     await tokenService.saveSocialToken(req.body, user._id, req.body.type);
 
     // Generate JWT Authentication Tokens in MatchMaking backend Scope
