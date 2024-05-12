@@ -1,6 +1,6 @@
 const httpStatus = require("http-status");
 const bcrypt = require("bcryptjs");
-const { User, Role } = require("../models");
+const { User, Role, QuestionnaireResponse, UserPreference } = require("../models");
 const ApiError = require("../utils/ApiError");
 const helper = require("../utils/Helper");
 const messages = require("../config/messages");
@@ -73,6 +73,41 @@ const _filterRegisterData = (data, roleId) => {
 };
 
 /**
+ * filter Questionnaire Data from request
+ * @param data
+ * @returns {*}
+ * @private
+ */
+const _filterResponseData = (data ,userId) => {
+  return {
+    userId: userId,
+    educationProfession: data?.educationProfession,
+    hobbiesPassions: data?.hobbiesPassions,
+    kidsPets: data?.kidsPets,
+    greenFlags: data?.greenFlags,
+    redFlags: data?.redFlags,
+    valuesPersonality: data?.valuesPersonality,
+  };
+};
+
+/**
+ * filter preference Data from request
+ * @param data
+ * @returns {*}
+ * @private
+ */
+const _filterPreferenceData = (data ,userId) => {
+  return {
+    userId: userId,
+    genderPreference: data?.genderPreference,
+    agePreference: data?.agePreference,
+    heightPreference: data?.heightPreference,
+    bmiPreference: data?.bmiPreference,
+    religionPreference: data?.religionPreference,
+    locationPreference: data?.locationPreference,
+  };
+};
+/**
  * Get user by id
  * @param {ObjectId} id
  * @returns {Promise<{user: *}>}
@@ -105,22 +140,7 @@ const validateEmailandUsername = async (userBody) => {
   }
 };
 
-/**
- * Fetch role from Database
- * @param role
- * @returns {*}
- */
-const fetchRole = async (role) => {
-  const userRole = await Role.findOne({ name: role });
 
-  if (!userRole)
-    throw new ApiError(
-      httpStatus.INTERNAL_SERVER_ERROR,
-      messages.api.userStoreError
-    );
-
-  return userRole;
-};
 
 /**
  * find User by filters
@@ -153,10 +173,25 @@ const createUser = async (userBody) => {
     return { ...item.toObject() };
   } catch (error) {
     console.log("error", error);
-    return false;
+    throw error;
   }
 };
-
+/**
+ * Create a user questionnaire response 
+ * @param {Object} userBody
+ */
+const createResponse = async (responseBody , userId) => {
+  try {
+    const item = await QuestionnaireResponse.create(_filterResponseData(responseBody , userId));
+    if (!item) {
+      throw new Error();
+    }
+    return { ...item.toObject() };
+  } catch (error) {
+    console.log("error", error);
+    throw error ;
+  }
+};
 /**
  * Create a user against a new social login
  * @param userBody
@@ -225,6 +260,39 @@ const checkUsernameValidity = async (username) => {
   }
 };
 
+/**
+ * Update user by id
+ * @param {ObjectId} userId
+ * @param {Object} updateBody
+ * @returns {Promise<User>}
+ */
+const update = async (user, updateBody) => {
+  try {
+    Object.assign(user, updateBody);
+    await user.save();
+    return  user ;
+  } catch (e) {
+    throw error;
+  }
+};
+
+/**
+ * Create a user questionnaire response 
+ * @param {Object} userBody
+ */
+const createPreference = async (preferenceBody , userId) => {
+  try {
+    const item = await UserPreference.create(_filterPreferenceData(preferenceBody , userId));
+    if (!item) {
+      throw new Error();
+    }
+    return { ...item.toObject() };
+  } catch (error) {
+    console.log("error", error);
+    throw error ;
+  }
+};
+
 module.exports = {
   findByClause,
   findById,
@@ -234,4 +302,7 @@ module.exports = {
   checkUsernameValidity,
   checkEmailValidity,
   validateEmailandUsername,
+  createResponse,
+  update,
+  createPreference
 };

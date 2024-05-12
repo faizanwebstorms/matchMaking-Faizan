@@ -9,14 +9,35 @@ const messages = require('../../config/messages');
 const { User } = require('../../models');
 
 /**
+ * Create User Questionnare Response
+ * @type {(function(*, *, *): void)|*}
+ */
+const createQuestionnaireResponse = catchAsync(async (req, res) => {
+  const response = await userService.createResponse(req.body , req.user?._id);
+  res.status(httpStatus.CREATED).send(Helper.apiResponse(httpStatus.CREATED, messages.api.success, response));
+});
+
+/**
  * Create User (For admin panel in future)
  * @type {(function(*, *, *): void)|*}
  */
-const createUser = catchAsync(async (req, res) => {
-  const user = await userService.createUser(req.body);
-  res.status(httpStatus.CREATED).send(Helper.apiResponse(httpStatus.CREATED, messages.api.success, user));
+const createUserPreference = catchAsync(async (req, res) => {
+  const preference = await userService.createPreference(req.body , req.user?._id);
+  res.status(httpStatus.CREATED).send(Helper.apiResponse(httpStatus.CREATED, messages.api.success, preference));
 });
 
+/**
+ * Update user personal Information
+ * @type {(function(*, *, *): void)|*}
+ */
+const updateUser = catchAsync(async (req, res) => {
+  let user = await User.findById(req.params?.userId);
+  if (!user) {
+    throw new ApiError(httpStatus.BAD_REQUEST, messages.api.userNotFound);
+  }
+  const updatedUser = await userService.update(user, req.body);
+  res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, updatedUser ));
+});
 
 // const getAllUsers = catchAsync(async (req, res) => {
 //   const options = pick(req.query, ['limit', 'page']);
@@ -70,6 +91,7 @@ const createUser = catchAsync(async (req, res) => {
 
 
 module.exports = {
-  createUser,
-  getAllUsers,
+  createQuestionnaireResponse,
+  updateUser,
+  createUserPreference
 };

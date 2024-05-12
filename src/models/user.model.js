@@ -64,7 +64,6 @@ const userSchema = mongoose.Schema(
     height: {
       type: Number,
     },
-
     weight: {
       type: Number,
     },
@@ -85,6 +84,12 @@ const userSchema = mongoose.Schema(
     relationshipIntention: {
       enum: userConfig.intentionEnum,
       type: Number,
+    },
+    latitude:{
+      type:Number
+    },
+    longitude:{
+      type:Number
     },
     personalityVector: [String],
     inMatch:{
