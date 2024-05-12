@@ -51,8 +51,6 @@ module.exports = router;
  *                 format: password
  *                 minLength: 8
  *                 description: At least one number and one letter
- *               username:
- *                  type: string
  *               age:
  *                  type: integer
  *               height:
@@ -74,7 +72,6 @@ module.exports = router;
  *               lastName: Name
  *               email: fake@example.com
  *               password: password1
- *               username: fakeusername
  *               age: 22
  *               height: 24.5
  *               weight: 54.6
