@@ -163,13 +163,16 @@ module.exports = router;
  *                 type: number
  *               locationPreference:
  *                 type: number
+ *               relationshipIntention:
+ *                 type: number
  *             example:
  *               genderPreference: 2
  *               agePreference: 0
  *               heightPreference: 1
  *               bmiPreference: 0
- *               religionPreference: 2
+ *               religionPreference: 1
  *               locationPreference: 1
+ *               relationshipIntention: 1
  * 
  * 
  *     responses:

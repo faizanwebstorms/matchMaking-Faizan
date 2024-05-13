@@ -67,6 +67,13 @@ const userSchema = mongoose.Schema(
     weight: {
       type: Number,
     },
+    bmi: {
+      type: Number,
+    },
+    bodyType: {
+      enum: userConfig.bodyTypeEnum,
+      type: Number,
+    },
     city: {
       type: String,
     },

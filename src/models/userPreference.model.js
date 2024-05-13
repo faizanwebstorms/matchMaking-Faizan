@@ -13,7 +13,7 @@ const userPreferenceSchema = mongoose.Schema(
       ref: 'User',
     },
     genderPreference: {
-      enum: userConfig.genderEnum,
+      enum: userConfig.genderPreferenceEnum,
       type: Number,
     },
     agePreference: {
@@ -25,11 +25,15 @@ const userPreferenceSchema = mongoose.Schema(
       type: Number,
     },
     bmiPreference: {
-      enum: userConfig.bmiEnum,
+      enum: userConfig.bodyTypePreferenceEnum,
       type: Number,
     },
     religionPreference: {
-      enum: userConfig.religionEnum,
+      enum: userConfig.religionPreferecneEnum,
+      type: Number,
+    },
+    relationshipIntention: {
+      enum: userConfig.intentionEnum,
       type: Number,
     },
     locationPreference: {
