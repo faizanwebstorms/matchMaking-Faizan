@@ -1,20 +1,27 @@
 
 const getTypes = [0, 1, 2, 3];
-const intentionEnum= [0,1,2];
+const intentionEnum= [0,1,2,3];
 const religionEnum= [0,1,2,3,4];
+const religionPreferecneEnum= [0,1];
 const genderEnum= [0,1,2];
+const genderPreferenceEnum= [0,1,2];
 const idTypes = ['standardId', 'facebookId', 'googleId', 'appleId'];
 const ageEnum =[0, 1, 2, 3];
 const heightEnum =[0, 1, 2, 3];
-const bmiEnum =[0, 1, 2, 3];
+const bodyTypeEnum =[0, 1, 2, 3];
+const bodyTypePreferenceEnum =[0, 1, 2, 3];
 const locationEnum =[0, 1, 2, 3];
 
 const gender ={
+  MALE:0 , 
+  FEMALE:1,
+  OTHER:2
+}
+const genderPreference ={
+  IDONTCARE:0 ,
   MALE:1 , 
   FEMALE:2,
-  OTHER:3
 }
-
 const religion ={
   CHRISTIAN:0 ,
   JEW:1,
@@ -22,10 +29,15 @@ const religion ={
   ATHEIST:3,
   OTHER:4,
 }
+const religionPreference ={
+  IDONTCARE:0 ,
+  SAMEASME:1
+}
 const relIntention = {
-  DATING :0 , 
-  SERIOUSRELATIONSHIP:1,
-  OPENRELATIONSHIP:2,
+  IDONTCARE:0,
+  DATING :1 , 
+  SERIOUSRELATIONSHIP:2,
+  OPENRELATIONSHIP:3,
 }
 const types = {
   STANDARD: 0,
@@ -34,28 +46,35 @@ const types = {
   APPLE: 3,
 };
 const age ={
-  ANY:0,
-  OLDER:1,
-  YOUNGER:2,
-  SIMILAR_AGE:3
+  IDONTCARE:0,
+  SIMILAR:1,
+  OLDER:2,
+  YOUNGER:3,
 }
 const height ={
-  ANY: 0,
-  TALLER: 1,
-  SHORTER: 2,
-  SIMILAR_HEIGHT:3
+  IDONTCARE: 0,
+  SIMILAR:1,
+  TALLER: 2,
+  SHORTER: 3,
+  
 }
-const bmi ={
-  ANY: 0,
-  HEAVIER: 1,
-  THINNER: 2,
-  SIMILAR_BMI:3
+const bodyType ={
+  UNDERWEIGHT: 0,
+  OVERWEIGHT:1,
+  NORMALWEIGHT: 2,
+  OBESE: 3,
+}
+const bodyTypePreference ={
+  IDONTCARE: 0,
+  SIMILAR:1,
+  LARGER: 2,
+  SMALLER: 3,
 }
 const location ={
-  WORLD: 0,
-  SAME_CITY:1,
+  IDONTCARE: 0,
+  SAME_COUNTRY: 1,
   SAME_REGION: 2,
-  SAME_COUNTRY: 3
+  SAME_CITY:3,
 }
 module.exports = {
   getTypes,
@@ -69,10 +88,16 @@ module.exports = {
   genderEnum,
   age,
   height,
-  bmi,
+  bodyType,
   location,
   ageEnum,
   heightEnum,
-  bmiEnum,
-  locationEnum
+  bodyTypeEnum,
+  locationEnum,
+  religionPreference,
+  religionPreferecneEnum,
+  genderPreferenceEnum,
+  genderPreference,
+  bodyTypePreference,
+  bodyTypePreferenceEnum
 };

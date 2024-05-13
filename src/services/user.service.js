@@ -105,6 +105,7 @@ const _filterPreferenceData = (data ,userId) => {
     bmiPreference: data?.bmiPreference,
     religionPreference: data?.religionPreference,
     locationPreference: data?.locationPreference,
+    relationshipIntention:data?.relationshipIntention
   };
 };
 /**
@@ -156,6 +157,34 @@ const findByClause = async (filters, multiple = false) => {
 };
 
 /**
+ * Caclute BMI and body type
+ * @param filters
+ * @param multiple
+ * @returns {Promise<*>}
+ */
+const calculateBMI=(weight, height)=>{
+  const bmi = weight / ((height / 100) ** 2);
+    // Determine body type based on BMI
+    let bodyType;
+    switch(true) {
+      case (bmi < 18.5):
+       return bodyType = userConfig.bodyType.UNDERWEIGHT;
+        
+      case (bmi >= 18.5 && bmi < 25):
+        bodyType = userConfig.bodyType.NORMALWEIGHT;
+        break;
+      case (bmi >= 25 && bmi < 30):
+        bodyType = userConfig.bodyType.OVERWEIGHT;
+        break;
+      default:
+        bodyType = userConfig.bodyType.OBESE;
+    }
+
+    return {bmi , bodyType};
+}
+
+
+/**
  * Create a user
  * @param {Object} userBody
  */
@@ -164,6 +193,7 @@ const createUser = async (userBody) => {
     await validateEmailandUsername(userBody);
 
     // const vectors = convertToVector(user_preferences);
+    
     const item = await User.create(_filterUserData(userBody));
     if (!item) {
       throw new Error();
@@ -268,6 +298,10 @@ const checkUsernameValidity = async (username) => {
  */
 const update = async (user, updateBody) => {
   try {
+    if(updateBody?.height && updateBody?.weight){
+      const bmiCalculator = await calculateBMI(updateBody?.weight, updateBody?.height );
+      Object.assign(user , {bmi: bmiCalculator.bmi , bodyType: bmiCalculator.bodyType } );
+    }
     Object.assign(user, updateBody);
     await user.save();
     return  user ;
