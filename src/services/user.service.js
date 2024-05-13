@@ -129,12 +129,12 @@ const findById = async (_id) => {
  */
 const validateEmailandUsername = async (userBody) => {
   const emailExists = await checkEmailValidity(userBody.email);
-  const userNameExists = await checkUsernameValidity(userBody.username);
+  // const userNameExists = await checkUsernameValidity(userBody.username);
 
   // Check if email/username already exists
-  if (!emailExists || !userNameExists) {
+  if (!emailExists ) {
     let message = !emailExists ? "Email" : "";
-    message += !userNameExists ? " Username" : "";
+    // message += !userNameExists ? " Username" : "";
 
     throw new ApiError(httpStatus.BAD_REQUEST, `${message} already Exists`);
   }
