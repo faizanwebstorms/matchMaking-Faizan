@@ -7,6 +7,7 @@ const messages = require("../config/messages");
 // const otpService = require('./otp.service');
 const userConfig = require("../config/user");
 const { otpTypes } = require("../config/otp");
+const axios = require('axios');
 
 /**
  * filter User Data from request
@@ -182,7 +183,33 @@ const calculateBMI=(weight, height)=>{
 
     return {bmi , bodyType};
 }
+/**
+ * CALCULATE LONGITUDE AND LATITUDE FROM POSTAL CODE
+ * @param filters
+ * @param multiple
+ * @returns {Promise<*>}
+ */
 
+async function getCoordinatesFromPostalCode(postalCode) {
+  try {
+    const mapAddress="https://maps.googleapis.com/maps/api/geocode/json"
+    const apiKey ="AIzaSyBGm8JnJuyLBjlfBX1z8NAVefFeKWIYNc4";
+    const response = await axios.get(`${mapAddress}?address=${postalCode}&key=${apiKey}`);
+    // Check if the response is successful and contains results
+    if (response.data.status === 'OK' && response.data.results.length > 0) {
+      const location = response.data.results[0].geometry.location;
+      const latitude = location.lat;
+      const longitude = location.lng;
+      
+      return { latitude, longitude };
+    } else {
+      throw new Error('Failed to fetch coordinates from postal code');
+    }
+  } catch (error) {
+    console.error('Error fetching coordinates:', error.message);
+    throw error;
+  }
+}
 
 /**
  * Create a user
@@ -301,6 +328,10 @@ const update = async (user, updateBody) => {
     if(updateBody?.height && updateBody?.weight){
       const bmiCalculator = await calculateBMI(updateBody?.weight, updateBody?.height );
       Object.assign(user , {bmi: bmiCalculator.bmi , bodyType: bmiCalculator.bodyType } );
+    }
+    if(updateBody?.postalCode){
+      const coordinates = await getCoordinatesFromPostalCode(updateBody?.postalCode);
+      Object.assign(user , {latitude: coordinates.latitude , longitude: coordinates.longitude } );
     }
     Object.assign(user, updateBody);
     await user.save();
