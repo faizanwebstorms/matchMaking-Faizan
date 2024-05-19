@@ -5,11 +5,6 @@ const register = {
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
-    firstName: Joi.string().required().custom(alphabets),
-    lastName: Joi.string().required().custom(alphabets),
-    username: Joi.string().required().custom(username),
-    phoneNumber: Joi.string().custom(phoneNumber),
-    user_preferences:Joi.array().items(Joi.string().allow('')).allow('')
   }),
 };
 
@@ -27,7 +22,19 @@ const loginSocial = {
     phoneNumber: Joi.string().custom(phoneNumber),
   }),
 };
-
+const updateUser = {
+  params: Joi.object().keys({
+    userId: Joi.string().required(),
+  }),
+  body: Joi.object()
+    .keys({
+      email: Joi.string().email(),
+      firstName: Joi.string().allow('').custom(alphabets),
+      lastName: Joi.string().allow('').custom(alphabets),
+      phone_number: Joi.string(),
+    })
+    .min(1),
+};
 const login = {
   body: Joi.object().keys({
     email: Joi.string().required(),

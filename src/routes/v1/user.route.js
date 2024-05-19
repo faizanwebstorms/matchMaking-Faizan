@@ -1,6 +1,6 @@
 const express = require('express');
 const validate = require('../../middlewares/validate');
-const authValidation = require('../../validations/auth.validation');
+const userValidation = require('../../validations/user.validation');
 const userController = require('../../controllers/api/user.controller') 
 const auth = require('../../middlewares/auth');
 
@@ -13,9 +13,10 @@ router.post('/preferences', auth(), userController.createUserPreference);
 router
   .route('/:userId')
   // .get(auth(permissions.readOwn, resources.users), validate(userValidation.getUser), userController.getUser)
-  .patch(auth(), userController.updateUser)
+  .patch(auth() ,validate(userValidation.updateUser), userController.updateUser)
   // .delete(auth(permissions.delete, resources.users), validate(userValidation.deleteUser), userController.deleteUser);
-
+router.get('/all/homeScreen',auth(), userController.getAllUsers);
+router.get('/checkMatch',auth(), userController.checkMatch );
 module.exports = router;
 
 /**
@@ -119,7 +120,7 @@ module.exports = router;
  *               height: 24.5
  *               weight: 54.6
  *               city: Lahore
- *               postalCode: 20456
+ *               postalCode: "20456"
  *               gender: 0
  *               religion: 2
  *               relationshipIntention: 2
@@ -180,4 +181,84 @@ module.exports = router;
  *         $ref: '#components/responses/UserRegistered'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
+ */
+/**
+ * @swagger
+ * /users/all/homeScreen:
+ *   get:
+ *     summary: Get all users
+ *     description: retrieve all users.
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *         description: sort by query in the form of field:desc/asc (ex. name:asc)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         default: 10
+ *         description: Maximum number of users
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/MultipleUsersResponse'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ */
+/**
+ * @swagger
+ * /users/checkMatch:
+ *   get:
+ *     summary: Get all users
+ *     description: retrieve all users.
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: MUser id of the user with whom current user wanna match 
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *         description: sort by query in the form of field:desc/asc (ex. name:asc)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         default: 10
+ *         description: Maximum number of users
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/MultipleUsersResponse'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
  */

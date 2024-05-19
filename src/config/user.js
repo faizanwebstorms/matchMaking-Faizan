@@ -13,9 +13,9 @@ const bodyTypePreferenceEnum =[0, 1, 2, 3];
 const locationEnum =[0, 1, 2, 3];
 
 const gender ={
-  MALE:0 , 
-  FEMALE:1,
-  OTHER:2
+  OTHER:0,
+  MALE:1 , 
+  FEMALE:2,
 }
 const genderPreference ={
   IDONTCARE:0 ,

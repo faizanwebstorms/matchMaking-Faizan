@@ -21,6 +21,7 @@ const swaggerDef = {
   tags: [
     { name: 'Auth' },
     { name: 'Users' },
+    { name: 'Reactions' }
   ],
 };
 

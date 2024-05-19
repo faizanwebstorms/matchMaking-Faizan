@@ -6,7 +6,7 @@ const userService = require('../../services/user.service');
 // const otpService = require('../../services/otp.service');
 const Helper = require('../../utils/Helper');
 const messages = require('../../config/messages');
-const { User } = require('../../models');
+const { User, UserPreference } = require('../../models');
 
 /**
  * Create User Questionnare Response
@@ -89,9 +89,38 @@ const updateUser = catchAsync(async (req, res) => {
 //   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, result));
 // });
 
+const getAllUsers = catchAsync(async (req, res) => {
+  const options = pick(req.query, ['limit', 'page']);
+  if (req.query.sortBy) {
+    options.sort = {};
+    // eslint-disable-next-line prefer-destructuring
+    options.sort[req.query.sortBy.split(':')[0]] = req.query.sortBy.split(':')[1];
+  }
 
+  const users = await userService.getAllUsers(req.user._id , options);
+
+  res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, users));
+});
+
+const checkMatch = catchAsync(async (req, res) => {
+  const options = pick(req.query, ['limit', 'page']);
+  if (req.query.sortBy) {
+    options.sort = {};
+    // eslint-disable-next-line prefer-destructuring
+    options.sort[req.query.sortBy.split(':')[0]] = req.query.sortBy.split(':')[1];
+  }
+  let requestedUserId;
+  if(req.query.userId){
+    requestedUserId = req.query.userId
+  }
+  const isMatch = await userService.checkMatch(req.user._id , options , requestedUserId);
+
+  res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, isMatch));
+});
 module.exports = {
   createQuestionnaireResponse,
   updateUser,
-  createUserPreference
+  createUserPreference,
+  getAllUsers,
+  checkMatch
 };
