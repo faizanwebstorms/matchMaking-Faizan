@@ -1,13 +1,21 @@
 const httpStatus = require("http-status");
 const bcrypt = require("bcryptjs");
-const { User, Role, QuestionnaireResponse, UserPreference } = require("../models");
+const {
+  User,
+  Role,
+  QuestionnaireResponse,
+  UserPreference,
+  Reaction,
+} = require("../models");
 const ApiError = require("../utils/ApiError");
 const helper = require("../utils/Helper");
 const messages = require("../config/messages");
 // const otpService = require('./otp.service');
 const userConfig = require("../config/user");
+const {type} = require ('../config/reaction')
 const { otpTypes } = require("../config/otp");
-const axios = require('axios');
+const axios = require("axios");
+const { handleReactionCreation } = require("./reaction.service");
 
 /**
  * filter User Data from request
@@ -79,7 +87,7 @@ const _filterRegisterData = (data, roleId) => {
  * @returns {*}
  * @private
  */
-const _filterResponseData = (data ,userId) => {
+const _filterResponseData = (data, userId) => {
   return {
     userId: userId,
     educationProfession: data?.educationProfession,
@@ -97,7 +105,7 @@ const _filterResponseData = (data ,userId) => {
  * @returns {*}
  * @private
  */
-const _filterPreferenceData = (data ,userId) => {
+const _filterPreferenceData = (data, userId) => {
   return {
     userId: userId,
     genderPreference: data?.genderPreference,
@@ -106,7 +114,7 @@ const _filterPreferenceData = (data ,userId) => {
     bmiPreference: data?.bmiPreference,
     religionPreference: data?.religionPreference,
     locationPreference: data?.locationPreference,
-    relationshipIntention:data?.relationshipIntention
+    relationshipIntention: data?.relationshipIntention,
   };
 };
 /**
@@ -134,15 +142,13 @@ const validateEmailandUsername = async (userBody) => {
   // const userNameExists = await checkUsernameValidity(userBody.username);
 
   // Check if email/username already exists
-  if (!emailExists ) {
+  if (!emailExists) {
     let message = !emailExists ? "Email" : "";
     // message += !userNameExists ? " Username" : "";
 
     throw new ApiError(httpStatus.BAD_REQUEST, `${message} already Exists`);
   }
 };
-
-
 
 /**
  * find User by filters
@@ -163,26 +169,26 @@ const findByClause = async (filters, multiple = false) => {
  * @param multiple
  * @returns {Promise<*>}
  */
-const calculateBMI=(weight, height)=>{
-  const bmi = weight / ((height / 100) ** 2);
-    // Determine body type based on BMI
-    let bodyType;
-    switch(true) {
-      case (bmi < 18.5):
-       return bodyType = userConfig.bodyType.UNDERWEIGHT;
-        
-      case (bmi >= 18.5 && bmi < 25):
-        bodyType = userConfig.bodyType.NORMALWEIGHT;
-        break;
-      case (bmi >= 25 && bmi < 30):
-        bodyType = userConfig.bodyType.OVERWEIGHT;
-        break;
-      default:
-        bodyType = userConfig.bodyType.OBESE;
-    }
+const calculateBMI = (weight, height) => {
+  const bmi = weight / (height / 100) ** 2;
+  // Determine body type based on BMI
+  let bodyType;
+  switch (true) {
+    case bmi < 18.5:
+      return (bodyType = userConfig.bodyType.UNDERWEIGHT);
 
-    return {bmi , bodyType};
-}
+    case bmi >= 18.5 && bmi < 25:
+      bodyType = userConfig.bodyType.NORMALWEIGHT;
+      break;
+    case bmi >= 25 && bmi < 30:
+      bodyType = userConfig.bodyType.OVERWEIGHT;
+      break;
+    default:
+      bodyType = userConfig.bodyType.OBESE;
+  }
+
+  return { bmi, bodyType };
+};
 /**
  * CALCULATE LONGITUDE AND LATITUDE FROM POSTAL CODE
  * @param filters
@@ -192,21 +198,23 @@ const calculateBMI=(weight, height)=>{
 
 async function getCoordinatesFromPostalCode(postalCode) {
   try {
-    const mapAddress="https://maps.googleapis.com/maps/api/geocode/json"
-    const apiKey ="AIzaSyBGm8JnJuyLBjlfBX1z8NAVefFeKWIYNc4";
-    const response = await axios.get(`${mapAddress}?address=${postalCode}&key=${apiKey}`);
+    const mapAddress = "https://maps.googleapis.com/maps/api/geocode/json";
+    const apiKey = "AIzaSyBGm8JnJuyLBjlfBX1z8NAVefFeKWIYNc4";
+    const response = await axios.get(
+      `${mapAddress}?address=${postalCode}&key=${apiKey}`
+    );
     // Check if the response is successful and contains results
-    if (response.data.status === 'OK' && response.data.results.length > 0) {
+    if (response.data.status === "OK" && response.data.results.length > 0) {
       const location = response.data.results[0].geometry.location;
       const latitude = location.lat;
       const longitude = location.lng;
-      
+
       return { latitude, longitude };
     } else {
-      throw new Error('Failed to fetch coordinates from postal code');
+      throw new Error("Failed to fetch coordinates from postal code");
     }
   } catch (error) {
-    console.error('Error fetching coordinates:', error.message);
+    console.error("Error fetching coordinates:", error.message);
     throw error;
   }
 }
@@ -220,7 +228,7 @@ const createUser = async (userBody) => {
     await validateEmailandUsername(userBody);
 
     // const vectors = convertToVector(user_preferences);
-    
+
     const item = await User.create(_filterUserData(userBody));
     if (!item) {
       throw new Error();
@@ -234,19 +242,21 @@ const createUser = async (userBody) => {
   }
 };
 /**
- * Create a user questionnaire response 
+ * Create a user questionnaire response
  * @param {Object} userBody
  */
-const createResponse = async (responseBody , userId) => {
+const createResponse = async (responseBody, userId) => {
   try {
-    const item = await QuestionnaireResponse.create(_filterResponseData(responseBody , userId));
+    const item = await QuestionnaireResponse.create(
+      _filterResponseData(responseBody, userId)
+    );
     if (!item) {
       throw new Error();
     }
     return { ...item.toObject() };
   } catch (error) {
     console.log("error", error);
-    throw error ;
+    throw error;
   }
 };
 /**
@@ -325,39 +335,142 @@ const checkUsernameValidity = async (username) => {
  */
 const update = async (user, updateBody) => {
   try {
-    if(updateBody?.height && updateBody?.weight){
-      const bmiCalculator = await calculateBMI(updateBody?.weight, updateBody?.height );
-      Object.assign(user , {bmi: bmiCalculator.bmi , bodyType: bmiCalculator.bodyType } );
+    if (updateBody?.height && updateBody?.weight) {
+      const bmiCalculator = await calculateBMI(
+        updateBody?.weight,
+        updateBody?.height
+      );
+      Object.assign(user, {
+        bmi: bmiCalculator.bmi,
+        bodyType: bmiCalculator.bodyType,
+      });
     }
-    if(updateBody?.postalCode){
-      const coordinates = await getCoordinatesFromPostalCode(updateBody?.postalCode);
-      Object.assign(user , {latitude: coordinates.latitude , longitude: coordinates.longitude } );
+    if (updateBody?.postalCode) {
+      const coordinates = await getCoordinatesFromPostalCode(
+        updateBody?.postalCode
+      );
+      Object.assign(user, {
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+      });
     }
     Object.assign(user, updateBody);
     await user.save();
-    return  user ;
+    return user;
   } catch (e) {
     throw error;
   }
 };
 
 /**
- * Create a user questionnaire response 
+ * Create a user questionnaire response
  * @param {Object} userBody
  */
-const createPreference = async (preferenceBody , userId) => {
+const createPreference = async (preferenceBody, userId) => {
   try {
-    const item = await UserPreference.create(_filterPreferenceData(preferenceBody , userId));
+    const item = await UserPreference.create(
+      _filterPreferenceData(preferenceBody, userId)
+    );
     if (!item) {
       throw new Error();
     }
     return { ...item.toObject() };
   } catch (error) {
     console.log("error", error);
-    throw error ;
+    throw error;
   }
 };
 
+const getAllUsers = async (userId, options) => {
+  try {
+    const userPreferences = await UserPreference.findOne({ userId });
+    if (!userPreferences) {
+      throw new Error();
+    }
+    let matchCriteria = {
+      _id: { $ne: userId },
+    };
+
+    // Check if the user has set a gender preference
+    if (userPreferences && userPreferences.genderPreference) {
+      const preferredGender = userPreferences.genderPreference;
+
+      // If the preferred gender is not 0 (which stands for 'Any'), add the gender criteria
+      if (preferredGender !== 0) {
+        matchCriteria.gender = preferredGender;
+      }
+    }
+    const aggregate = User.aggregate([
+      {
+        $match: matchCriteria,
+      },
+    ]);
+    let result;
+    await Promise.resolve(
+      User.aggregatePaginate(aggregate, {
+        ...options,
+      }).then(function (results, err) {
+        if (err) throw new Error();
+        result = results;
+      })
+    );
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const checkMatch = async (requestingUserId, options, requestedUserId) => {
+  try {
+    //  CREATE A REACTION IF DOESNT EXIST BEFOR OTHERWISE UPDATE IT
+    const reaction = await handleReactionCreation(requestingUserId , requestedUserId , type.LIKE );
+    if(!reaction){
+      throw new Error (" Error While Creating Reaction")
+    }
+
+    // FETCH PREFERENCES FOR BOTH USERS
+    const requestingUserPref = await UserPreference.findOne({
+      userId: requestingUserId,
+    });
+    const requestedUserPref = await UserPreference.findOne({
+      userId: requestedUserId,
+    });
+
+    if (!requestingUserPref || !requestedUserPref) {
+      throw new Error("User preferences not found for one or both users.");
+    }
+
+    // DEFINE THE FIELDS TO COMPARE
+    const fieldsToCompare = [
+      "genderPreference",
+      "agePreference",
+      "heightPreference",
+      "bmiPreference",
+      "religionPreference",
+      "relationshipIntention",
+      "locationPreference",
+    ];
+    let matchCount = 0;
+
+    // COMPARE PREFERENCES
+    fieldsToCompare.forEach((field) => {
+      if (requestingUserPref[field] === requestedUserPref[field]) {
+        matchCount++;
+      }
+    });
+    // CALCULATE MATCH PERCENTAGE
+    const matchPercentage = (matchCount / fieldsToCompare.length) * 100;
+    
+    if (matchPercentage >= 60) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 module.exports = {
   findByClause,
   findById,
@@ -369,5 +482,7 @@ module.exports = {
   validateEmailandUsername,
   createResponse,
   update,
-  createPreference
+  createPreference,
+  getAllUsers,
+  checkMatch,
 };
