@@ -1,3 +1,5 @@
+
+
 module.exports = {
   api: {
     success: 'Success',
@@ -21,5 +23,8 @@ module.exports = {
     otpDocError: 'Send OTP first to verify otp for this phone number',
     forbidden: 'User doesnot have the required permission',
   },
+  preference:{
+    notFound: 'Preference Not Found',
+  }
 
 };

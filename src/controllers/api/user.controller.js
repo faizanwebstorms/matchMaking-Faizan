@@ -117,10 +117,24 @@ const checkMatch = catchAsync(async (req, res) => {
 
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, isMatch));
 });
+/**
+ * Update user preferences
+ * @type {(function(*, *, *): void)|*}
+ */
+const updatePreferences = catchAsync(async (req, res) => {
+  let preference = await UserPreference.findOne({userId:req.params?.userId});
+  console.log("preference",preference)
+  if (!preference) {
+    throw new ApiError(httpStatus.BAD_REQUEST, messages.preference.notFound);
+  }
+  const updatedPreference = await userService.updatePreference(preference, req.body);
+  res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, updatedPreference ));
+});
 module.exports = {
   createQuestionnaireResponse,
   updateUser,
   createUserPreference,
   getAllUsers,
-  checkMatch
+  checkMatch,
+  updatePreferences
 };

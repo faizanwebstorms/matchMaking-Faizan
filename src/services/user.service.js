@@ -471,6 +471,22 @@ const checkMatch = async (requestingUserId, options, requestedUserId) => {
     throw error;
   }
 };
+
+/**
+ * Update Preference by id
+ * @param {ObjectId} userId
+ * @param {Object} updateBody
+ * @returns {Promise<User>}
+ */
+const updatePreference = async (preference, updateBody) => {
+  try {
+    Object.assign(preference, updateBody);
+    await preference.save();
+    return preference;
+  } catch (e) {
+    throw error;
+  }
+};
 module.exports = {
   findByClause,
   findById,
@@ -485,4 +501,5 @@ module.exports = {
   createPreference,
   getAllUsers,
   checkMatch,
+  updatePreference
 };
