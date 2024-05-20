@@ -31,8 +31,37 @@ const updateUser = {
       relationshipIntention:Joi.number().allow(''),
     })
 };
+const createPreference = {
+  body: Joi.object()
+    .keys({
+      genderPreference: Joi.number().allow(''),
+      agePreference:Joi.number().allow(''),
+      heightPreference:Joi.number().allow(''),
+      bmiPreference: Joi.number().allow(''),
+      religionPreference:Joi.number().allow(''),
+      locationPreference:Joi.number().allow(''),
+      relationshipIntention:Joi.number().allow(''),
+    })
+};
+const updatePreference = {
+  params: Joi.object().keys({
+    userId: Joi.string().required(),
+  }),
+  body: Joi.object()
+    .keys({
+      genderPreference: Joi.number().allow(''),
+      agePreference:Joi.number().allow(''),
+      heightPreference:Joi.number().allow(''),
+      bmiPreference: Joi.number().allow(''),
+      religionPreference:Joi.number().allow(''),
+      locationPreference:Joi.number().allow(''),
+      relationshipIntention:Joi.number().allow(''),
+    })
+};
 module.exports = {
   createUser,
-  updateUser
+  updateUser,
+  updatePreference,
+  createPreference
 
 };

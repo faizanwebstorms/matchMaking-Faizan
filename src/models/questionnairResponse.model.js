@@ -14,27 +14,21 @@ const questionnaireResponseSchema = mongoose.Schema(
     },
     educationProfession: {
       type: String,
-      required: true,
     },
     hobbiesPassions: {
       type: String,
-      required: true,
     },
     kidsPets: {
       type: String,
-      required: true,
     },
     valuesPersonality: {
       type: String,
-      required: true,
     },
     greenFlags: {
       type: String,
-      required: true,
     },
     redFlags: {
       type: String,
-      required: true,
     },
   },
   {

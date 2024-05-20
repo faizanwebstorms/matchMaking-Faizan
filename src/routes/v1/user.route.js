@@ -8,7 +8,8 @@ const router = express.Router();
 
 
 router.post('/questionnaireResponses', auth(), userController.createQuestionnaireResponse);
-router.post('/preferences', auth(), userController.createUserPreference);
+router.post('/preferences', auth() ,validate(userValidation.createPreference) , userController.createUserPreference);
+router.route('/preferences/:userId').patch(auth() ,validate(userValidation.updatePreference) , userController.updatePreferences)
 
 router
   .route('/:userId')
@@ -181,6 +182,64 @@ module.exports = router;
  *         $ref: '#components/responses/UserRegistered'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
+ */
+/**
+ * @swagger
+ * /users/preferences/{userId}:
+ *
+ *   patch:
+ *     summary: Update user preferences
+ *     description: Logged in users can update their preferences
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User Id 
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               genderPreference:
+ *                 type: number
+ *               agePreference: 
+ *                 type: number   
+ *               heightPreference:
+ *                 type: number
+ *               bmiPreference:
+ *                 type: number
+ *               religionPreference:
+ *                 type: number
+ *               locationPreference:
+ *                 type: number
+ *               relationshipIntention:
+ *                 type: number
+ *             example:
+ *               genderPreference: 2
+ *               agePreference: 0
+ *               heightPreference: 1
+ *               bmiPreference: 0
+ *               religionPreference: 1
+ *               locationPreference: 1
+ *               relationshipIntention: 1
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/UserResponse'
+ *       "400":
+ *         $ref: '#/components/responses/DuplicateEmail'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
  */
 /**
  * @swagger
