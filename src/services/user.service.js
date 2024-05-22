@@ -420,7 +420,7 @@ const getAllUsers = async (userId, options) => {
   }
 };
 
-const checkMatch = async (requestingUserId, options, requestedUserId) => {
+const checkMatch = async (requestingUserId, requestedUserId) => {
   try {
     //  CREATE A REACTION IF DOESNT EXIST BEFOR OTHERWISE UPDATE IT
     const reaction = await handleReactionCreation(requestingUserId , requestedUserId , type.LIKE );

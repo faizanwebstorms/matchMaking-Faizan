@@ -103,17 +103,11 @@ const getAllUsers = catchAsync(async (req, res) => {
 });
 
 const checkMatch = catchAsync(async (req, res) => {
-  const options = pick(req.query, ['limit', 'page']);
-  if (req.query.sortBy) {
-    options.sort = {};
-    // eslint-disable-next-line prefer-destructuring
-    options.sort[req.query.sortBy.split(':')[0]] = req.query.sortBy.split(':')[1];
-  }
   let requestedUserId;
   if(req.query.userId){
     requestedUserId = req.query.userId
   }
-  const isMatch = await userService.checkMatch(req.user._id , options , requestedUserId);
+  const isMatch = await userService.checkMatch(req.user._id , requestedUserId);
 
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, isMatch));
 });
