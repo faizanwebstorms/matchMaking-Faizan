@@ -7,7 +7,7 @@ const auth = require('../../middlewares/auth');
 const router = express.Router();
 
 
-router.post('/questionnaireResponses', auth(), userController.createQuestionnaireResponse);
+router.post('/questionnaireResponses', auth(),validate(userValidation.questionnaireResponse) ,  userController.createQuestionnaireResponse);
 router.post('/preferences', auth() ,validate(userValidation.createPreference) , userController.createUserPreference);
 router.route('/preferences/:userId').patch(auth() ,validate(userValidation.updatePreference) , userController.updatePreferences)
 
@@ -294,25 +294,6 @@ module.exports = router;
  *           type: string
  *         required: true
  *         description: MUser id of the user with whom current user wanna match 
- *       - in: query
- *         name: sortBy
- *         schema:
- *           type: string
- *         description: sort by query in the form of field:desc/asc (ex. name:asc)
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           minimum: 1
- *         default: 10
- *         description: Maximum number of users
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *           minimum: 1
- *           default: 1
- *         description: Page number
  *     responses:
  *       "200":
  *         $ref: '#/components/responses/MultipleUsersResponse'
