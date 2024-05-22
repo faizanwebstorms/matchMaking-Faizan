@@ -4,6 +4,7 @@ const { authService, userService, tokenService, emailService, otpService } = req
 const ApiError = require('../../utils/ApiError');
 const Helper = require('../../utils/Helper');
 const messages = require('../../config/messages');
+const { UserPreference } = require('../../models');
 
 /**
  * Register User
@@ -97,6 +98,7 @@ const login = catchAsync(async (req, res) => {
   if (!tokens) {
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, messages.api.internalServerError);
   }
+  user.isOnBordingCompleted = await UserPreference.count({userId:user?.id});
   res.send(
     Helper.apiResponse(httpStatus.OK, messages.api.success, {
       user,
