@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { toJSON } = require('./plugins');
+const mongoose = require("mongoose");
+const { toJSON } = require("./plugins");
 const userConfig = require("../config/user");
 /**
  * userPreference Schema Model
@@ -10,7 +10,7 @@ const userPreferenceSchema = mongoose.Schema(
   {
     userId: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'User',
+      ref: "User",
     },
     genderPreference: {
       enum: userConfig.genderPreferenceEnum,
@@ -40,7 +40,6 @@ const userPreferenceSchema = mongoose.Schema(
       enum: userConfig.locationEnum,
       type: Number,
     },
-    
   },
   {
     timestamps: true,
@@ -53,6 +52,6 @@ userPreferenceSchema.plugin(toJSON);
 /**
  * @typedef userPreference
  */
-const UserPreference = mongoose.model('UserPreference', userPreferenceSchema);
+const UserPreference = mongoose.model("UserPreference", userPreferenceSchema);
 
 module.exports = UserPreference;

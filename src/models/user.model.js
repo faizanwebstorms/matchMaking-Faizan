@@ -92,15 +92,15 @@ const userSchema = mongoose.Schema(
       enum: userConfig.intentionEnum,
       type: Number,
     },
-    latitude:{
-      type:Number
+    latitude: {
+      type: Number,
     },
-    longitude:{
-      type:Number
+    longitude: {
+      type: Number,
     },
     personalityVector: [String],
-    inMatch:{
-      type:Boolean
+    inMatch: {
+      type: Boolean,
     },
     // Unique Identifier for on of the settings screen
     uuid: String,
@@ -113,7 +113,6 @@ const userSchema = mongoose.Schema(
     facebookId: String,
     googleId: String,
     appleId: String,
-   
   },
 
   {
