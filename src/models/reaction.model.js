@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { toJSON } = require('./plugins');
+const mongoose = require("mongoose");
+const { toJSON } = require("./plugins");
 const reactionConfig = require("../config/reaction");
 /**
  * reaction Schema Model
@@ -10,16 +10,16 @@ const reactionSchema = mongoose.Schema(
   {
     reactedBy: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'User',
+      ref: "User",
     },
     reactedTo: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'User',
+      ref: "User",
     },
-    type:{
+    type: {
       enum: reactionConfig.typeEnum,
-      type: Number
-    }
+      type: Number,
+    },
   },
   {
     timestamps: true,
@@ -32,6 +32,6 @@ reactionSchema.plugin(toJSON);
 /**
  * @typedef reaction
  */
-const Reaction = mongoose.model('Reaction', reactionSchema);
+const Reaction = mongoose.model("Reaction", reactionSchema);
 
 module.exports = Reaction;

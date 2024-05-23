@@ -12,7 +12,7 @@ const helper = require("../utils/Helper");
 const messages = require("../config/messages");
 // const otpService = require('./otp.service');
 const userConfig = require("../config/user");
-const {type} = require ('../config/reaction')
+const { type } = require("../config/reaction");
 const { otpTypes } = require("../config/otp");
 const axios = require("axios");
 const { handleReactionCreation } = require("./reaction.service");
@@ -423,9 +423,13 @@ const getAllUsers = async (userId, options) => {
 const checkMatch = async (requestingUserId, requestedUserId) => {
   try {
     //  CREATE A REACTION IF DOESNT EXIST BEFOR OTHERWISE UPDATE IT
-    const reaction = await handleReactionCreation(requestingUserId , requestedUserId , type.LIKE );
-    if(!reaction){
-      throw new Error (" Error While Creating Reaction")
+    const reaction = await handleReactionCreation(
+      requestingUserId,
+      requestedUserId,
+      type.LIKE
+    );
+    if (!reaction) {
+      throw new Error(" Error While Creating Reaction");
     }
 
     // FETCH PREFERENCES FOR BOTH USERS
@@ -460,7 +464,7 @@ const checkMatch = async (requestingUserId, requestedUserId) => {
     });
     // CALCULATE MATCH PERCENTAGE
     const matchPercentage = (matchCount / fieldsToCompare.length) * 100;
-    
+
     if (matchPercentage >= 60) {
       return true;
     } else {
@@ -501,5 +505,5 @@ module.exports = {
   createPreference,
   getAllUsers,
   checkMatch,
-  updatePreference
+  updatePreference,
 };

@@ -1,35 +1,43 @@
-const httpStatus = require('http-status');
-const catchAsync = require('../../utils/catchAsync');
-const { authService, userService, tokenService, emailService, otpService } = require('../../services');
-const ApiError = require('../../utils/ApiError');
-const Helper = require('../../utils/Helper');
-const messages = require('../../config/messages');
-const { UserPreference } = require('../../models');
+const httpStatus = require("http-status");
+const catchAsync = require("../../utils/catchAsync");
+const {
+  authService,
+  userService,
+  tokenService,
+  emailService,
+  otpService,
+} = require("../../services");
+const ApiError = require("../../utils/ApiError");
+const Helper = require("../../utils/Helper");
+const messages = require("../../config/messages");
+const { UserPreference } = require("../../models");
 
 /**
  * Register User
  * @type {(function(*, *, *): void)|*}
  */
 const register = catchAsync(async (req, res) => {
-
   const user = await userService.createUser(req.body);
 
   if (!user) {
-    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, messages.api.userStoreError);
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      messages.api.userStoreError
+    );
   }
-
-
-
   const tokens = await tokenService.generateAuthTokens(user);
 
   if (!tokens) {
-    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, messages.api.internalServerError);
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      messages.api.internalServerError
+    );
   }
 
   res.send(
     Helper.apiResponse(httpStatus.OK, messages.api.success, {
       user,
-      tokens
+      tokens,
     })
   );
 });
@@ -44,14 +52,19 @@ const loginSocial = catchAsync(async (req, res) => {
   if (!user) {
     const emailExists = await userService.checkEmailValidity(req.body.email);
     if (!emailExists) {
-      throw new ApiError(httpStatus.BAD_REQUEST, messages.api.emailAlreadyExists);
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        messages.api.emailAlreadyExists
+      );
     }
     // create user
     user = await userService.createSocialUser(req.body);
     if (!user) {
-      throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, messages.api.userStoreError);
+      throw new ApiError(
+        httpStatus.INTERNAL_SERVER_ERROR,
+        messages.api.userStoreError
+      );
     }
-
   }
 
   // Check if Social ID in request matches to the one stored in DB
@@ -75,7 +88,14 @@ const loginSocial = catchAsync(async (req, res) => {
       })
     );
   } else {
-    res.status(httpStatus.BAD_REQUEST).send(Helper.apiResponse(httpStatus.BAD_REQUEST, messages.api.socialLoginError));
+    res
+      .status(httpStatus.BAD_REQUEST)
+      .send(
+        Helper.apiResponse(
+          httpStatus.BAD_REQUEST,
+          messages.api.socialLoginError
+        )
+      );
   }
 });
 
@@ -88,7 +108,10 @@ const login = catchAsync(async (req, res) => {
   const user = await authService.login(email, password);
 
   if (!user) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email/username or password');
+    throw new ApiError(
+      httpStatus.UNAUTHORIZED,
+      "Incorrect email/username or password"
+    );
   }
 
   delete user.password;
@@ -96,9 +119,12 @@ const login = catchAsync(async (req, res) => {
   // Generate Auth Tokens
   const tokens = await tokenService.generateAuthTokens(user);
   if (!tokens) {
-    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, messages.api.internalServerError);
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      messages.api.internalServerError
+    );
   }
-  user.isOnBordingCompleted = await UserPreference.count({userId:user?.id});
+  user.isOnBordingCompleted = await UserPreference.count({ userId: user?.id });
   res.send(
     Helper.apiResponse(httpStatus.OK, messages.api.success, {
       user,
@@ -116,7 +142,9 @@ const logout = catchAsync(async (req, res) => {
   if (!response) {
     throw new ApiError(httpStatus.NOT_FOUND, messages.api.notFound);
   }
-  res.status(httpStatus.OK).send(Helper.apiResponse(httpStatus.OK, messages.api.success));
+  res
+    .status(httpStatus.OK)
+    .send(Helper.apiResponse(httpStatus.OK, messages.api.success));
 });
 
 module.exports = {
@@ -124,4 +152,4 @@ module.exports = {
   loginSocial,
   login,
   logout,
-}
+};

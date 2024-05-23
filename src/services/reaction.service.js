@@ -6,7 +6,6 @@ const helper = require("../utils/Helper");
 const messages = require("../config/messages");
 const { Reaction } = require("../models");
 
-
 /**
  * CREATE A REACTION IF DOESNT EXIST BEFOR OTHERWISE UPDATE IT
  * @param {Object} userBody
@@ -47,7 +46,11 @@ const handleReactionCreation = async (
  */
 const createReaction = async (body) => {
   try {
-    const item = await handleReactionCreation(body.reactedBy , body.reactedTo , body.type);
+    const item = await handleReactionCreation(
+      body.reactedBy,
+      body.reactedTo,
+      body.type
+    );
     if (!item) {
       throw new Error();
     }

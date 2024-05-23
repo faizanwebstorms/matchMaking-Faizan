@@ -1,13 +1,13 @@
-const jwt = require('jsonwebtoken');
-const moment = require('moment');
-const httpStatus = require('http-status');
-const config = require('../config/config');
-const messages = require('../config/messages');
-const userService = require('./user.service');
-const { Token } = require('../models');
-const ApiError = require('../utils/ApiError');
-const { tokenTypes } = require('../config/tokens');
-const { types } = require('../config/user');
+const jwt = require("jsonwebtoken");
+const moment = require("moment");
+const httpStatus = require("http-status");
+const config = require("../config/config");
+const messages = require("../config/messages");
+const userService = require("./user.service");
+const { Token } = require("../models");
+const ApiError = require("../utils/ApiError");
+const { tokenTypes } = require("../config/tokens");
+const { types } = require("../config/user");
 
 /**
  * Generate token
@@ -66,7 +66,10 @@ const saveSocialToken = async (req, userId, userType) => {
       tokenType = tokenTypes.FACEBOOK_ACCESS;
   }
   let token = await Token.findOne({ userId, type: tokenType });
-  const socialTokenExpires = moment().add(config.jwt.socialExpirationDays, 'days');
+  const socialTokenExpires = moment().add(
+    config.jwt.socialExpirationDays,
+    "days"
+  );
   if (!token) {
     token = await Token.create({
       token: req.token,
@@ -93,9 +96,14 @@ const saveSocialToken = async (req, userId, userType) => {
  */
 const verifyToken = async (token, type) => {
   const payload = jwt.verify(token, config.jwt.secret);
-  const tokenDoc = await Token.findOne({ token, type, userId: payload.sub, blacklisted: false });
+  const tokenDoc = await Token.findOne({
+    token,
+    type,
+    userId: payload.sub,
+    blacklisted: false,
+  });
   if (!tokenDoc) {
-    throw new Error('Token not found');
+    throw new Error("Token not found");
   }
   return tokenDoc;
 };
@@ -107,12 +115,31 @@ const verifyToken = async (token, type) => {
  */
 const generateAuthTokens = async (user) => {
   try {
-    const accessTokenExpires = moment().add(config.jwt.accessExpirationMinutes, 'minutes');
-    const accessToken = generateToken(user._id, accessTokenExpires, tokenTypes.ACCESS);
+    const accessTokenExpires = moment().add(
+      config.jwt.accessExpirationMinutes,
+      "minutes"
+    );
+    const accessToken = generateToken(
+      user._id,
+      accessTokenExpires,
+      tokenTypes.ACCESS
+    );
 
-    const refreshTokenExpires = moment().add(config.jwt.refreshExpirationDays, 'days');
-    const refreshToken = generateToken(user._id, refreshTokenExpires, tokenTypes.REFRESH);
-    await saveToken(refreshToken, user._id, refreshTokenExpires, tokenTypes.REFRESH);
+    const refreshTokenExpires = moment().add(
+      config.jwt.refreshExpirationDays,
+      "days"
+    );
+    const refreshToken = generateToken(
+      user._id,
+      refreshTokenExpires,
+      tokenTypes.REFRESH
+    );
+    await saveToken(
+      refreshToken,
+      user._id,
+      refreshTokenExpires,
+      tokenTypes.REFRESH
+    );
 
     return {
       access: {
@@ -139,9 +166,21 @@ const generateResetPasswordToken = async (email) => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, messages.api.notFound);
   }
-  const expires = moment().add(config.jwt.resetPasswordExpirationMinutes, 'minutes');
-  const resetPasswordToken = generateToken(user.id, expires, tokenTypes.RESET_PASSWORD);
-  await saveToken(resetPasswordToken, user.id, expires, tokenTypes.RESET_PASSWORD);
+  const expires = moment().add(
+    config.jwt.resetPasswordExpirationMinutes,
+    "minutes"
+  );
+  const resetPasswordToken = generateToken(
+    user.id,
+    expires,
+    tokenTypes.RESET_PASSWORD
+  );
+  await saveToken(
+    resetPasswordToken,
+    user.id,
+    expires,
+    tokenTypes.RESET_PASSWORD
+  );
   return resetPasswordToken;
 };
 
@@ -151,8 +190,15 @@ const generateResetPasswordToken = async (email) => {
  * @returns {Promise<string>}
  */
 const generateVerifyEmailToken = async (user) => {
-  const expires = moment().add(config.jwt.verifyEmailExpirationMinutes, 'minutes');
-  const verifyEmailToken = generateToken(user.id, expires, tokenTypes.VERIFY_EMAIL);
+  const expires = moment().add(
+    config.jwt.verifyEmailExpirationMinutes,
+    "minutes"
+  );
+  const verifyEmailToken = generateToken(
+    user.id,
+    expires,
+    tokenTypes.VERIFY_EMAIL
+  );
   await saveToken(verifyEmailToken, user.id, expires, tokenTypes.VERIFY_EMAIL);
   return verifyEmailToken;
 };

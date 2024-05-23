@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { toJSON } = require('./plugins');
+const mongoose = require("mongoose");
+const { toJSON } = require("./plugins");
 
 /**
  * QuestionnaireResponse Schema Model
@@ -10,7 +10,7 @@ const questionnaireResponseSchema = mongoose.Schema(
   {
     userId: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'User',
+      ref: "User",
     },
     educationProfession: {
       type: String,
@@ -42,6 +42,9 @@ questionnaireResponseSchema.plugin(toJSON);
 /**
  * @typedef QuestionnaireResponse
  */
-const QuestionnaireResponse = mongoose.model('QuestionnaireResponse', questionnaireResponseSchema);
+const QuestionnaireResponse = mongoose.model(
+  "QuestionnaireResponse",
+  questionnaireResponseSchema
+);
 
 module.exports = QuestionnaireResponse;
