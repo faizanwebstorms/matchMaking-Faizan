@@ -170,7 +170,8 @@ const findByClause = async (filters, multiple = false) => {
  * @returns {Promise<*>}
  */
 const calculateBMI = (weight, height) => {
-  const bmi = weight / (height / 100) ** 2;
+  try {
+    const bmi = weight / (height / 100) ** 2;
   // Determine body type based on BMI
   let bodyType;
   switch (true) {
@@ -187,7 +188,11 @@ const calculateBMI = (weight, height) => {
       bodyType = userConfig.bodyType.OBESE;
   }
 
-  return { bmi, bodyType };
+  return { bmi, bodyType }; 
+  } catch (error) {
+    throw error;
+  }
+  
 };
 /**
  * CALCULATE LONGITUDE AND LATITUDE FROM POSTAL CODE
