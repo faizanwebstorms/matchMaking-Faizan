@@ -99,6 +99,8 @@ const userSchema = mongoose.Schema(
       type: Number,
     },
     personalityVector: [String],
+    unMatchedUsers: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'User' }],
+
     inMatch: {
       type: Boolean,
     },
