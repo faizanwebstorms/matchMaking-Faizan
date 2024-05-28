@@ -22,7 +22,7 @@ const createQuestionnaireResponse = catchAsync(async (req, res) => {
  * @type {(function(*, *, *): void)|*}
  */
 const createUserPreference = catchAsync(async (req, res) => {
-  const preference = await userService.createPreference(req.body , req.user?._id);
+  const preference = await userService.createPreference(req.body , req.user);
   res.status(httpStatus.CREATED).send(Helper.apiResponse(httpStatus.CREATED, messages.api.success, preference));
 });
 
@@ -117,12 +117,18 @@ const checkMatch = catchAsync(async (req, res) => {
  */
 const updatePreferences = catchAsync(async (req, res) => {
   let preference = await UserPreference.findOne({userId:req.params?.userId});
-  console.log("preference",preference)
   if (!preference) {
     throw new ApiError(httpStatus.BAD_REQUEST, messages.preference.notFound);
   }
-  const updatedPreference = await userService.updatePreference(preference, req.body);
+  const updatedPreference = await userService.updatePreference(preference, req.body , req.user);
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, updatedPreference ));
+});
+const unMatchAUser = catchAsync(async (req, res) => {
+  
+
+  const unmatch = await userService.unmatch(req?.user?.id , req.params.userId);
+
+  res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, unmatch));
 });
 module.exports = {
   createQuestionnaireResponse,
@@ -130,5 +136,6 @@ module.exports = {
   createUserPreference,
   getAllUsers,
   checkMatch,
-  updatePreferences
+  updatePreferences,
+  unMatchAUser
 };
