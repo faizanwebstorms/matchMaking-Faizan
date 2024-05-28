@@ -52,7 +52,7 @@ if (config.env === 'production') {
 // v1 api routes
 app.use('/v1', routes);
 app.get('/', function (req, res) {
-  res.redirect('/');
+  res.redirect('/v1/docs');
 });
 
 
