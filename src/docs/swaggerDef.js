@@ -15,7 +15,7 @@ const swaggerDef = {
   },
   servers: [
     {
-      url: `match-making-faizan.vercel.app/v1/docs`,
+      url: `https://match-making-faizan.vercel.app/v1/docs`,
     },
   ],
   tags: [
