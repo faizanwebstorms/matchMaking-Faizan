@@ -54,7 +54,13 @@ app.use('/v1', routes);
 // app.get('/', function (req, res) {
 //   res.redirect('/v1/docs');
 // });
+app.get('/', function (req, res) {
+  res.redirect('/');
+});
 
+app.get('/', (req, res) => {
+  res.send('Welcome to the API');
+});
 
 app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
