@@ -49,12 +49,12 @@ if (config.env === 'production') {
   app.use('/v1/auth', authLimiter);
 }
 
+// v1 api routes
 app.use('/v1', routes);
-
-// Redirect root URL to Swagger docs
-app.get('/', (req, res) => {
+app.get('/', function (req, res) {
   res.redirect('/v1/docs');
 });
+
 
 app.get('/', (req, res) => {
   res.send('Welcome to the API');
