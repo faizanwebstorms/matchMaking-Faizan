@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const app = require('./app');
 const config = require('./config/config');
+
 const logger = require('./config/logger');
 
 let server;
@@ -9,8 +10,7 @@ mongoose.set('strictQuery', true);
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   logger.info('Connected to MongoDB');
   server = app.listen(config.port, () => {
-    logger.info(`Listening to port Hellow Workd`);
-    console.log("sddddaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    logger.info(`Listening to port ${config.port}`);
   });
 });
 
@@ -26,7 +26,6 @@ const exitHandler = () => {
 };
 
 const unexpectedErrorHandler = (error) => {
-  console.log("error", error)
   logger.error(error);
   exitHandler();
 };
