@@ -117,6 +117,54 @@ const _filterPreferenceData = (data, userId) => {
     relationshipIntention: data?.relationshipIntention,
   };
 };
+
+/**
+ * Find the most matched preference based on the given preference item
+ * @param {Object} preference
+ * @returns {Object} mostMatchedPreference
+ */
+const findMostMatchedPreference = async (preference , unMatchedUsers) => {
+  try {
+    const matchStage = {
+      $match: {
+        userId: { $ne: preference.userId, $nin: unMatchedUsers }
+      }
+    };
+
+    const addFieldsStage = {
+      $addFields: {
+        matchScore: {
+          $add: [
+            { $cond: [{ $eq: ["$genderPreference", preference.genderPreference] }, 1, 0] },
+            { $cond: [{ $eq: ["$agePreference", preference.agePreference] }, 1, 0] },
+            { $cond: [{ $eq: ["$heightPreference", preference.heightPreference] }, 1, 0] },
+            { $cond: [{ $eq: ["$bmiPreference", preference.bmiPreference] }, 1, 0] },
+            { $cond: [{ $eq: ["$religionPreference", preference.religionPreference] }, 1, 0] },
+            { $cond: [{ $eq: ["$locationPreference", preference.locationPreference] }, 1, 0] },
+            { $cond: [{ $eq: ["$relationshipIntention", preference.relationshipIntention] }, 1, 0] }
+          ]
+        }
+      }
+    };
+
+    const sortStage = {
+      $sort: { matchScore: -1 }
+    };
+
+    const limitStage = {
+      $limit: 1
+    };
+
+    const result = await UserPreference.aggregate([matchStage, addFieldsStage, sortStage, limitStage]);
+
+    return result.length > 0 ? result[0] : null;
+  } catch (error) {
+    console.log("error", error);
+    throw error;
+  }
+};
+
+
 /**
  * Get user by id
  * @param {ObjectId} id
@@ -371,15 +419,23 @@ const update = async (user, updateBody) => {
  * Create a user questionnaire response
  * @param {Object} userBody
  */
-const createPreference = async (preferenceBody, userId) => {
+const createPreference = async (preferenceBody, user) => {
   try {
     const item = await UserPreference.create(
-      _filterPreferenceData(preferenceBody, userId)
+      _filterPreferenceData(preferenceBody, user?.id)
     );
     if (!item) {
       throw new Error();
     }
-    return { ...item.toObject() };
+    const mostMatchedPreference = await findMostMatchedPreference(item , user?.unMatchedUsers);
+
+    const matchedUser = await User.findById(mostMatchedPreference?.userId);
+
+    // Step 3: Return the created preference and the most matched User
+    return { 
+      createdPreference: item.toObject(),
+      matchedUser: matchedUser ? matchedUser.toObject() : null,
+    };
   } catch (error) {
     console.log("error", error);
     throw error;
@@ -487,12 +543,35 @@ const checkMatch = async (requestingUserId, requestedUserId) => {
  * @param {Object} updateBody
  * @returns {Promise<User>}
  */
-const updatePreference = async (preference, updateBody) => {
+const updatePreference = async (preference, updateBody , loggedInUser) => {
   try {
     Object.assign(preference, updateBody);
     await preference.save();
-    return preference;
+    const mostMatchedPreference = await findMostMatchedPreference(preference ,loggedInUser?.unMatchedUsers );
+    
+    const matchedUser = await User.findById(mostMatchedPreference?.userId);
+
+    return {
+      preference,
+      matchedUser
+    };
   } catch (e) {
+    throw error;
+  }
+};
+
+const unmatch = async (userId, unMatchedUserId) => {
+  try {
+    // Update the user's unMatchedUsers array
+    await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { unMatchedUsers: unMatchedUserId } },
+      { new: true, runValidators: true }
+    );
+    
+    return { message: 'User unmatched successfully' };
+  } catch (error) {
+    console.error('Error while unmatching user:', error);
     throw error;
   }
 };
@@ -511,4 +590,5 @@ module.exports = {
   getAllUsers,
   checkMatch,
   updatePreference,
+  unmatch
 };
