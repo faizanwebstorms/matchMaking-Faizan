@@ -590,5 +590,6 @@ module.exports = {
   getAllUsers,
   checkMatch,
   updatePreference,
-  unmatch
+  unmatch,
+  findMostMatchedPreference
 };
