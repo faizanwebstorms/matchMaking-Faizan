@@ -21,10 +21,14 @@ const login = async (email, password) => {
 
     //Get matchewd user
     const preference = await UserPreference.findOne({userId:user?.id});
-    const mostMatchedPreference = await userService.findMostMatchedPreference(preference ,user?.unMatchedUsers );    
-    const matchedUser = await User.findById(mostMatchedPreference?.userId);
-
-    return {user , matchedUser};
+    if(preference){
+      const mostMatchedPreference = await userService.findMostMatchedPreference(preference ,user?.unMatchedUsers );    
+      const matchedUser = await User.findById(mostMatchedPreference?.userId);
+      return {user , matchedUser};
+    }
+   else{
+    return {user };
+   }
   } catch (e) {
     throw e;
   }
