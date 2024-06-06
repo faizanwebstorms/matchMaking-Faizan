@@ -117,7 +117,7 @@ const login = catchAsync(async (req, res) => {
   delete user.password;
 
   // Generate Auth Tokens
-  const tokens = await tokenService.generateAuthTokens(user);
+  const tokens = await tokenService.generateAuthTokens(user?.user);
   if (!tokens) {
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
