@@ -124,7 +124,7 @@ const login = catchAsync(async (req, res) => {
       messages.api.internalServerError
     );
   }
-  user.isOnBordingCompleted = await UserPreference.count({ userId: user?.id });
+  user.isOnBordingCompleted = await UserPreference.count({ userId: user?.user?.id });
   res.send(
     Helper.apiResponse(httpStatus.OK, messages.api.success, {
       user,
