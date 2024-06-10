@@ -23,9 +23,9 @@ const login = async (email, password) => {
     
     const preference = await UserPreference.findOne({userId:user?.id});
     if(preference){
-      const mostMatchedPreference = await userService.findMostMatchedPreference(preference ,user?.unMatchedUsers );    
-      const matchedUser = await User.findById(mostMatchedPreference?.userId);
-      return {...user._doc , matchedUser:matchedUser};
+      const mostMatchedPreference = await userService.findMostMatchedUser(preference ,user );   
+      // const matchedUser = await User.findById(mostMatchedPreference?.userId);
+      return {...user._doc , matchedUser:mostMatchedPreference};
     }
    else{
     return user ;
