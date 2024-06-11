@@ -69,6 +69,11 @@ app.use('/v1', routes);
 // });
 
 
+
+app.get('/', (req, res) => {
+  res.send('Welcome to the API');
+});
+
 app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
 });
