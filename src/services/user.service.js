@@ -219,7 +219,7 @@ const calculateMatchScore = async (user, preference, loggedInUser) => {
   matchScore += 1;
 
   // Relationship intention preference check
-  if (!checkPreference(preference.relationshipIntention, user.relationshipIntention, loggedInUser.relationshipIntention)) return null;
+  if (preference.relationshipIntention !== 0 && preference.relationshipIntention !== user.relationshipIntention ) return null;
   matchScore += 1;
 
   // Location preference check
@@ -472,12 +472,15 @@ const update = async (user, updateBody) => {
         bodyType: bmiCalculator.bodyType,
       });
     }
+   
+    Object.assign(user, updateBody);
+    await user.save();
+    
     if (updateBody?.postalCode) {
       const coordinates = await locationHelper.getCoordinatesFromPostalCode(
         updateBody?.postalCode
       );
       const geoCodeData = await locationHelper.getGeocodeData(updateBody?.postalCode);
-
       Object.assign(user, {
         latitude: coordinates.latitude,
         longitude: coordinates.longitude,
@@ -487,13 +490,12 @@ const update = async (user, updateBody) => {
       });
       await user.save();
     }
-    Object.assign(user, updateBody);
-    await user.save();
     return user;
   } catch (e) {
     throw error;
   }
 };
+
 
 /**
  * Create a user questionnaire response
