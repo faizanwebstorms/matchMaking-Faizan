@@ -115,6 +115,15 @@ module.exports = router;
  *                  type: integer
  *               relationshipIntention:
  *                  type: integer
+ *               location:
+ *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                   lat:
+ *                     type: number
+ *                   lng:
+ *                     type: number
  *             example:
  *               firstName: update name
  *               lastName: update last name
@@ -126,6 +135,12 @@ module.exports = router;
  *               gender: 0
  *               religion: 2
  *               relationshipIntention: 2
+ *               location:
+ *                 name: Florida Gulf Coast University FGCU FGCU Boulevard Fort Myers FL USA
+ *                 latitude: 26.4626967
+ *                 longitude: -81.7800748
+ *                 latitudeDelta: 0.0922
+ *                 longitudeDelta: 0.0421
  *     responses:
  *       "200":
  *         $ref: '#/components/responses/UserResponse'

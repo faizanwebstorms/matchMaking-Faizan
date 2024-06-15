@@ -60,8 +60,28 @@ const checkUserName = {
     username: Joi.string().required().custom(username),
   }),
 };
+const forgotPassword = {
+  body: Joi.object().keys({
+    email: Joi.string().allow('').email()
+  }),
+};
+const verifyResetPasswordOTP = {
+  body: Joi.object().keys({
+    userId: Joi.string().required(),
+    otp: Joi.string().length(6).custom(numeric).required().messages({
+      'string.empty': 'OTP cannot be empty',
+      'any.required': 'OTP is required and cannot be empty',
+      'string.length': 'OTP length should be six digits',
+    }),
+  }),
+};
 
-
+const resetPassword = {
+  body: Joi.object().keys({
+    password: Joi.string().required().custom(password),
+    userId: Joi.string().required(),
+  }),
+};
 module.exports = {
   register,
   login,
@@ -69,5 +89,8 @@ module.exports = {
   logout,
   checkEmail,
   checkUserName,
+  forgotPassword,
+  verifyResetPasswordOTP,
+  resetPassword
 
 };

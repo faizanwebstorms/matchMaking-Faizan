@@ -6,3 +6,4 @@ module.exports.QuestionnaireResponse = require('./questionnairResponse.model');
 module.exports.UserPreference = require('./userPreference.model');
 module.exports.Reaction = require ('./reaction.model');
 module.exports.Chat = require ('./chat');
+module.exports.OTP = require ('./otp');
