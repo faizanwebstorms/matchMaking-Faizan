@@ -22,6 +22,7 @@ module.exports = {
     invalidUserOTP: 'Invalid UserId or OTP',
     otpDocError: 'Send OTP first to verify otp for this phone number',
     forbidden: 'User doesnot have the required permission',
+    emailNotFound:'Email Not Found',
   },
   preference:{
     notFound: 'Preference Not Found',
