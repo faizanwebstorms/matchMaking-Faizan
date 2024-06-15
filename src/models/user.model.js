@@ -59,7 +59,7 @@ const userSchema = mongoose.Schema(
       trim: true,
     },
     age: {
-      type: String,
+      type: Number,
     },
     height: {
       type: Number,
@@ -97,6 +97,15 @@ const userSchema = mongoose.Schema(
     },
     longitude: {
       type: Number,
+    },
+    city:{
+      type: String
+    },
+    country: {
+      type: String
+    },
+    region: {
+      type: String
     },
     personalityVector: [String],
     unMatchedUsers: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'User' }],
