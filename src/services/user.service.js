@@ -16,6 +16,7 @@ const { type } = require("../config/reaction");
 const { otpTypes } = require("../config/otp");
 const axios = require("axios");
 const { handleReactionCreation } = require("./reaction.service");
+const locationHelper = require('../helpers/location')
 
 /**
  * filter User Data from request
@@ -117,6 +118,155 @@ const _filterPreferenceData = (data, userId) => {
     relationshipIntention: data?.relationshipIntention,
   };
 };
+
+/**
+ * Find the most matched preference based on the given preference item
+ * @param {Object} preference
+ * @returns {Object} mostMatchedPreference
+ */
+const findMostMatchedPreference = async (preference , unMatchedUsers) => {
+  try {
+    const matchStage = {
+      $match: {
+        userId: { $ne: preference.userId, $nin: unMatchedUsers }
+      }
+    };
+
+    const addFieldsStage = {
+      $addFields: {
+        matchScore: {
+          $add: [
+            { $cond: [{ $eq: ["$genderPreference", preference.genderPreference] }, 1, 0] },
+            { $cond: [{ $eq: ["$agePreference", preference.agePreference] }, 1, 0] },
+            { $cond: [{ $eq: ["$heightPreference", preference.heightPreference] }, 1, 0] },
+            { $cond: [{ $eq: ["$bmiPreference", preference.bmiPreference] }, 1, 0] },
+            { $cond: [{ $eq: ["$religionPreference", preference.religionPreference] }, 1, 0] },
+            { $cond: [{ $eq: ["$locationPreference", preference.locationPreference] }, 1, 0] },
+            { $cond: [{ $eq: ["$relationshipIntention", preference.relationshipIntention] }, 1, 0] }
+          ]
+        }
+      }
+    };
+
+    const sortStage = {
+      $sort: { matchScore: -1 }
+    };
+
+    const limitStage = {
+      $limit: 1
+    };
+
+    const result = await UserPreference.aggregate([matchStage, addFieldsStage, sortStage, limitStage]);
+
+    return result.length > 0 ? result[0] : null;
+  } catch (error) {
+    console.log("error", error);
+    throw error;
+  }
+};
+
+const calculateMatchScore = async (user, preference, loggedInUser) => {
+  let matchScore = 0;
+
+  const checkPreference = (preferenceValue, userValue, loggedInUserValue, exactMatch = true) => {
+    if (preferenceValue === 0) return true;
+    return exactMatch ? userValue === loggedInUserValue : userValue === loggedInUserValue;
+  };
+
+  const checkRangePreference = (preferenceValue, userValue, loggedInUserValue, compareFn) => {
+    if (preferenceValue === 0) return true;
+    return compareFn(userValue, loggedInUserValue);
+  };
+
+  // Gender preference check
+  if (!checkPreference(preference.genderPreference, user.gender, preference.genderPreference)) return null;
+  matchScore += 1;
+
+  // Religion preference check
+  if (!checkPreference(preference.religionPreference, user.religion, loggedInUser.religion)) return null;
+  matchScore += 1;
+
+  // Body type preference check
+  const bodyTypeMatch = (preference.bmiPreference === 0) ||
+    (preference.bmiPreference === 1 && user.bodyType === loggedInUser.bodyType) ||
+    (preference.bmiPreference === 2 && (
+      (loggedInUser.bodyType === 0 && [1, 2, 3].includes(user.bodyType)) ||
+      (loggedInUser.bodyType === 1 && [2, 3].includes(user.bodyType)) ||
+      (loggedInUser.bodyType === 2 && user.bodyType === 3)
+    )) ||
+    (preference.bmiPreference === 3 && (
+      (loggedInUser.bodyType === 3 && [0, 1, 2].includes(user.bodyType)) ||
+      (loggedInUser.bodyType === 2 && [0, 1].includes(user.bodyType)) ||
+      (loggedInUser.bodyType === 1 && user.bodyType === 0)
+    ));
+  if (!bodyTypeMatch) return null;
+  matchScore += 1;
+
+  // Height preference check
+  const heightMatch = (preference.heightPreference === 0) ||
+    (preference.heightPreference === 1 && user.height === loggedInUser.height) ||
+    (preference.heightPreference === 2 && user.height > loggedInUser.height) ||
+    (preference.heightPreference === 3 && user.height < loggedInUser.height);
+  if (!heightMatch) return null;
+  matchScore += 1;
+
+  // Age preference check
+  const ageMatch = (preference.agePreference === 0) ||
+    (preference.agePreference === 1 && user.age === loggedInUser.age) ||
+    (preference.agePreference === 2 && user.age > loggedInUser.age) ||
+    (preference.agePreference === 3 && user.age < loggedInUser.age);
+  if (!ageMatch) return null;
+  matchScore += 1;
+
+  // Relationship intention preference check
+  if (preference.relationshipIntention !== 0 && preference.relationshipIntention !== user.relationshipIntention ) return null;
+  matchScore += 1;
+
+  // Location preference check
+  const locationMatch = (preference.locationPreference === 0) ||
+    (preference.locationPreference === 1 && user.country === loggedInUser.country) ||
+    (preference.locationPreference === 2 && user.region === loggedInUser.region) ||
+    (preference.locationPreference === 3 && user.city === loggedInUser.city);
+  if (!locationMatch) return null;
+  matchScore += 1;
+
+  return matchScore;
+};
+
+
+
+const findMostMatchedUser = async (preference, loggedInUser) => {
+  try {
+    let bestMatch = null;
+    let highestMatchScore = -1;
+    let validMatchFound = false;
+
+    const allUsers = await User.find({
+      _id: { $ne: preference?.userId, $nin: loggedInUser?.unMatchedUsers.map(id => id) }
+    });
+
+    for (let user of allUsers) {
+      // Calculate match score for each user
+      const matchScore = await calculateMatchScore(user, preference, loggedInUser);
+      // If a valid match score is found, update the best match
+      if (matchScore !== null) {
+        validMatchFound = true;
+        if (matchScore > highestMatchScore) {
+          highestMatchScore = matchScore;
+          bestMatch = user;
+        }
+      }
+    }
+
+    // Return the best match if any valid match was found, otherwise return null
+    return validMatchFound ? bestMatch : null;
+  } catch (error) {
+    console.log("error", error);
+    throw error;
+  }
+};
+
+
 /**
  * Get user by id
  * @param {ObjectId} id
@@ -194,35 +344,7 @@ const calculateBMI = (weight, height) => {
   }
   
 };
-/**
- * CALCULATE LONGITUDE AND LATITUDE FROM POSTAL CODE
- * @param filters
- * @param multiple
- * @returns {Promise<*>}
- */
 
-async function getCoordinatesFromPostalCode(postalCode) {
-  try {
-    const mapAddress = "https://maps.googleapis.com/maps/api/geocode/json";
-    const apiKey = "AIzaSyBGm8JnJuyLBjlfBX1z8NAVefFeKWIYNc4";
-    const response = await axios.get(
-      `${mapAddress}?address=${postalCode}&key=${apiKey}`
-    );
-    // Check if the response is successful and contains results
-    if (response.data.status === "OK" && response.data.results.length > 0) {
-      const location = response.data.results[0].geometry.location;
-      const latitude = location.lat;
-      const longitude = location.lng;
-
-      return { latitude, longitude };
-    } else {
-      throw new Error("Failed to fetch coordinates from postal code");
-    }
-  } catch (error) {
-    console.error("Error fetching coordinates:", error.message);
-    throw error;
-  }
-}
 
 /**
  * Create a user
@@ -350,36 +472,50 @@ const update = async (user, updateBody) => {
         bodyType: bmiCalculator.bodyType,
       });
     }
+   
+    Object.assign(user, updateBody);
+    await user.save();
+    
     if (updateBody?.postalCode) {
-      const coordinates = await getCoordinatesFromPostalCode(
+      const coordinates = await locationHelper.getCoordinatesFromPostalCode(
         updateBody?.postalCode
       );
+      const geoCodeData = await locationHelper.getGeocodeData(updateBody?.postalCode);
       Object.assign(user, {
         latitude: coordinates.latitude,
         longitude: coordinates.longitude,
+        city: geoCodeData.city,
+        country: geoCodeData.country,
+        region: geoCodeData.region
       });
+      await user.save();
     }
-    Object.assign(user, updateBody);
-    await user.save();
     return user;
   } catch (e) {
     throw error;
   }
 };
 
+
 /**
  * Create a user questionnaire response
  * @param {Object} userBody
  */
-const createPreference = async (preferenceBody, userId) => {
+const createPreference = async (preferenceBody, user) => {
   try {
     const item = await UserPreference.create(
-      _filterPreferenceData(preferenceBody, userId)
+      _filterPreferenceData(preferenceBody, user?.id)
     );
     if (!item) {
       throw new Error();
     }
-    return { ...item.toObject() };
+    const mostMatchedUser = await findMostMatchedUser(item , user);
+
+    // Step 3: Return the created preference and the most matched User
+    return { 
+      createdPreference: item.toObject(),
+      matchedUser: mostMatchedUser ? mostMatchedUser.toObject() : null,
+    };
   } catch (error) {
     console.log("error", error);
     throw error;
@@ -487,12 +623,32 @@ const checkMatch = async (requestingUserId, requestedUserId) => {
  * @param {Object} updateBody
  * @returns {Promise<User>}
  */
-const updatePreference = async (preference, updateBody) => {
+const updatePreference = async (preference, updateBody , loggedInUser) => {
   try {
     Object.assign(preference, updateBody);
     await preference.save();
-    return preference;
+    const matchedUser = await findMostMatchedUser(preference ,loggedInUser );
+    return {
+      preference,
+      matchedUser
+    };
   } catch (e) {
+    throw error;
+  }
+};
+
+const unmatch = async (userId, unMatchedUserId) => {
+  try {
+    // Update the user's unMatchedUsers array
+    await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { unMatchedUsers: unMatchedUserId } },
+      { new: true, runValidators: true }
+    );
+    
+    return { message: 'User unmatched successfully' };
+  } catch (error) {
+    console.error('Error while unmatching user:', error);
     throw error;
   }
 };
@@ -511,4 +667,7 @@ module.exports = {
   getAllUsers,
   checkMatch,
   updatePreference,
+  unmatch,
+  findMostMatchedPreference,
+  findMostMatchedUser
 };
