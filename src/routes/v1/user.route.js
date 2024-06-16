@@ -18,6 +18,7 @@ router
   // .delete(auth(permissions.delete, resources.users), validate(userValidation.deleteUser), userController.deleteUser);
 router.get('/all/homeScreen',auth(), userController.getAllUsers);
 router.get('/checkMatch',auth(), userController.checkMatch );
+router.patch('/unmatch/:userId',auth(), userController.unMatchAUser);
 module.exports = router;
 
 /**
@@ -301,4 +302,33 @@ module.exports = router;
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
+ */
+/**
+ * @swagger
+ * /users/unmatch/{userId}:
+ *
+ *   patch:
+ *     summary: Update Unmatched users by this user
+ *     description: Logged in users can update their Unmatched users
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User Id of the user to whom current user wants to unmatch
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/UserResponse'
+ *       "400":
+ *         $ref: '#/components/responses/DuplicateEmail'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
  */

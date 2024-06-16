@@ -106,7 +106,6 @@ const loginSocial = catchAsync(async (req, res) => {
 const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const user = await authService.login(email, password);
-
   if (!user) {
     throw new ApiError(
       httpStatus.UNAUTHORIZED,
@@ -124,7 +123,7 @@ const login = catchAsync(async (req, res) => {
       messages.api.internalServerError
     );
   }
-  user.isOnBordingCompleted = await UserPreference.count({ userId: user?.id });
+  user.isOnBordingCompleted = await UserPreference.count({ userId: user?._id });
   res.send(
     Helper.apiResponse(httpStatus.OK, messages.api.success, {
       user,

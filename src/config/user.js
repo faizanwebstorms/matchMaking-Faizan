@@ -56,7 +56,6 @@ const height ={
   SIMILAR:1,
   TALLER: 2,
   SHORTER: 3,
-  
 }
 const bodyType ={
   UNDERWEIGHT: 0,
