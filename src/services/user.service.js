@@ -221,13 +221,13 @@ const calculateMatchScore = async (user, preference, loggedInUser) => {
   // Relationship intention preference check
   if (preference.relationshipIntention !== 0 && preference.relationshipIntention !== user.relationshipIntention ) return null;
   matchScore += 1;
-
+  
   // Location preference check
-  if(user.location.country && loggedInUser.location.country){
+  if(user.location &&  loggedInUser.location){
       const locationMatch = (preference.locationPreference === 0) ||
-    (preference.locationPreference === 1 && user?.location.country === loggedInUser?.location.country) ||
-    (preference.locationPreference === 2 && user?.location.region === loggedInUser?.location.region) ||
-    (preference.locationPreference === 3 && user?.location.city === loggedInUser?.location.city);
+    (preference.locationPreference === 1 && user?.location?.country === loggedInUser?.location?.country) ||
+    (preference.locationPreference === 2 && user?.location?.region === loggedInUser?.location?.region) ||
+    (preference.locationPreference === 3 && user?.location?.city === loggedInUser?.location?.city);
   if (!locationMatch) return null;
   matchScore += 1;
   }
