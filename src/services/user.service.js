@@ -223,12 +223,15 @@ const calculateMatchScore = async (user, preference, loggedInUser) => {
   matchScore += 1;
 
   // Location preference check
-  const locationMatch = (preference.locationPreference === 0) ||
+  if(user.location.country && loggedInUser.location.country){
+      const locationMatch = (preference.locationPreference === 0) ||
     (preference.locationPreference === 1 && user?.location.country === loggedInUser?.location.country) ||
     (preference.locationPreference === 2 && user?.location.region === loggedInUser?.location.region) ||
     (preference.locationPreference === 3 && user?.location.city === loggedInUser?.location.city);
   if (!locationMatch) return null;
   matchScore += 1;
+  }
+
 
   return matchScore;
 };
