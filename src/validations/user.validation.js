@@ -24,11 +24,17 @@ const updateUser = {
       age: Joi.number().allow(''),
       height: Joi.number().allow(''),
       weight: Joi.number().allow(''),
-      city: Joi.string().allow('').custom(alphabets),
       postalCode:Joi.string().allow(''),
       gender: Joi.number().allow('').valid(0 ,1 ,2),
       religion:Joi.number().allow('').valid(0, 1, 2 ,3 ,4),
       relationshipIntention:Joi.number().allow(''),
+      location: Joi.object().keys({
+        name: Joi.string().allow(''),
+        latitude: Joi.number().allow(''),
+        longitude: Joi.number().allow(''),
+        latitudeDelta: Joi.number().allow(''),
+        longitudeDelta: Joi.number().allow(''),
+      }),
     })
 };
 const createPreference = {

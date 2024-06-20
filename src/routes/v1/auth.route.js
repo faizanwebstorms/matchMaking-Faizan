@@ -11,7 +11,13 @@ router.post('/register', validate(authValidation.register), authController.regis
 router.post('/login/social', validate(authValidation.loginSocial), authController.loginSocial);
 router.post('/login', validate(authValidation.login), authController.login);
 router.post('/logout', validate(authValidation.logout), authController.logout);
-
+router.post("/forgot-password", validate(authValidation.forgotPassword), authController.forgotPassword);
+router.post(
+    '/reset-password/verify-otp',
+    validate(authValidation.verifyResetPasswordOTP),
+    authController.verifyResetPasswordOTP
+  );
+router.post('/reset-password', validate(authValidation.resetPassword), authController.resetPassword);
 
 module.exports = router;
 
@@ -214,4 +220,109 @@ module.exports = router;
  *         $ref: '#/components/responses/OK'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ */
+/**
+ * @swagger
+ * /auth/forgot-password:
+ *   post:
+ *     summary: Forgot password
+ *     description: An email will be sent to reset password.
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *             example:
+ *               email: fake@example.com
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/ForgotPassword'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+/**
+ * @swagger
+ * /auth/reset-password/verify-otp:
+ *   post:
+ *     summary: Verify Reset password OTP
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userId
+ *               - otp
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 description: userId from forgot password response
+ *               otp:
+ *                 type: string
+ *             example:
+ *               userId: 'userId'
+ *               otp: '000000'
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/OK'
+ *       "400":
+ *         description: Password reset failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               code: 400
+ *               message: Password reset failed
+ */
+
+/**
+ * @swagger
+ * /auth/reset-password:
+ *   post:
+ *     summary: Reset password
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - password
+ *               - userId
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 minLength: 8
+ *                 description: At least one number and one letter
+ *               userId:
+ *                 type: string
+ *                 description: userId from forgot password response
+ *             example:
+ *               password: password1
+ *               userId: 'userId'
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/OK'
+ *       "400":
+ *         description: Password reset failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               code: 400
+ *               message: Password reset failed
  */

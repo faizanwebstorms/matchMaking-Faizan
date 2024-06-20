@@ -1,5 +1,6 @@
 const axios = require("axios");
-
+const NodeGeocoder = require('node-geocoder');
+const config = require('../config/config')
 
 /**
  * CALCULATE CITY , COUNTRY , REGION FROM POSTAl CODE
@@ -67,8 +68,28 @@ async function getCoordinatesFromPostalCode(postalCode) {
     throw error;
   }
 }
-
+const geoLocationFinder = async (lat, lon) => {
+  const options = {
+    provider: 'google',
+    httpAdapter: 'https',
+    formatter: null,
+    apiKey: config.googleApi.apikey,
+    language: 'en',
+  };
+  const geocoder = NodeGeocoder(options);
+  const geoCoder = await geocoder.reverse({ lat, lon });
+  if (geoCoder.length > 0) {
+    return {
+      city: geoCoder[0]?.city,
+      country: geoCoder[0]?.country,
+      zipCode: geoCoder[0]?.zipcode,
+      state: geoCoder[0]?.administrativeLevels?.level1long,
+    };
+  }
+  return false;
+};
 module.exports = {
   getGeocodeData,
-  getCoordinatesFromPostalCode
+  getCoordinatesFromPostalCode,
+  geoLocationFinder
 }
