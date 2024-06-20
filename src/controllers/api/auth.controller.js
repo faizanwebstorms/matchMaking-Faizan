@@ -10,7 +10,8 @@ const {
 const ApiError = require("../../utils/ApiError");
 const Helper = require("../../utils/Helper");
 const messages = require("../../config/messages");
-const { UserPreference } = require("../../models");
+const { UserPreference, OTP } = require("../../models");
+const { otpTypes } = require('../../config/otp');
 
 /**
  * Register User
@@ -146,9 +147,70 @@ const logout = catchAsync(async (req, res) => {
     .send(Helper.apiResponse(httpStatus.OK, messages.api.success));
 });
 
+/**
+ * Forgot password Request
+ * @type {(function(*, *, *): void)|*}
+ */
+const forgotPassword = catchAsync(async (req, res) => {
+  const user = await userService.findByClause({ $or: [{ email: req?.body?.email }, { username: req?.body?.email }] });
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, messages.api.emailNotFound);
+  }
+  // Generate Reset Password OTP
+  const resetPasswordOTP = await otpService.generateResetPasswordOTP(user);
+
+  if (resetPasswordOTP) {
+    // Send Reset Password OTP through Email (commented till email server implementation)
+    await emailService.changePasswordEmail(req.body.email, resetPasswordOTP.otp);
+    res
+      .status(httpStatus.OK)
+      .send(Helper.apiResponse(httpStatus.OK, messages.api.success, { userId: resetPasswordOTP.userId }));
+  } else {
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .send(Helper.apiResponse(httpStatus.INTERNAL_SERVER_ERROR, messages.api.internalServerError));
+  }
+});
+/**
+ * Verify OTP to Reset User password
+ * @type {(function(*, *, *): void)|*}
+ */
+const verifyResetPasswordOTP = catchAsync(async (req, res) => {
+  const resetPasswordTokenDoc = await otpService.verifyOTP(req.body.otp, otpTypes.RESET_PASSWORD, req.body.userId);
+  if (!resetPasswordTokenDoc) {
+    throw new ApiError(httpStatus.BAD_REQUEST, messages.api.invalidUserOTP);
+  }
+
+  const currentDate = new Date();
+
+  // Check if otp is expired
+  if (currentDate > resetPasswordTokenDoc.expires) {
+    // If otp is expired, delete the record from DB (optimizing resources)
+    await otpService.deleteById(resetPasswordTokenDoc._id);
+    throw new ApiError(httpStatus.GONE, messages.api.codeExpired);
+  }
+  await OTP.deleteMany({ userId: req.body.userId, type: otpTypes.RESET_PASSWORD });
+  res.status(httpStatus.OK).send(Helper.apiResponse(httpStatus.OK, messages.api.success));
+});
+
+/**
+ * Reset User password
+ * @type {(function(*, *, *): void)|*}
+ */
+const resetPassword = catchAsync(async (req, res) => {
+  const reset = await authService.resetPassword(req.body.userId, req.body.password);
+  if (!reset) {
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, messages.api.internalServerError);
+  }
+  res.status(httpStatus.OK).send(Helper.apiResponse(httpStatus.OK, messages.api.success));
+});
+
 module.exports = {
   register,
   loginSocial,
   login,
   logout,
+  forgotPassword,
+  verifyResetPasswordOTP,
+  resetPassword
 };

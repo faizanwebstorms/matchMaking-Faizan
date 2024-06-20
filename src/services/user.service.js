@@ -224,9 +224,9 @@ const calculateMatchScore = async (user, preference, loggedInUser) => {
 
   // Location preference check
   const locationMatch = (preference.locationPreference === 0) ||
-    (preference.locationPreference === 1 && user.country === loggedInUser.country) ||
-    (preference.locationPreference === 2 && user.region === loggedInUser.region) ||
-    (preference.locationPreference === 3 && user.city === loggedInUser.city);
+    (preference.locationPreference === 1 && user?.location.country === loggedInUser?.location.country) ||
+    (preference.locationPreference === 2 && user?.location.region === loggedInUser?.location.region) ||
+    (preference.locationPreference === 3 && user?.location.city === loggedInUser?.location.city);
   if (!locationMatch) return null;
   matchScore += 1;
 
@@ -476,17 +476,21 @@ const update = async (user, updateBody) => {
     Object.assign(user, updateBody);
     await user.save();
     
-    if (updateBody?.postalCode) {
-      const coordinates = await locationHelper.getCoordinatesFromPostalCode(
-        updateBody?.postalCode
-      );
-      const geoCodeData = await locationHelper.getGeocodeData(updateBody?.postalCode);
+    if (updateBody.location) {
+      let address = {};
+      if (updateBody.location.latitude && updateBody.location.longitude) {
+        address = await locationHelper.geoLocationFinder(updateBody.location.latitude, updateBody.location.longitude);
+      }
       Object.assign(user, {
-        latitude: coordinates.latitude,
-        longitude: coordinates.longitude,
-        city: geoCodeData.city,
-        country: geoCodeData.country,
-        region: geoCodeData.region
+        ...updateBody,
+        location: {
+          name: updateBody?.location?.name,
+          coordinates: [updateBody?.location?.longitude, updateBody?.location.latitude],
+          city: address?.city ? address?.city : undefined,
+          country: address?.country ? address?.country : undefined,
+          zipCode: address?.zipCode ? address?.zipCode : undefined,
+          region: address?.state ? address?.state : undefined,
+        },
       });
       await user.save();
     }
