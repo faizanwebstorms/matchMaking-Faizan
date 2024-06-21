@@ -3,6 +3,8 @@ const userService = require("./user.service");
 const { Token, OTP, User, UserPreference } = require("../models");
 const { tokenTypes } = require("../config/tokens");
 const { otpTypes } = require("../config/otp");
+const httpStatus = require('http-status');
+const ApiError = require('../utils/ApiError');
 
 /**
  * Login with username and password
@@ -16,7 +18,7 @@ const login = async (email, password) => {
       $or: [{ email }, { username: email }],
     });
     if (!user || !(await user.isPasswordMatch(password))) {
-      throw new Error();
+      throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email/username or password");
     }
 
     //Get matchewd user
@@ -54,7 +56,34 @@ const logout = async (refreshToken) => {
   }
 };
 
+/**
+ * Reset password
+ * @param resetPasswordTokenDoc
+ * @param {string} newPassword
+ * @returns {Promise}
+ */
+const resetPassword = async (userId, newPassword) => {
+  try {
+    // Fetch User
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+    }
+
+    // Update User Password
+    await userService.update(user, { password: newPassword });
+
+    // Delete all reset password OTPs for this user (To remove redundant documents)
+    await OTP.deleteMany({ userId: user._id, type: otpTypes.RESET_PASSWORD });
+    return true;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 module.exports = {
   login,
   logout,
+  resetPassword
 };
