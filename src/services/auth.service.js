@@ -77,7 +77,7 @@ const resetPassword = async (userId, newPassword) => {
     await OTP.deleteMany({ userId: user._id, type: otpTypes.RESET_PASSWORD });
     return true;
   } catch (error) {
-    return false;
+    throw error;
   }
 };
 
