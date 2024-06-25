@@ -1,5 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const socketIO = require("socket.io");
+const { chatService } = require("../services");
+const { api } = require("../config/messages");
 
 const users = [];
 const socketConnection = (server) => {
@@ -10,11 +12,34 @@ const socketConnection = (server) => {
   });
   io.on("connection", async (socket) => {
     // join new room
-    socket.on("join-room", async () => {
+    socket.on("join-room", async (roomId, userId) => {
       console.log(" User Joined Room Successfully ");
-      return socket.emit("error", {
-        error: "roomId and userId will not be epmty",
+      if (!(roomId && userId)) {
+        return socket.emit("error", {
+          error: "roomId and userId will not be epmty",
+        });
+      }
+      socket.join(roomId);
+
+      await chatService.seenAllUnseenMessageWhenRoomJoin({ roomId, userId });
+      const roomMessages = await chatService.getMessageByRoomIdForSocket({
+        roomId,
       });
+      socket.emit("room-messages", roomMessages);
+    });
+
+    // create chat
+    socket.on("message-room", async (data) => {
+      const chat = await chatService.store(data);
+
+      if (!chat) {
+        return socket.emit("error", { error: api.internalServerError });
+      }
+      const roomMessages = await chatService.getMessageByRoomIdForSocket({
+        roomId: chat?.roomId,
+      });
+      /// sending message to room
+      io.to(data?.roomId).emit("room-messages", roomMessages);
     });
 
     socket.on("disconnect", async () => {
