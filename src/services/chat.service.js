@@ -235,7 +235,7 @@ const remove = async (messageId) => {
     }
     return message;
   } catch (e) {
-    return false;
+    throw e;
   }
 };
 
@@ -399,6 +399,15 @@ async function checkAdminOnline(crewId) {
     return e;
   }
 }
+
+const deleteRoomMessages = async (roomId) => {
+  try {
+    await Chat.deleteMany({ roomId });
+    return true;
+  } catch (error) {
+    throw error;
+  }
+};
 module.exports = {
   store,
   getMessageByRoomId,
@@ -412,4 +421,5 @@ module.exports = {
   getUnseenMessageCount,
   seenAllUnseenMessageWhenRoomJoin,
   updateMessageSeenStatus,
+  deleteRoomMessages,
 };

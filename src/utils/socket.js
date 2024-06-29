@@ -42,6 +42,29 @@ const socketConnection = (server) => {
       io.to(data?.roomId).emit("room-messages", roomMessages);
     });
 
+    // delete message
+    socket.on("delete-message", async (data) => {
+      const isOwner = data?.senderId === req?.user?._id;
+      if (!isOwner) {
+        return socket.emit("error", { error: api.forbidden });
+      }
+      const roomMessages = await chatService.remove(data?._id);
+      /// sending message to room
+      io.to(data?.roomId).emit("room-messages", roomMessages);
+    });
+
+    // Leave room
+    socket.on("leave-room", async (roomId) => {
+      if (!roomId) {
+        return socket.emit("error", {
+          error: "roomId cannot be epmty",
+        });
+      }
+      const leavRoom = await chatService.deleteRoomMessages(roomId);
+      socket.emit("room-deleted", leavRoom);
+      socket.leave(roomId);
+    });
+
     socket.on("disconnect", async () => {
       console.log("User disconnected");
       return socket.emit("User disconnected");
