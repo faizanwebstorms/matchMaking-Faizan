@@ -44,24 +44,29 @@ const socketConnection = (server) => {
 
     // delete message
     socket.on("delete-message", async (data) => {
-      const isOwner = data?.senderId === req?.user?._id;
-      if (!isOwner) {
-        return socket.emit("error", { error: api.forbidden });
-      }
+      // const isOwner = data?.senderId === req?.user?._id;
+      // if (!isOwner) {
+      //   return socket.emit("error", { error: api.forbidden });
+      // }
       const roomMessages = await chatService.remove(data?._id);
       /// sending message to room
       io.to(data?.roomId).emit("room-messages", roomMessages);
     });
 
     // Leave room
-    socket.on("leave-room", async (roomId) => {
+    socket.on("leave-room", async (roomId, userId) => {
       if (!roomId) {
         return socket.emit("error", {
           error: "roomId cannot be epmty",
         });
       }
       const leavRoom = await chatService.deleteRoomMessages(roomId);
-      socket.emit("room-deleted", leavRoom);
+
+      const { loggedInUser, secondUser } = getUserIdsFromRoomId(roomId, userId);
+      console.log("Logged In User ID:", loggedInUser);
+      console.log("Second User ID:", secondUser);
+      io.to(secondUser).emit("room-deleted", leavRoom);
+      // socket.emit("room-deleted", leavRoom);
       socket.leave(roomId);
     });
 
@@ -72,7 +77,20 @@ const socketConnection = (server) => {
   });
   return io;
 };
+function getUserIdsFromRoomId(roomId, userId) {
+  // Split the roomId by the underscore
+  const [userId1, userId2] = roomId.split("_");
 
+  // Check which userId matches the userId from params
+  if (userId === userId1) {
+    return { loggedInUser: userId1, secondUser: userId2 };
+  } else if (userId === userId2) {
+    return { loggedInUser: userId2, secondUser: userId1 };
+  } else {
+    // If neither matches, return an error or handle accordingly
+    throw new Error("UserId does not match either of the IDs in roomId");
+  }
+}
 module.exports = {
   socketConnection,
 };
