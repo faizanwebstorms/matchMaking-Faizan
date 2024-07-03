@@ -1,5 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const socketIO = require("socket.io");
+const chatService = require("../services/chat.service");
+const { api } = require("../config/messages");
 
 const users = [];
 const socketConnection = (server) => {
@@ -20,6 +22,7 @@ const socketConnection = (server) => {
       socket.join(roomId);
       // users[userId] = socket.id;
       await chatService.seenAllUnseenMessageWhenRoomJoin({ roomId, userId });
+      console.log("roomId", roomId);
       const roomMessages = await chatService.getMessageByRoomIdForSocket({
         roomId,
       });
