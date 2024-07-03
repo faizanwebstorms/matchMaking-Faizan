@@ -3,7 +3,7 @@ const socketIO = require("socket.io");
 const { chatService } = require("../services");
 const { api } = require("../config/messages");
 
-const users = [];
+const users = {};
 const socketConnection = (server) => {
   const io = socketIO(server, {
     cors: {
@@ -20,7 +20,7 @@ const socketConnection = (server) => {
         });
       }
       socket.join(roomId);
-
+      users[userId] = socket.id;
       await chatService.seenAllUnseenMessageWhenRoomJoin({ roomId, userId });
       const roomMessages = await chatService.getMessageByRoomIdForSocket({
         roomId,
@@ -65,14 +65,28 @@ const socketConnection = (server) => {
       const { loggedInUser, secondUser } = getUserIdsFromRoomId(roomId, userId);
       console.log("Logged In User ID:", loggedInUser);
       console.log("Second User ID:", secondUser);
-      io.to(secondUser).emit("room-deleted", leavRoom);
+
+      const secondUserSocketId = users[secondUser];
+
+      console.log("secondUserSocketId11111111", secondUserSocketId);
+      if (secondUserSocketId) {
+        console.log("secondUserSocketId222222222222", secondUserSocketId);
+        io.to(secondUserSocketId).emit("room-deleted", leavRoom);
+      } else {
+        console.log(`Second user ${secondUser} is not connected`);
+      }
       // socket.emit("room-deleted", leavRoom);
       socket.leave(roomId);
     });
 
-    socket.on("disconnect", async () => {
-      console.log("User disconnected");
-      return socket.emit("User disconnected");
+    socket.on("disconnect", () => {
+      console.log("User disconnected:", socket.id);
+      for (const [userId, socketId] of Object.entries(users)) {
+        if (socketId === socket.id) {
+          delete users[userId];
+          break;
+        }
+      }
     });
   });
   return io;
