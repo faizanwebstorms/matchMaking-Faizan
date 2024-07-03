@@ -89,7 +89,20 @@ const socketConnection = (server) => {
   });
   return io;
 };
+function getUserIdsFromRoomId(roomId, userId) {
+  // Split the roomId by the underscore
+  const [userId1, userId2] = roomId.split("_");
 
+  // Check which userId matches the userId from params
+  if (userId === userId1) {
+    return { loggedInUser: userId1, secondUser: userId2 };
+  } else if (userId === userId2) {
+    return { loggedInUser: userId2, secondUser: userId1 };
+  } else {
+    // If neither matches, return an error or handle accordingly
+    throw new Error("UserId does not match either of the IDs in roomId");
+  }
+}
 module.exports = {
   socketConnection,
 };
