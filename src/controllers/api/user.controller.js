@@ -1,20 +1,24 @@
-const httpStatus = require('http-status');
-const pick = require('../../utils/pick');
-const ApiError = require('../../utils/ApiError');
-const catchAsync = require('../../utils/catchAsync');
-const userService = require('../../services/user.service');
+const httpStatus = require("http-status");
+const pick = require("../../utils/pick");
+const ApiError = require("../../utils/ApiError");
+const catchAsync = require("../../utils/catchAsync");
+const userService = require("../../services/user.service");
 // const otpService = require('../../services/otp.service');
-const Helper = require('../../utils/Helper');
-const messages = require('../../config/messages');
-const { User, UserPreference } = require('../../models');
+const Helper = require("../../utils/Helper");
+const messages = require("../../config/messages");
+const { User, UserPreference } = require("../../models");
 
 /**
  * Create User Questionnare Response
  * @type {(function(*, *, *): void)|*}
  */
 const createQuestionnaireResponse = catchAsync(async (req, res) => {
-  const response = await userService.createResponse(req.body , req.user?._id);
-  res.status(httpStatus.CREATED).send(Helper.apiResponse(httpStatus.CREATED, messages.api.success, response));
+  const response = await userService.createResponse(req.body, req.user?._id);
+  res
+    .status(httpStatus.CREATED)
+    .send(
+      Helper.apiResponse(httpStatus.CREATED, messages.api.success, response)
+    );
 });
 
 /**
@@ -22,8 +26,12 @@ const createQuestionnaireResponse = catchAsync(async (req, res) => {
  * @type {(function(*, *, *): void)|*}
  */
 const createUserPreference = catchAsync(async (req, res) => {
-  const preference = await userService.createPreference(req.body , req.user);
-  res.status(httpStatus.CREATED).send(Helper.apiResponse(httpStatus.CREATED, messages.api.success, preference));
+  const preference = await userService.createPreference(req.body, req.user);
+  res
+    .status(httpStatus.CREATED)
+    .send(
+      Helper.apiResponse(httpStatus.CREATED, messages.api.success, preference)
+    );
 });
 
 /**
@@ -36,7 +44,9 @@ const updateUser = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.BAD_REQUEST, messages.api.userNotFound);
   }
   const updatedUser = await userService.update(user, req.body);
-  res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, updatedUser ));
+  res.send(
+    Helper.apiResponse(httpStatus.OK, messages.api.success, updatedUser)
+  );
 });
 
 // const getAllUsers = catchAsync(async (req, res) => {
@@ -90,24 +100,25 @@ const updateUser = catchAsync(async (req, res) => {
 // });
 
 const getAllUsers = catchAsync(async (req, res) => {
-  const options = pick(req.query, ['limit', 'page']);
+  const options = pick(req.query, ["limit", "page"]);
   if (req.query.sortBy) {
     options.sort = {};
     // eslint-disable-next-line prefer-destructuring
-    options.sort[req.query.sortBy.split(':')[0]] = req.query.sortBy.split(':')[1];
+    options.sort[req.query.sortBy.split(":")[0]] =
+      req.query.sortBy.split(":")[1];
   }
 
-  const users = await userService.getAllUsers(req.user._id , options);
+  const users = await userService.getAllUsers(req.user._id, options);
 
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, users));
 });
 
 const checkMatch = catchAsync(async (req, res) => {
   let requestedUserId;
-  if(req.query.userId){
-    requestedUserId = req.query.userId
+  if (req.query.userId) {
+    requestedUserId = req.query.userId;
   }
-  const isMatch = await userService.checkMatch(req.user._id , requestedUserId);
+  const isMatch = await userService.checkMatch(req.user._id, requestedUserId);
 
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, isMatch));
 });
@@ -116,17 +127,21 @@ const checkMatch = catchAsync(async (req, res) => {
  * @type {(function(*, *, *): void)|*}
  */
 const updatePreferences = catchAsync(async (req, res) => {
-  let preference = await UserPreference.findOne({userId:req.params?.userId});
+  let preference = await UserPreference.findOne({ userId: req.params?.userId });
   if (!preference) {
     throw new ApiError(httpStatus.BAD_REQUEST, messages.preference.notFound);
   }
-  const updatedPreference = await userService.updatePreference(preference, req.body , req.user);
-  res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, updatedPreference ));
+  const updatedPreference = await userService.updatePreference(
+    preference,
+    req.body,
+    req.user
+  );
+  res.send(
+    Helper.apiResponse(httpStatus.OK, messages.api.success, updatedPreference)
+  );
 });
 const unMatchAUser = catchAsync(async (req, res) => {
-  
-
-  const unmatch = await userService.unmatch(req?.user?.id , req.params.userId);
+  const unmatch = await userService.unmatch(req?.user?.id, req.params.userId);
 
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, unmatch));
 });
@@ -137,5 +152,5 @@ module.exports = {
   getAllUsers,
   checkMatch,
   updatePreferences,
-  unMatchAUser
+  unMatchAUser,
 };
