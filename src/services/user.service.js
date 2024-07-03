@@ -307,7 +307,7 @@ const calculateMatchScore = async (user, preference, loggedInUser) => {
   )
     return null;
   matchScore += 1;
-
+  
   // Location preference check
   if (user.location && loggedInUser.location) {
     const locationMatch =
@@ -600,6 +600,7 @@ const update = async (user, updateBody) => {
     throw error;
   }
 };
+
 
 /**
  * Create a user questionnaire response
