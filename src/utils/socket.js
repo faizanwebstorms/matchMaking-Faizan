@@ -44,13 +44,14 @@ const socketConnection = (server) => {
 
     // delete message
     socket.on("delete-message", async (data) => {
-      // const isOwner = data?.senderId === req?.user?._id;
-      // if (!isOwner) {
-      //   return socket.emit("error", { error: api.forbidden });
-      // }
-      const roomMessages = await chatService.remove(data?._id);
-      /// sending message to room
-      io.to(data?.roomId).emit("room-messages", roomMessages);
+      const removeMessage = await chatService.remove(data?._id);
+      if (removeMessage) {
+        const roomMessages = await chatService.getMessageByRoomIdForSocket({
+          roomId: data?.roomId,
+        });
+        /// sending message to room
+        io.to(data?.roomId).emit("room-messages", roomMessages);
+      }
     });
 
     // Leave room
