@@ -227,13 +227,13 @@ const update = async (data) => {
 const remove = async (messageId) => {
   // eslint-disable-next-line no-useless-catch
   try {
-    let message;
+    // let message;
     const isExist = await Chat.findOne({ _id: messageId }).select("roomId");
     if (isExist) {
       await Chat.deleteOne({ _id: messageId });
-      message = await getMessageByRoomIdForSocket({ roomId: isExist?.roomId });
+      // message = await getMessageByRoomIdForSocket({ roomId: isExist?.roomId });
     }
-    return message;
+    return true;
   } catch (e) {
     throw e;
   }
