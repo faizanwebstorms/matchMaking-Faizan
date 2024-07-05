@@ -64,14 +64,10 @@ const socketConnection = (server) => {
       const leavRoom = await chatService.deleteRoomMessages(roomId);
 
       const { loggedInUser, secondUser } = getUserIdsFromRoomId(roomId, userId);
-      console.log("Logged In User ID:", loggedInUser);
-      console.log("Second User ID:", secondUser);
 
       const secondUserSocketId = users[secondUser];
 
-      console.log("secondUserSocketId11111111", secondUserSocketId);
       if (secondUserSocketId) {
-        console.log("secondUserSocketId222222222222", secondUserSocketId);
         io.to(secondUserSocketId).emit("room-deleted", leavRoom);
       } else {
         console.log(`Second user ${secondUser} is not connected`);
