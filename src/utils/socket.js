@@ -9,6 +9,7 @@ const socketConnection = (server) => {
     cors: {
       origin: "*",
     },
+    addTrailingSlash: false,
   });
   io.on("connection", async (socket) => {
     // join new room
