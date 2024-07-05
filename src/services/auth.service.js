@@ -1,10 +1,10 @@
 const tokenService = require("./token.service");
 const userService = require("./user.service");
-const { Token, OTP, User, UserPreference } = require("../models");
+const { Token, OTP, User, UserPreference, Match } = require("../models");
 const { tokenTypes } = require("../config/tokens");
 const { otpTypes } = require("../config/otp");
-const httpStatus = require('http-status');
-const ApiError = require('../utils/ApiError');
+const httpStatus = require("http-status");
+const ApiError = require("../utils/ApiError");
 
 /**
  * Login with username and password
@@ -18,20 +18,38 @@ const login = async (email, password) => {
       $or: [{ email }, { username: email }],
     });
     if (!user || !(await user.isPasswordMatch(password))) {
-      throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email/username or password");
+      throw new ApiError(
+        httpStatus.UNAUTHORIZED,
+        "Incorrect email/username or password"
+      );
     }
 
     //Get matchewd user
-    
-    const preference = await UserPreference.findOne({userId:user?.id});
-    if(preference){
-      const mostMatchedPreference = await userService.findMostMatchedUser(preference ,user );   
-      // const matchedUser = await User.findById(mostMatchedPreference?.userId);
-      return {...user._doc , matchedUser:mostMatchedPreference};
+    const isMatchExists = await Match.findOne({
+      $and: [
+        {
+          $or: [{ matchedBy: user?._id }, { matchedTo: user?._id }],
+        },
+        { active: true },
+      ],
+    });
+
+    if (isMatchExists) {
+      let matchedUserId;
+
+      // Check if the user is matchedBy or matchedTo and set matchedUserId accordingly
+      if (isMatchExists.matchedBy.equals(user._id)) {
+        matchedUserId = isMatchExists.matchedTo;
+      } else if (isMatchExists.matchedTo.equals(user._id)) {
+        matchedUserId = isMatchExists.matchedBy;
+      }
+
+      const matchedUser = await User.findById(matchedUserId);
+
+      return { ...user._doc, matchedUser: matchedUser };
+    } else {
+      return user;
     }
-   else{
-    return user ;
-   }
   } catch (e) {
     throw e;
   }
@@ -81,9 +99,8 @@ const resetPassword = async (userId, newPassword) => {
   }
 };
 
-
 module.exports = {
   login,
   logout,
-  resetPassword
+  resetPassword,
 };
