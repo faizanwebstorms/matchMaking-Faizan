@@ -791,13 +791,16 @@ const unmatch = async (userId, unMatchedUserId) => {
     }
 
     const isMatchExists = await Match.findOne({
-      matchedBy: userId,
-      matchedTo: unMatchedUserId,
+      $or: [
+        { matchedBy: userId, matchedTo: unMatchedUserId },
+        { matchedBy: unMatchedUserId, matchedTo: userId },
+      ],
     });
     if (isMatchExists) {
       Object.assign(isMatchExists, { active: false });
-      isMatchExists.save();
+      await isMatchExists.save();
     }
+
     return { message: "User unmatched successfully" };
   } catch (error) {
     console.error("Error while unmatching user:", error);
