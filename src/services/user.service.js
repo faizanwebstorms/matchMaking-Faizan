@@ -307,7 +307,7 @@ const calculateMatchScore = async (user, preference, loggedInUser) => {
   )
     return null;
   matchScore += 1;
-  
+
   // Location preference check
   if (user.location && loggedInUser.location) {
     const locationMatch =
@@ -601,7 +601,6 @@ const update = async (user, updateBody) => {
   }
 };
 
-
 /**
  * Create a user questionnaire response
  * @param {Object} userBody
@@ -792,13 +791,16 @@ const unmatch = async (userId, unMatchedUserId) => {
     }
 
     const isMatchExists = await Match.findOne({
-      matchedBy: userId,
-      matchedTo: unMatchedUserId,
+      $or: [
+        { matchedBy: userId, matchedTo: unMatchedUserId },
+        { matchedBy: unMatchedUserId, matchedTo: userId },
+      ],
     });
     if (isMatchExists) {
       Object.assign(isMatchExists, { active: false });
-      isMatchExists.save();
+      await isMatchExists.save();
     }
+
     return { message: "User unmatched successfully" };
   } catch (error) {
     console.error("Error while unmatching user:", error);
