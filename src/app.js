@@ -1,25 +1,25 @@
-const express = require('express');
-const xss = require('xss-clean');
-const mongoSanitize = require('express-mongo-sanitize');
-const compression = require('compression');
-const cors = require('cors');
-const passport = require('passport');
-const httpStatus = require('http-status');
-const mongoose = require('mongoose');
-const config = require('./config/config');
-const morgan = require('./config/morgan');
-const { jwtStrategy } = require('./config/passport');
-const { authLimiter } = require('./middlewares/rateLimiter');
-const routes = require('./routes/v1');
-const { errorConverter, errorHandler } = require('./middlewares/error');
-const ApiError = require('./utils/ApiError');
-const logger = require('./config/logger');
-const { socketConnection } = require('./utils/socket');
-const socketMiddleware = require('./middlewares/socket');
+const express = require("express");
+const xss = require("xss-clean");
+const mongoSanitize = require("express-mongo-sanitize");
+const compression = require("compression");
+const cors = require("cors");
+const passport = require("passport");
+const httpStatus = require("http-status");
+const mongoose = require("mongoose");
+const config = require("./config/config");
+const morgan = require("./config/morgan");
+const { jwtStrategy } = require("./config/passport");
+const { authLimiter } = require("./middlewares/rateLimiter");
+const routes = require("./routes/v1");
+const { errorConverter, errorHandler } = require("./middlewares/error");
+const ApiError = require("./utils/ApiError");
+const logger = require("./config/logger");
+const { socketConnection } = require("./utils/socket");
+const socketMiddleware = require("./middlewares/socket");
 
-mongoose.set('strictQuery', true);
+mongoose.set("strictQuery", true);
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
-  logger.info('Connected to MongoDB');
+  logger.info("Connected to MongoDB");
 });
 
 const app = express();
@@ -31,14 +31,14 @@ const io = socketConnection(server);
 
 app.use(socketMiddleware(io));
 
-if (config.env !== 'test') {
+if (config.env !== "test") {
   app.use(morgan.successHandler);
   app.use(morgan.errorHandler);
 }
 
 // Increase request entity
-app.use(express.json({ limit: '10mb', extended: true }));
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use(express.json({ limit: "10mb", extended: true }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 // sanitize request data
 app.use(xss());
@@ -49,28 +49,26 @@ app.use(compression());
 
 // enable cors
 app.use(cors());
-app.options('*', cors());
-
-
+app.options("*", cors());
 
 // jwt authentication
 app.use(passport.initialize());
-passport.use('jwt', jwtStrategy);
+passport.use("jwt", jwtStrategy);
 
 // limit repeated failed requests to auth endpoints
-if (config.env === 'production') {
-  app.use('/v1/auth', authLimiter);
+if (config.env === "production") {
+  app.use("/v1/auth", authLimiter);
 }
 
 // v1 api routes
-app.use('/v1', routes);
-app.get('/', function (req, res) {
-  res.redirect('/v1/docs');
+app.use("/v1", routes);
+app.get("/", function (req, res) {
+  res.redirect("/v1/docs");
 });
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {
-  next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
+  next(new ApiError(httpStatus.NOT_FOUND, "Not found"));
 });
 
 // convert error to ApiError, if needed
@@ -82,7 +80,7 @@ app.use(errorHandler);
 const exitHandler = () => {
   if (server) {
     server.close(() => {
-      logger.info('Server closed');
+      logger.info("Server closed");
       process.exit(1);
     });
   } else {
@@ -95,14 +93,36 @@ const unexpectedErrorHandler = (error) => {
   exitHandler();
 };
 
-process.on('uncaughtException', unexpectedErrorHandler);
-process.on('unhandledRejection', unexpectedErrorHandler);
+process.on("uncaughtException", unexpectedErrorHandler);
+process.on("unhandledRejection", unexpectedErrorHandler);
 
-process.on('SIGTERM', () => {
-  logger.info('SIGTERM received');
+process.on("SIGTERM", () => {
+  logger.info("SIGTERM received");
   if (server) {
     server.close();
   }
 });
+
+// Let's start with importing `NlpManager` from `node-nlp`. This will be responsible for training, saving, loading and processing.
+const { NlpManager } = require("node-nlp");
+console.log("Starting Chatbot ...");
+// Creating new Instance of NlpManager class.
+const manager = new NlpManager({ languages: ["en"] });
+// Loading our saved model
+manager.load();
+// // Loading a module readline, this will be able to take input from the terminal.
+// var readline = require("readline");
+// var rl = readline.createInterface(process.stdin, process.stdout);
+// console.log("Chatbot started!");
+// rl.setPrompt("> ");
+// rl.prompt();
+// rl.on("line", async function (line) {
+//   // Here Passing our input text to the manager to get response and display response answer.
+//   const response = await manager.process("en", line);
+//   console.log(response.answer);
+//   rl.prompt();
+// }).on("close", function () {
+//   process.exit(0);
+// });
 
 module.exports = app;

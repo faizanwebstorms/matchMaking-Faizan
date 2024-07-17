@@ -1,0 +1,26 @@
+{
+  "questions": [
+    "find me a match",
+    "show me potential matches",
+    "who can I date",
+    "who is available to date",
+    "find someone for me",
+    "who can I meet",
+    "show me profiles",
+    "I want to see matches",
+    "show me people to date",
+    "find people for me to meet"
+  ],
+  "answers": [
+    "Sure, let's find someone special for you. Please tell me more about your preferences.",
+    "I can help with that. What kind of person are you looking for?",
+    "Let's see who's available. Can you specify any preferences?",
+    "Great! Tell me more about what you're looking for in a match.",
+    "I can help find someone for you. What are your preferences?",
+    "Let's find someone you can connect with. What kind of person do you have in mind?",
+    "I'll show you some profiles. What are your preferences?",
+    "Let's see who we can find for you. Do you have any specific criteria?",
+    "I'll help you find someone to date. What are you looking for?",
+    "Let's find some people you might like. Tell me more about your ideal match."
+  ]
+}

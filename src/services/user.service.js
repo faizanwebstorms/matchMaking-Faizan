@@ -18,6 +18,11 @@ const { otpTypes } = require("../config/otp");
 const axios = require("axios");
 const { handleReactionCreation } = require("./reaction.service");
 const locationHelper = require("../helpers/location");
+const { NlpManager } = require("node-nlp");
+
+// Load the NlpManager instance once
+const manager = new NlpManager({ languages: ["en"] });
+manager.load();
 
 /**
  * filter User Data from request
@@ -807,6 +812,16 @@ const unmatch = async (userId, unMatchedUserId) => {
     throw error;
   }
 };
+
+const chatBotResponse = async (body) => {
+  try {
+    const response = await manager.process("en", body.question);
+    return response.answer;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   findByClause,
   findById,
@@ -825,4 +840,5 @@ module.exports = {
   unmatch,
   findMostMatchedPreference,
   findMostMatchedUser,
+  chatBotResponse,
 };
