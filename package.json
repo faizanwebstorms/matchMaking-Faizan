@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "pm2 start ecosystem.config.json --no-daemon",
+    "train": "node src/train.js",
     "dev": "cross-env NODE_ENV=development nodemon --trace-warnings src/app.js",
     "test": "jest -i --colors --verbose --detectOpenHandles",
     "test:watch": "jest -i --watchAll",
@@ -74,6 +75,7 @@
     "mongoose-paginate-v2": "^1.7.1",
     "morgan": "^1.9.1",
     "node-geocoder": "^4.3.0",
+    "node-nlp": "^4.27.0",
     "nodemailer": "^6.3.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",

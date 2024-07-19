@@ -145,6 +145,17 @@ const unMatchAUser = catchAsync(async (req, res) => {
 
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, unmatch));
 });
+/**
+ * Send ChatBot response
+ * @type {(function(*, *, *): void)|*}
+ */
+const chatBot = catchAsync(async (req, res) => {
+  const chatBotResponse = await userService.chatBotResponse(req.body);
+  res.send(
+    Helper.apiResponse(httpStatus.OK, messages.api.success, chatBotResponse)
+  );
+});
+
 module.exports = {
   createQuestionnaireResponse,
   updateUser,
@@ -153,4 +164,5 @@ module.exports = {
   checkMatch,
   updatePreferences,
   unMatchAUser,
+  chatBot,
 };
