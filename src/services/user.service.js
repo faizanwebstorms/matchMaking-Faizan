@@ -816,6 +816,11 @@ const unmatch = async (userId, unMatchedUserId) => {
 const chatBotResponse = async (body) => {
   try {
     const response = await manager.process("en", body.question);
+    if (response.answer == null) {
+      response.answer =
+        "I cannot answer this question. Please ask a valid question.";
+      return response.answer;
+    }
     return response.answer;
   } catch (error) {
     throw error;
