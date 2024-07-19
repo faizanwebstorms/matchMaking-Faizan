@@ -9,6 +9,7 @@ const socketConnection = (server) => {
     cors: {
       origin: "*",
     },
+    addTrailingSlash: false,
   });
   io.on("connection", async (socket) => {
     // join new room
@@ -52,6 +53,7 @@ const socketConnection = (server) => {
         /// sending message to room
         io.to(data?.roomId).emit("room-messages", roomMessages);
       }
+      /// sending message to room
     });
 
     // Leave room
