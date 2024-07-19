@@ -1,0 +1,2913 @@
+{
+  "settings": {
+    "languages": [
+      "en"
+    ],
+    "tag": "nlp",
+    "threshold": 0.5,
+    "autoLoad": true,
+    "autoSave": true,
+    "modelFileName": "model.nlp",
+    "executeActionsBeforeAnswers": false,
+    "calculateSentiment": true
+  },
+  "nluManager": {
+    "settings": {
+      "tag": "nlu-manager"
+    },
+    "locales": [
+      "en"
+    ],
+    "languageNames": {},
+    "domainManagers": {
+      "en": {
+        "settings": {
+          "locale": "en",
+          "trainByDomain": false,
+          "tag": "domain-manager-en",
+          "nluByDomain": {
+            "default": {
+              "className": "NeuralNlu",
+              "settings": {}
+            }
+          },
+          "useStemDict": true
+        },
+        "stemDict": {
+          "app,doe,how,this,work": {
+            "intent": "app.info",
+            "domain": "default"
+          },
+          "about,app,me,tell,this": {
+            "intent": "app.info",
+            "domain": "default"
+          },
+          "app,do,how,i,this,use": {
+            "intent": "app.info",
+            "domain": "default"
+          },
+          "app,can,do,i,on,this,what": {
+            "intent": "app.info",
+            "domain": "default"
+          },
+          "do,find,how,i,match": {
+            "intent": "app.info",
+            "domain": "default"
+          },
+          "app,doe,featur,have,this,what": {
+            "intent": "app.info",
+            "domain": "default"
+          },
+          "date,do,how,i,start": {
+            "intent": "app.info",
+            "domain": "default"
+          },
+          "app,for,is,this,what": {
+            "intent": "app.info",
+            "domain": "default"
+          },
+          "do,here,how,i,meet,peopl": {
+            "intent": "app.info",
+            "domain": "default"
+          },
+          "can,do,here,i,what": {
+            "intent": "app.info",
+            "domain": "default"
+          },
+          "goodby": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "bye,care,take": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "later,see,you": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "bye,for,now": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "go,i,must": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "catch,later,you": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "see,you": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "farewel": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "easi,it,take": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "am,i,out": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "out,peac": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "go,gotta,i": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "later": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "see,ya": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "bye": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "later,talk,to,you": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "long,so": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "have,i,leav,to": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "gotta,run": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "next,time,until": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "hello": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "hi": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "howdi": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "greet": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "hey": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "hey,there": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "hi,there": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "is,up,what": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "go,how,is,it": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "good,morn": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "afternoon,good": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "even,good": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "is,new,what": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "yo": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "hiya": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "hello,there": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "sup": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "hey,you": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "salut": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "are,how,you": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "are,do,how,you": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "howdy-do": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "hola": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "bonjour": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "everyon,hi": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "day,g": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "howdi,partner": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "a,find,match,me": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "match,me,potenti,show": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "can,date,i,who": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "avail,date,is,to,who": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "find,for,me,someon": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "can,i,meet,who": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "me,profil,show": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "i,match,see,to,want": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "date,me,peopl,show,to": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "find,for,me,meet,peopl,to": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "a,after,am,breakup,feel,i,sad": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "betray,by,i,my,partner,was": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "i,need,someon,talk,to": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "chat,i,just,to,want": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "be,can,friend,my,you": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "am,feel,happi,i": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "good,i,news,share,some,to,want": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "cheer,i,need,up": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "about,fun,is,let,someth,talk": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "a,joke,me,tell": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "feel,i,lone": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "advic,i,my,need,on,relationship": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "can,feel,help,me,my,with,you": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "i,just,to,vent,want": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "a,be,can,chat,for,my,partner,you": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "about,am,excit,futur,i,my": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "about,hobbi,is,let,talk": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "interest,me,someth,tell": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "i,need,posit,some": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "day,discuss,i,my,to,want": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "can,how,i,improv,mood,my": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "i,motiv,need": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "excit,is,let,plan,someth": {
+            "intent": "matches.find",
+            "domain": "default"
+          },
+          "can,help,me,relax,you": {
+            "intent": "matches.find",
+            "domain": "default"
+          }
+        },
+        "intentDict": {
+          "app.info": "default",
+          "greetings.bye": "default",
+          "greetings.hello": "default",
+          "matches.find": "default"
+        },
+        "sentences": [
+          {
+            "domain": "default",
+            "utterance": "how does this app work",
+            "intent": "app.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "tell me about this app",
+            "intent": "app.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "how do I use this app",
+            "intent": "app.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "what can I do on this app",
+            "intent": "app.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "how do I find matches",
+            "intent": "app.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "what features does this app have",
+            "intent": "app.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "how do I start dating",
+            "intent": "app.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "what is this app for",
+            "intent": "app.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "how do I meet people here",
+            "intent": "app.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "what can I do here",
+            "intent": "app.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "goodbye",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "bye take care",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "see you later",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "bye for now",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "i must go",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "catch you later",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "see you",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "farewell",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "take it easy",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "i'm out",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "peace out",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "i gotta go",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "laters",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "see ya",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "bye bye",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "talk to you later",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "so long",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "i have to leave",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "gotta run",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "until next time",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "hello",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "hi",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "howdy",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "greetings",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "hey",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "hey there",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "hi there",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "what's up",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "how's it going",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "good morning",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "good afternoon",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "good evening",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "what's new",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "yo",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "hiya",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "hello there",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "sup",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "hey you",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "salutations",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "how are you",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "how are you doing",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "howdy-do",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "hola",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "bonjour",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "hi everyone",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "g'day",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "howdy partner",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "find me a match",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me potential matches",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "who can I date",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "who is available to date",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "find someone for me",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "who can I meet",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me profiles",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "I want to see matches",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me people to date",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "find people for me to meet",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "I am feeling sad after a breakup",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "I was betrayed by my partner",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "I need someone to talk to",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "I just want to chat",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "Can you be my friend?",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "I am feeling happy",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "I want to share some good news",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "I need cheering up",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "Let's talk about something fun",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "Tell me a joke",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "I feel lonely",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "I need advice on my relationship",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "Can you help me with my feelings?",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "I just want to vent",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "Can you be my partner for a chat?",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "I am excited about my future",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "Let's talk about hobbies",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "Tell me something interesting",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "I need some positivity",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "I want to discuss my day",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "How can I improve my mood?",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "I need motivation",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "Let's plan something exciting",
+            "intent": "matches.find"
+          },
+          {
+            "domain": "default",
+            "utterance": "Can you help me relax?",
+            "intent": "matches.find"
+          }
+        ],
+        "domains": {
+          "master_domain": {
+            "settings": {
+              "locale": "en",
+              "tag": "nlu-en",
+              "keepStopwords": true,
+              "nonefeatureValue": 1,
+              "nonedeltaMultiplier": 1.2,
+              "spellCheck": false,
+              "spellCheckDistance": 1,
+              "filterZeros": true,
+              "log": true
+            },
+            "features": {
+              "how": 1,
+              "doe": 1,
+              "this": 1,
+              "app": 1,
+              "work": 1,
+              "tell": 1,
+              "me": 1,
+              "about": 1,
+              "do": 1,
+              "i": 1,
+              "use": 1,
+              "what": 1,
+              "can": 1,
+              "on": 1,
+              "find": 1,
+              "match": 1,
+              "featur": 1,
+              "have": 1,
+              "start": 1,
+              "date": 1,
+              "is": 1,
+              "for": 1,
+              "meet": 1,
+              "peopl": 1,
+              "here": 1,
+              "goodby": 1,
+              "bye": 1,
+              "take": 1,
+              "care": 1,
+              "see": 1,
+              "you": 1,
+              "later": 1,
+              "now": 1,
+              "must": 1,
+              "go": 1,
+              "catch": 1,
+              "farewel": 1,
+              "it": 1,
+              "easi": 1,
+              "am": 1,
+              "out": 1,
+              "peac": 1,
+              "gotta": 1,
+              "ya": 1,
+              "talk": 1,
+              "to": 1,
+              "so": 1,
+              "long": 1,
+              "leav": 1,
+              "run": 1,
+              "until": 1,
+              "next": 1,
+              "time": 1,
+              "hello": 1,
+              "hi": 1,
+              "howdi": 1,
+              "greet": 1,
+              "hey": 1,
+              "there": 1,
+              "up": 1,
+              "good": 1,
+              "morn": 1,
+              "afternoon": 1,
+              "even": 1,
+              "new": 1,
+              "yo": 1,
+              "hiya": 1,
+              "sup": 1,
+              "salut": 1,
+              "are": 1,
+              "howdy-do": 1,
+              "hola": 1,
+              "bonjour": 1,
+              "everyon": 1,
+              "g": 1,
+              "day": 1,
+              "partner": 1,
+              "a": 1,
+              "show": 1,
+              "potenti": 1,
+              "who": 1,
+              "avail": 1,
+              "someon": 1,
+              "profil": 1,
+              "want": 1,
+              "feel": 1,
+              "sad": 1,
+              "after": 1,
+              "breakup": 1,
+              "was": 1,
+              "betray": 1,
+              "by": 1,
+              "my": 1,
+              "need": 1,
+              "just": 1,
+              "chat": 1,
+              "be": 1,
+              "friend": 1,
+              "happi": 1,
+              "share": 1,
+              "some": 1,
+              "news": 1,
+              "cheer": 1,
+              "let": 1,
+              "someth": 1,
+              "fun": 1,
+              "joke": 1,
+              "lone": 1,
+              "advic": 1,
+              "relationship": 1,
+              "help": 1,
+              "with": 1,
+              "vent": 1,
+              "excit": 1,
+              "futur": 1,
+              "hobbi": 1,
+              "interest": 1,
+              "posit": 1,
+              "discuss": 1,
+              "improv": 1,
+              "mood": 1,
+              "motiv": 1,
+              "plan": 1,
+              "relax": 1
+            },
+            "intents": {
+              "app.info": 1,
+              "greetings.bye": 1,
+              "greetings.hello": 1,
+              "matches.find": 1
+            },
+            "intentFeatures": {
+              "app.info": {
+                "how": 1,
+                "doe": 1,
+                "this": 1,
+                "app": 1,
+                "work": 1,
+                "tell": 1,
+                "me": 1,
+                "about": 1,
+                "do": 1,
+                "i": 1,
+                "use": 1,
+                "what": 1,
+                "can": 1,
+                "on": 1,
+                "find": 1,
+                "match": 1,
+                "featur": 1,
+                "have": 1,
+                "start": 1,
+                "date": 1,
+                "is": 1,
+                "for": 1,
+                "meet": 1,
+                "peopl": 1,
+                "here": 1
+              },
+              "greetings.bye": {
+                "goodby": 1,
+                "bye": 1,
+                "take": 1,
+                "care": 1,
+                "see": 1,
+                "you": 1,
+                "later": 1,
+                "for": 1,
+                "now": 1,
+                "i": 1,
+                "must": 1,
+                "go": 1,
+                "catch": 1,
+                "farewel": 1,
+                "it": 1,
+                "easi": 1,
+                "am": 1,
+                "out": 1,
+                "peac": 1,
+                "gotta": 1,
+                "ya": 1,
+                "talk": 1,
+                "to": 1,
+                "so": 1,
+                "long": 1,
+                "have": 1,
+                "leav": 1,
+                "run": 1,
+                "until": 1,
+                "next": 1,
+                "time": 1
+              },
+              "greetings.hello": {
+                "hello": 1,
+                "hi": 1,
+                "howdi": 1,
+                "greet": 1,
+                "hey": 1,
+                "there": 1,
+                "what": 1,
+                "is": 1,
+                "up": 1,
+                "how": 1,
+                "it": 1,
+                "go": 1,
+                "good": 1,
+                "morn": 1,
+                "afternoon": 1,
+                "even": 1,
+                "new": 1,
+                "yo": 1,
+                "hiya": 1,
+                "sup": 1,
+                "you": 1,
+                "salut": 1,
+                "are": 1,
+                "do": 1,
+                "howdy-do": 1,
+                "hola": 1,
+                "bonjour": 1,
+                "everyon": 1,
+                "g": 1,
+                "day": 1,
+                "partner": 1
+              },
+              "matches.find": {
+                "find": 1,
+                "me": 1,
+                "a": 1,
+                "match": 1,
+                "show": 1,
+                "potenti": 1,
+                "who": 1,
+                "can": 1,
+                "i": 1,
+                "date": 1,
+                "is": 1,
+                "avail": 1,
+                "to": 1,
+                "someon": 1,
+                "for": 1,
+                "meet": 1,
+                "profil": 1,
+                "want": 1,
+                "see": 1,
+                "peopl": 1,
+                "am": 1,
+                "feel": 1,
+                "sad": 1,
+                "after": 1,
+                "breakup": 1,
+                "was": 1,
+                "betray": 1,
+                "by": 1,
+                "my": 1,
+                "partner": 1,
+                "need": 1,
+                "talk": 1,
+                "just": 1,
+                "chat": 1,
+                "you": 1,
+                "be": 1,
+                "friend": 1,
+                "happi": 1,
+                "share": 1,
+                "some": 1,
+                "good": 1,
+                "news": 1,
+                "cheer": 1,
+                "up": 1,
+                "let": 1,
+                "about": 1,
+                "someth": 1,
+                "fun": 1,
+                "tell": 1,
+                "joke": 1,
+                "lone": 1,
+                "advic": 1,
+                "on": 1,
+                "relationship": 1,
+                "help": 1,
+                "with": 1,
+                "vent": 1,
+                "excit": 1,
+                "futur": 1,
+                "hobbi": 1,
+                "interest": 1,
+                "posit": 1,
+                "discuss": 1,
+                "day": 1,
+                "how": 1,
+                "improv": 1,
+                "mood": 1,
+                "motiv": 1,
+                "plan": 1,
+                "relax": 1
+              }
+            },
+            "featuresToIntent": {
+              "how": [
+                "app.info",
+                "greetings.hello",
+                "matches.find"
+              ],
+              "doe": [
+                "app.info"
+              ],
+              "this": [
+                "app.info"
+              ],
+              "app": [
+                "app.info"
+              ],
+              "work": [
+                "app.info"
+              ],
+              "tell": [
+                "app.info",
+                "matches.find"
+              ],
+              "me": [
+                "app.info",
+                "matches.find"
+              ],
+              "about": [
+                "app.info",
+                "matches.find"
+              ],
+              "do": [
+                "app.info",
+                "greetings.hello"
+              ],
+              "i": [
+                "app.info",
+                "greetings.bye",
+                "matches.find"
+              ],
+              "use": [
+                "app.info"
+              ],
+              "what": [
+                "app.info",
+                "greetings.hello"
+              ],
+              "can": [
+                "app.info",
+                "matches.find"
+              ],
+              "on": [
+                "app.info",
+                "matches.find"
+              ],
+              "find": [
+                "app.info",
+                "matches.find"
+              ],
+              "match": [
+                "app.info",
+                "matches.find"
+              ],
+              "featur": [
+                "app.info"
+              ],
+              "have": [
+                "app.info",
+                "greetings.bye"
+              ],
+              "start": [
+                "app.info"
+              ],
+              "date": [
+                "app.info",
+                "matches.find"
+              ],
+              "is": [
+                "app.info",
+                "greetings.hello",
+                "matches.find"
+              ],
+              "for": [
+                "app.info",
+                "greetings.bye",
+                "matches.find"
+              ],
+              "meet": [
+                "app.info",
+                "matches.find"
+              ],
+              "peopl": [
+                "app.info",
+                "matches.find"
+              ],
+              "here": [
+                "app.info"
+              ],
+              "goodby": [
+                "greetings.bye"
+              ],
+              "bye": [
+                "greetings.bye"
+              ],
+              "take": [
+                "greetings.bye"
+              ],
+              "care": [
+                "greetings.bye"
+              ],
+              "see": [
+                "greetings.bye",
+                "matches.find"
+              ],
+              "you": [
+                "greetings.bye",
+                "greetings.hello",
+                "matches.find"
+              ],
+              "later": [
+                "greetings.bye"
+              ],
+              "now": [
+                "greetings.bye"
+              ],
+              "must": [
+                "greetings.bye"
+              ],
+              "go": [
+                "greetings.bye",
+                "greetings.hello"
+              ],
+              "catch": [
+                "greetings.bye"
+              ],
+              "farewel": [
+                "greetings.bye"
+              ],
+              "it": [
+                "greetings.bye",
+                "greetings.hello"
+              ],
+              "easi": [
+                "greetings.bye"
+              ],
+              "am": [
+                "greetings.bye",
+                "matches.find"
+              ],
+              "out": [
+                "greetings.bye"
+              ],
+              "peac": [
+                "greetings.bye"
+              ],
+              "gotta": [
+                "greetings.bye"
+              ],
+              "ya": [
+                "greetings.bye"
+              ],
+              "talk": [
+                "greetings.bye",
+                "matches.find"
+              ],
+              "to": [
+                "greetings.bye",
+                "matches.find"
+              ],
+              "so": [
+                "greetings.bye"
+              ],
+              "long": [
+                "greetings.bye"
+              ],
+              "leav": [
+                "greetings.bye"
+              ],
+              "run": [
+                "greetings.bye"
+              ],
+              "until": [
+                "greetings.bye"
+              ],
+              "next": [
+                "greetings.bye"
+              ],
+              "time": [
+                "greetings.bye"
+              ],
+              "hello": [
+                "greetings.hello"
+              ],
+              "hi": [
+                "greetings.hello"
+              ],
+              "howdi": [
+                "greetings.hello"
+              ],
+              "greet": [
+                "greetings.hello"
+              ],
+              "hey": [
+                "greetings.hello"
+              ],
+              "there": [
+                "greetings.hello"
+              ],
+              "up": [
+                "greetings.hello",
+                "matches.find"
+              ],
+              "good": [
+                "greetings.hello",
+                "matches.find"
+              ],
+              "morn": [
+                "greetings.hello"
+              ],
+              "afternoon": [
+                "greetings.hello"
+              ],
+              "even": [
+                "greetings.hello"
+              ],
+              "new": [
+                "greetings.hello"
+              ],
+              "yo": [
+                "greetings.hello"
+              ],
+              "hiya": [
+                "greetings.hello"
+              ],
+              "sup": [
+                "greetings.hello"
+              ],
+              "salut": [
+                "greetings.hello"
+              ],
+              "are": [
+                "greetings.hello"
+              ],
+              "howdy-do": [
+                "greetings.hello"
+              ],
+              "hola": [
+                "greetings.hello"
+              ],
+              "bonjour": [
+                "greetings.hello"
+              ],
+              "everyon": [
+                "greetings.hello"
+              ],
+              "g": [
+                "greetings.hello"
+              ],
+              "day": [
+                "greetings.hello",
+                "matches.find"
+              ],
+              "partner": [
+                "greetings.hello",
+                "matches.find"
+              ],
+              "a": [
+                "matches.find"
+              ],
+              "show": [
+                "matches.find"
+              ],
+              "potenti": [
+                "matches.find"
+              ],
+              "who": [
+                "matches.find"
+              ],
+              "avail": [
+                "matches.find"
+              ],
+              "someon": [
+                "matches.find"
+              ],
+              "profil": [
+                "matches.find"
+              ],
+              "want": [
+                "matches.find"
+              ],
+              "feel": [
+                "matches.find"
+              ],
+              "sad": [
+                "matches.find"
+              ],
+              "after": [
+                "matches.find"
+              ],
+              "breakup": [
+                "matches.find"
+              ],
+              "was": [
+                "matches.find"
+              ],
+              "betray": [
+                "matches.find"
+              ],
+              "by": [
+                "matches.find"
+              ],
+              "my": [
+                "matches.find"
+              ],
+              "need": [
+                "matches.find"
+              ],
+              "just": [
+                "matches.find"
+              ],
+              "chat": [
+                "matches.find"
+              ],
+              "be": [
+                "matches.find"
+              ],
+              "friend": [
+                "matches.find"
+              ],
+              "happi": [
+                "matches.find"
+              ],
+              "share": [
+                "matches.find"
+              ],
+              "some": [
+                "matches.find"
+              ],
+              "news": [
+                "matches.find"
+              ],
+              "cheer": [
+                "matches.find"
+              ],
+              "let": [
+                "matches.find"
+              ],
+              "someth": [
+                "matches.find"
+              ],
+              "fun": [
+                "matches.find"
+              ],
+              "joke": [
+                "matches.find"
+              ],
+              "lone": [
+                "matches.find"
+              ],
+              "advic": [
+                "matches.find"
+              ],
+              "relationship": [
+                "matches.find"
+              ],
+              "help": [
+                "matches.find"
+              ],
+              "with": [
+                "matches.find"
+              ],
+              "vent": [
+                "matches.find"
+              ],
+              "excit": [
+                "matches.find"
+              ],
+              "futur": [
+                "matches.find"
+              ],
+              "hobbi": [
+                "matches.find"
+              ],
+              "interest": [
+                "matches.find"
+              ],
+              "posit": [
+                "matches.find"
+              ],
+              "discuss": [
+                "matches.find"
+              ],
+              "improv": [
+                "matches.find"
+              ],
+              "mood": [
+                "matches.find"
+              ],
+              "motiv": [
+                "matches.find"
+              ],
+              "plan": [
+                "matches.find"
+              ],
+              "relax": [
+                "matches.find"
+              ]
+            },
+            "neuralNetwork": {
+              "settings": {
+                "locale": "en",
+                "tag": "nlu-en",
+                "keepStopwords": true,
+                "nonefeatureValue": 1,
+                "nonedeltaMultiplier": 1.2,
+                "spellCheck": false,
+                "spellCheckDistance": 1,
+                "filterZeros": true,
+                "log": true
+              },
+              "features": [
+                "how",
+                "doe",
+                "this",
+                "app",
+                "work",
+                "tell",
+                "me",
+                "about",
+                "do",
+                "i",
+                "use",
+                "what",
+                "can",
+                "on",
+                "find",
+                "match",
+                "featur",
+                "have",
+                "start",
+                "date",
+                "is",
+                "for",
+                "meet",
+                "peopl",
+                "here",
+                "goodby",
+                "bye",
+                "take",
+                "care",
+                "see",
+                "you",
+                "later",
+                "now",
+                "must",
+                "go",
+                "catch",
+                "farewel",
+                "it",
+                "easi",
+                "am",
+                "out",
+                "peac",
+                "gotta",
+                "ya",
+                "talk",
+                "to",
+                "so",
+                "long",
+                "leav",
+                "run",
+                "until",
+                "next",
+                "time",
+                "hello",
+                "hi",
+                "howdi",
+                "greet",
+                "hey",
+                "there",
+                "up",
+                "good",
+                "morn",
+                "afternoon",
+                "even",
+                "new",
+                "yo",
+                "hiya",
+                "sup",
+                "salut",
+                "are",
+                "howdy-do",
+                "hola",
+                "bonjour",
+                "everyon",
+                "g",
+                "day",
+                "partner",
+                "a",
+                "show",
+                "potenti",
+                "who",
+                "avail",
+                "someon",
+                "profil",
+                "want",
+                "feel",
+                "sad",
+                "after",
+                "breakup",
+                "was",
+                "betray",
+                "by",
+                "my",
+                "need",
+                "just",
+                "chat",
+                "be",
+                "friend",
+                "happi",
+                "share",
+                "some",
+                "news",
+                "cheer",
+                "let",
+                "someth",
+                "fun",
+                "joke",
+                "lone",
+                "advic",
+                "relationship",
+                "help",
+                "with",
+                "vent",
+                "excit",
+                "futur",
+                "hobbi",
+                "interest",
+                "posit",
+                "discuss",
+                "improv",
+                "mood",
+                "motiv",
+                "plan",
+                "relax"
+              ],
+              "intents": [
+                "app.info",
+                "greetings.bye",
+                "greetings.hello",
+                "matches.find"
+              ],
+              "perceptrons": [
+                [
+                  3.3972408771514893,
+                  2.0095407962799072,
+                  4.745781421661377,
+                  4.745781421661377,
+                  1.2443883419036865,
+                  4.098370552062988,
+                  -1.094546914100647,
+                  3.645775318145752,
+                  5.550861358642578,
+                  1.7606762647628784,
+                  -4.056641101837158,
+                  3.732471227645874,
+                  -0.8393927216529846,
+                  -3.550924301147461,
+                  1.8327019214630127,
+                  3.5986506938934326,
+                  0.7651551961898804,
+                  0.14431080222129822,
+                  3.2673404216766357,
+                  2.1670122146606445,
+                  0.2159857451915741,
+                  2.7005503177642822,
+                  -0.45134350657463074,
+                  -0.04920611158013344,
+                  5.935771465301514,
+                  -0.21313917636871338,
+                  -0.5921591520309448,
+                  -0.2681070864200592,
+                  -0.12395953387022018,
+                  -0.9358628988265991,
+                  -3.854475259780884,
+                  -0.4788563549518585,
+                  -0.25122272968292236,
+                  -0.4532421827316284,
+                  -1.5692468881607056,
+                  -0.08821719884872437,
+                  -0.15338902175426483,
+                  -0.5802881717681885,
+                  -0.08216777443885803,
+                  -1.1535581350326538,
+                  -0.6719792485237122,
+                  -0.06485726684331894,
+                  -0.45357266068458557,
+                  -0.05058889836072922,
+                  -0.7443975210189819,
+                  -2.1182425022125244,
+                  -0.09366337954998016,
+                  -0.09366337954998016,
+                  -0.4943866431713104,
+                  -0.03805398568511009,
+                  -0.07101912051439285,
+                  -0.07101912051439285,
+                  -0.07101912051439285,
+                  -0.09541313350200653,
+                  -0.12206419557332993,
+                  -0.06623672693967819,
+                  -0.06352681666612625,
+                  -0.11722631752490997,
+                  -0.1121075451374054,
+                  -2.0907628536224365,
+                  -0.0890049859881401,
+                  -0.022576594725251198,
+                  -0.02068205550312996,
+                  -0.018472863361239433,
+                  -2.0907833576202393,
+                  -0.015877068042755127,
+                  -0.015210897661745548,
+                  -0.014176251366734505,
+                  -0.013581443578004837,
+                  -3.237384080886841,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  -0.08269152790307999,
+                  -2.4786536693573,
+                  -0.37628743052482605,
+                  -0.31663087010383606,
+                  -1.5000325441360474,
+                  0,
+                  -1.5809273719787598,
+                  -0.01571960560977459,
+                  -0.44790923595428467,
+                  -0.34544530510902405,
+                  -0.03609335049986839,
+                  -0.03609335049986839,
+                  -0.03609335049986839,
+                  -0.08269152790307999,
+                  -0.08269152790307999,
+                  -0.08269152790307999,
+                  -1.5820322036743164,
+                  -0.4438871741294861,
+                  -0.003693484468385577,
+                  -0.003693484468385577,
+                  0,
+                  0,
+                  -0.024203311651945114,
+                  0,
+                  -0.11206832528114319,
+                  0,
+                  -0.07157915085554123,
+                  -0.682087779045105,
+                  -0.6253983974456787,
+                  -0.10168179124593735,
+                  -0.08824951201677322,
+                  -0.23777376115322113,
+                  -0.10618957132101059,
+                  -0.10618957132101059,
+                  0,
+                  0,
+                  0,
+                  -0.40683916211128235,
+                  -0.40683916211128235,
+                  -0.5779703259468079,
+                  -0.5212807655334473,
+                  -0.11206832528114319,
+                  0,
+                  -0.8577761650085449,
+                  -0.8577761650085449,
+                  -0.07751083374023438,
+                  0,
+                  0,
+                  -1.8570729479537749
+                ],
+                [
+                  -5.530142784118652,
+                  -1.4397097826004028,
+                  -1.4397097826004028,
+                  -1.4397097826004028,
+                  0,
+                  -0.5913193821907043,
+                  -3.2244765758514404,
+                  -1.3007107973098755,
+                  -0.7224624156951904,
+                  0.3748127520084381,
+                  0,
+                  -2.751596212387085,
+                  -2.6968212127685547,
+                  -0.09433979541063309,
+                  -1.219059705734253,
+                  -5.178098201751709,
+                  -1.4397097826004028,
+                  3.521956443786621,
+                  0,
+                  -1.0068632364273071,
+                  -4.7540082931518555,
+                  -0.4283623993396759,
+                  -1.0026220083236694,
+                  -0.31322357058525085,
+                  0,
+                  9.428038597106934,
+                  9.19571304321289,
+                  2.5812160968780518,
+                  -2.4661710262298584,
+                  4.6746506690979,
+                  1.6764514446258545,
+                  6.263940811157227,
+                  0.6862797737121582,
+                  5.535130977630615,
+                  3.548032760620117,
+                  1.704488754272461,
+                  9.440201759338379,
+                  1.690840482711792,
+                  5.049699783325195,
+                  1.283340334892273,
+                  7.6032633781433105,
+                  1.782767653465271,
+                  5.323444366455078,
+                  4.636996269226074,
+                  0.9890760779380798,
+                  0.3352198004722595,
+                  4.623305320739746,
+                  4.623305320739746,
+                  4.963232040405273,
+                  3.9524788856506348,
+                  3.076505184173584,
+                  3.076505184173584,
+                  3.076505184173584,
+                  -4.955327987670898,
+                  -4.9495415687561035,
+                  -4.943637847900391,
+                  -4.9377336502075195,
+                  -6.593481540679932,
+                  -2.0790505409240723,
+                  -1.3438273668289185,
+                  -3.780195474624634,
+                  -1.2635833024978638,
+                  -1.2578973770141602,
+                  -1.2531846761703491,
+                  -0.39646488428115845,
+                  -4.926152229309082,
+                  -4.920193672180176,
+                  -4.914206504821777,
+                  -4.903853893280029,
+                  -2.115673065185547,
+                  -4.897783279418945,
+                  -4.891687393188477,
+                  -4.885556221008301,
+                  -0.33969464898109436,
+                  -2.478306531906128,
+                  -2.478306531906128,
+                  -1.1228841543197632,
+                  -1.2191691398620605,
+                  -1.022763729095459,
+                  -0.1511116623878479,
+                  -1.7002289295196533,
+                  -0.04270234331488609,
+                  -2.4524922370910645,
+                  -0.7442284226417542,
+                  -5.215013027191162,
+                  -4.3150553703308105,
+                  -0.8041815161705017,
+                  -0.8041815161705017,
+                  -0.8041815161705017,
+                  -0.5743792057037354,
+                  -0.5743792057037354,
+                  -0.5743792057037354,
+                  -2.7595698833465576,
+                  -4.23994779586792,
+                  -0.48119068145751953,
+                  -0.5403053164482117,
+                  -0.6805579662322998,
+                  -0.5600930452346802,
+                  -2.346219778060913,
+                  0,
+                  -0.7074478268623352,
+                  0,
+                  -0.5269588828086853,
+                  0,
+                  -0.5904906392097473,
+                  0,
+                  -0.00024776221835054457,
+                  -1.0577154159545898,
+                  -0.09433979541063309,
+                  -0.09433979541063309,
+                  -0.3851073980331421,
+                  -0.008999761193990707,
+                  -0.03209591656923294,
+                  -1.3007107973098755,
+                  -1.3007107973098755,
+                  0,
+                  -0.5904906392097473,
+                  -0.7074478268623352,
+                  0,
+                  0,
+                  0,
+                  -1.1454581022262573,
+                  0,
+                  -0.36710789799690247,
+                  5.010309382257915
+                ],
+                [
+                  3.261324882507324,
+                  -2.457770347595215,
+                  -4.437685966491699,
+                  -4.437685966491699,
+                  -1.4842751026153564,
+                  -0.8440253138542175,
+                  -5.214407920837402,
+                  -2.3646647930145264,
+                  -0.03808123618364334,
+                  -8.77353572845459,
+                  -0.11960718035697937,
+                  2.7550277709960938,
+                  -2.92659068107605,
+                  -0.029532404616475105,
+                  -1.7687009572982788,
+                  -2.1781740188598633,
+                  -0.7918649911880493,
+                  -0.7918649911880493,
+                  -0.49197301268577576,
+                  -2.860053300857544,
+                  1.352500319480896,
+                  -3.7941250801086426,
+                  -1.4209009408950806,
+                  -1.113318681716919,
+                  -0.7814455628395081,
+                  -7.958535671234131,
+                  -7.947890281677246,
+                  -4.630789279937744,
+                  -1.3721307516098022,
+                  -7.6656341552734375,
+                  -0.2176883965730667,
+                  -7.9501752853393555,
+                  -0.8909996151924133,
+                  -1.0570124387741089,
+                  1.895706057548523,
+                  -1.8627254962921143,
+                  -7.949832916259766,
+                  -0.16314491629600525,
+                  -3.1386570930480957,
+                  -0.8966321349143982,
+                  -3.9858548641204834,
+                  -3.9858548641204834,
+                  -3.9906704425811768,
+                  -1.6521801948547363,
+                  -2.582533121109009,
+                  -3.317777395248413,
+                  -3.979327440261841,
+                  -3.979327440261841,
+                  0,
+                  -3.9678657054901123,
+                  -2.6530661582946777,
+                  -2.6530661582946777,
+                  -2.6530661582946777,
+                  6.375296115875244,
+                  6.374995231628418,
+                  6.341036796569824,
+                  6.346076011657715,
+                  6.449667453765869,
+                  -0.04377589747309685,
+                  2.2506728172302246,
+                  4.592529296875,
+                  1.7628668546676636,
+                  1.7626991271972656,
+                  1.7625266313552856,
+                  2.249669313430786,
+                  6.350818157196045,
+                  6.350497722625732,
+                  6.348982810974121,
+                  6.342118740081787,
+                  3.338650941848755,
+                  6.343010425567627,
+                  6.34249210357666,
+                  6.341938018798828,
+                  -0.0236602071672678,
+                  3.1732492446899414,
+                  3.1732492446899414,
+                  0.011670885607600212,
+                  -2.124905824661255,
+                  -2.235187292098999,
+                  -0.7908598184585571,
+                  -2.605356454849243,
+                  -1.3265297412872314,
+                  -0.8628751635551453,
+                  -1.0704188346862793,
+                  -1.249218225479126,
+                  -1.334249496459961,
+                  -0.3733057379722595,
+                  -0.3733057379722595,
+                  -0.3733057379722595,
+                  -0.5496383905410767,
+                  -0.5496383905410767,
+                  -0.5496383905410767,
+                  -2.1969668865203857,
+                  -1.5117137432098389,
+                  -0.17126213014125824,
+                  -0.29670393466949463,
+                  -1.3853485584259033,
+                  -1.2425650358200073,
+                  -0.3752487897872925,
+                  -0.5800935626029968,
+                  -0.7608689665794373,
+                  -0.5800935626029968,
+                  -0.910988986492157,
+                  -3.889380931854248,
+                  -2.9702539443969727,
+                  -0.9247550368309021,
+                  -0.4852437376976013,
+                  -0.2724493741989136,
+                  -0.029532404616475105,
+                  -0.029532404616475105,
+                  -0.13876792788505554,
+                  -0.023898156359791756,
+                  0,
+                  -1.4357514381408691,
+                  0,
+                  -1.1818264722824097,
+                  -0.2959039807319641,
+                  -0.10129352658987045,
+                  0,
+                  -0.00529605383053422,
+                  -0.00529605383053422,
+                  -0.13791227340698242,
+                  -1.4357514381408691,
+                  -0.09395889192819595,
+                  7.936274526333529
+                ],
+                [
+                  -2.9178831577301025,
+                  -0.2769913673400879,
+                  -5.7076334953308105,
+                  -5.7076334953308105,
+                  -0.2769913673400879,
+                  1.1072545051574707,
+                  8.014854431152344,
+                  1.7694807052612305,
+                  -6.645995140075684,
+                  5.156943321228027,
+                  -0.3850165009498596,
+                  -5.208281517028809,
+                  3.5484542846679688,
+                  -0.7486364841461182,
+                  1.8788862228393555,
+                  1.763827919960022,
+                  0,
+                  -3.5706255435943604,
+                  -0.8484513759613037,
+                  1.3579920530319214,
+                  4.318871021270752,
+                  1.8124675750732422,
+                  1.1636278629302979,
+                  -0.22353050112724304,
+                  -1.5959731340408325,
+                  -1.102290153503418,
+                  -1.7817302942276,
+                  -1.022310495376587,
+                  -0.471032053232193,
+                  0.5291919708251953,
+                  -1.0402292013168335,
+                  -2.807993173599243,
+                  -0.928142786026001,
+                  -2.3198814392089844,
+                  -4.038780212402344,
+                  -0.2711702287197113,
+                  -0.919939398765564,
+                  -0.42434921860694885,
+                  -0.42434921860694885,
+                  0.21576230227947235,
+                  -5.911408424377441,
+                  -0.25978073477745056,
+                  -1.8222548961639404,
+                  -1.0516364574432373,
+                  0.04523457959294319,
+                  1.1750801801681519,
+                  -0.4621516466140747,
+                  -0.4621516466140747,
+                  -3.5706255435943604,
+                  -0.15444578230381012,
+                  -0.29778343439102173,
+                  -0.29778343439102173,
+                  -0.29778343439102173,
+                  -0.6073504686355591,
+                  -0.6362830400466919,
+                  -0.9234864115715027,
+                  -0.584923267364502,
+                  -0.6143000721931458,
+                  -0.4009854793548584,
+                  0.37206777930259705,
+                  -0.5963788628578186,
+                  -0.37861186265945435,
+                  -0.36454856395721436,
+                  -0.3478098511695862,
+                  -0.40514811873435974,
+                  -0.5476375818252563,
+                  -0.5453236699104309,
+                  -0.5433560013771057,
+                  -0.5416761636734009,
+                  0,
+                  -0.5402505993843079,
+                  -0.5390860438346863,
+                  -0.5380018353462219,
+                  -0.055170439183712006,
+                  -0.026131311431527138,
+                  -0.671083390712738,
+                  0.004232797771692276,
+                  2.0944223403930664,
+                  3.3529906272888184,
+                  0.6587790846824646,
+                  3.806858777999878,
+                  3.101384401321411,
+                  1.9993126392364502,
+                  2.4215734004974365,
+                  5.117156505584717,
+                  4.439927577972412,
+                  0.6181097030639648,
+                  0.6181097030639648,
+                  0.6181097030639648,
+                  1.6612740755081177,
+                  1.6612740755081177,
+                  1.6612740755081177,
+                  3.615778684616089,
+                  5.406980037689209,
+                  1.8910552263259888,
+                  0.42412102222442627,
+                  3.296091079711914,
+                  4.343886375427246,
+                  3.94740629196167,
+                  0.5255042910575867,
+                  1.858979344367981,
+                  0.5255042910575867,
+                  2.8191540241241455,
+                  4.318403720855713,
+                  2.8250486850738525,
+                  0.4803737998008728,
+                  2.5469658374786377,
+                  4.162815093994141,
+                  0.16504253447055817,
+                  0.16504253447055817,
+                  -0.5271749496459961,
+                  -4.288487434387207,
+                  0.4191077649593353,
+                  1.7682065963745117,
+                  1.2349493503570557,
+                  3.3042163848876953,
+                  1.8110594749450684,
+                  1.333442211151123,
+                  -0.6315768957138062,
+                  2.1784496307373047,
+                  2.1784496307373047,
+                  3.187718152999878,
+                  0.5334158539772034,
+                  3.7613136768341064,
+                  0.5261914638653308
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "intentDomains": {},
+    "extraSentences": [
+      [
+        "en",
+        "how does this app work"
+      ],
+      [
+        "en",
+        "tell me about this app"
+      ],
+      [
+        "en",
+        "how do I use this app"
+      ],
+      [
+        "en",
+        "what can I do on this app"
+      ],
+      [
+        "en",
+        "how do I find matches"
+      ],
+      [
+        "en",
+        "what features does this app have"
+      ],
+      [
+        "en",
+        "how do I start dating"
+      ],
+      [
+        "en",
+        "what is this app for"
+      ],
+      [
+        "en",
+        "how do I meet people here"
+      ],
+      [
+        "en",
+        "what can I do here"
+      ],
+      [
+        "en",
+        "goodbye"
+      ],
+      [
+        "en",
+        "bye take care"
+      ],
+      [
+        "en",
+        "see you later"
+      ],
+      [
+        "en",
+        "bye for now"
+      ],
+      [
+        "en",
+        "i must go"
+      ],
+      [
+        "en",
+        "catch you later"
+      ],
+      [
+        "en",
+        "see you"
+      ],
+      [
+        "en",
+        "farewell"
+      ],
+      [
+        "en",
+        "take it easy"
+      ],
+      [
+        "en",
+        "i'm out"
+      ],
+      [
+        "en",
+        "peace out"
+      ],
+      [
+        "en",
+        "i gotta go"
+      ],
+      [
+        "en",
+        "laters"
+      ],
+      [
+        "en",
+        "see ya"
+      ],
+      [
+        "en",
+        "bye bye"
+      ],
+      [
+        "en",
+        "talk to you later"
+      ],
+      [
+        "en",
+        "so long"
+      ],
+      [
+        "en",
+        "i have to leave"
+      ],
+      [
+        "en",
+        "gotta run"
+      ],
+      [
+        "en",
+        "until next time"
+      ],
+      [
+        "en",
+        "hello"
+      ],
+      [
+        "en",
+        "hi"
+      ],
+      [
+        "en",
+        "howdy"
+      ],
+      [
+        "en",
+        "greetings"
+      ],
+      [
+        "en",
+        "hey"
+      ],
+      [
+        "en",
+        "hey there"
+      ],
+      [
+        "en",
+        "hi there"
+      ],
+      [
+        "en",
+        "what's up"
+      ],
+      [
+        "en",
+        "how's it going"
+      ],
+      [
+        "en",
+        "good morning"
+      ],
+      [
+        "en",
+        "good afternoon"
+      ],
+      [
+        "en",
+        "good evening"
+      ],
+      [
+        "en",
+        "what's new"
+      ],
+      [
+        "en",
+        "yo"
+      ],
+      [
+        "en",
+        "hiya"
+      ],
+      [
+        "en",
+        "hello there"
+      ],
+      [
+        "en",
+        "sup"
+      ],
+      [
+        "en",
+        "hey you"
+      ],
+      [
+        "en",
+        "salutations"
+      ],
+      [
+        "en",
+        "how are you"
+      ],
+      [
+        "en",
+        "how are you doing"
+      ],
+      [
+        "en",
+        "howdy-do"
+      ],
+      [
+        "en",
+        "hola"
+      ],
+      [
+        "en",
+        "bonjour"
+      ],
+      [
+        "en",
+        "hi everyone"
+      ],
+      [
+        "en",
+        "g'day"
+      ],
+      [
+        "en",
+        "howdy partner"
+      ],
+      [
+        "en",
+        "find me a match"
+      ],
+      [
+        "en",
+        "show me potential matches"
+      ],
+      [
+        "en",
+        "who can I date"
+      ],
+      [
+        "en",
+        "who is available to date"
+      ],
+      [
+        "en",
+        "find someone for me"
+      ],
+      [
+        "en",
+        "who can I meet"
+      ],
+      [
+        "en",
+        "show me profiles"
+      ],
+      [
+        "en",
+        "I want to see matches"
+      ],
+      [
+        "en",
+        "show me people to date"
+      ],
+      [
+        "en",
+        "find people for me to meet"
+      ],
+      [
+        "en",
+        "I am feeling sad after a breakup"
+      ],
+      [
+        "en",
+        "I was betrayed by my partner"
+      ],
+      [
+        "en",
+        "I need someone to talk to"
+      ],
+      [
+        "en",
+        "I just want to chat"
+      ],
+      [
+        "en",
+        "Can you be my friend?"
+      ],
+      [
+        "en",
+        "I am feeling happy"
+      ],
+      [
+        "en",
+        "I want to share some good news"
+      ],
+      [
+        "en",
+        "I need cheering up"
+      ],
+      [
+        "en",
+        "Let's talk about something fun"
+      ],
+      [
+        "en",
+        "Tell me a joke"
+      ],
+      [
+        "en",
+        "I feel lonely"
+      ],
+      [
+        "en",
+        "I need advice on my relationship"
+      ],
+      [
+        "en",
+        "Can you help me with my feelings?"
+      ],
+      [
+        "en",
+        "I just want to vent"
+      ],
+      [
+        "en",
+        "Can you be my partner for a chat?"
+      ],
+      [
+        "en",
+        "I am excited about my future"
+      ],
+      [
+        "en",
+        "Let's talk about hobbies"
+      ],
+      [
+        "en",
+        "Tell me something interesting"
+      ],
+      [
+        "en",
+        "I need some positivity"
+      ],
+      [
+        "en",
+        "I want to discuss my day"
+      ],
+      [
+        "en",
+        "How can I improve my mood?"
+      ],
+      [
+        "en",
+        "I need motivation"
+      ],
+      [
+        "en",
+        "Let's plan something exciting"
+      ],
+      [
+        "en",
+        "Can you help me relax?"
+      ]
+    ]
+  },
+  "ner": {
+    "settings": {
+      "tag": "ner",
+      "entityPreffix": "%",
+      "entitySuffix": "%"
+    },
+    "rules": {}
+  },
+  "nlgManager": {
+    "settings": {
+      "tag": "nlg-manager"
+    },
+    "responses": {
+      "en": {
+        "app.info": [
+          {
+            "answer": "This app helps you find your perfect match by allowing you to set preferences and browse potential matches. You can start by setting up your profile and preferences."
+          },
+          {
+            "answer": "Our app connects you with potential matches based on your preferences. You can browse profiles and connect with people you're interested in."
+          },
+          {
+            "answer": "To use this app, simply set up your profile, specify your preferences, and start browsing potential matches. You can connect with people you find interesting."
+          },
+          {
+            "answer": "On this app, you can set your dating preferences, browse profiles, and connect with potential matches. Start by setting up your profile."
+          },
+          {
+            "answer": "You can find matches by setting your preferences and browsing profiles that match your criteria. Connect with people you find interesting."
+          },
+          {
+            "answer": "This app offers features like setting preferences, browsing profiles, and connecting with matches. Start by setting up your profile."
+          },
+          {
+            "answer": "To start dating, set up your profile, specify your preferences, and start browsing potential matches. Connect with people you find interesting."
+          },
+          {
+            "answer": "This app is designed to help you find and connect with potential matches. Set up your profile and preferences to get started."
+          },
+          {
+            "answer": "Meet people by setting your preferences, browsing profiles, and connecting with those who interest you. Start by setting up your profile."
+          },
+          {
+            "answer": "You can set your preferences, browse profiles, and connect with potential matches. Start by setting up your profile and preferences."
+          }
+        ],
+        "greetings.bye": [
+          {
+            "answer": "see you soon!"
+          },
+          {
+            "answer": "Till next time"
+          },
+          {
+            "answer": "bye bye"
+          },
+          {
+            "answer": "have a great day"
+          },
+          {
+            "answer": "take care!"
+          },
+          {
+            "answer": "goodbye!"
+          },
+          {
+            "answer": "peace!"
+          },
+          {
+            "answer": "see you later!"
+          },
+          {
+            "answer": "farewell!"
+          },
+          {
+            "answer": "stay safe!"
+          },
+          {
+            "answer": "catch you later!"
+          },
+          {
+            "answer": "talk to you soon!"
+          },
+          {
+            "answer": "have a good one!"
+          },
+          {
+            "answer": "later!"
+          },
+          {
+            "answer": "bye for now!"
+          },
+          {
+            "answer": "until we meet again!"
+          },
+          {
+            "answer": "see you around!"
+          },
+          {
+            "answer": "all the best!"
+          },
+          {
+            "answer": "cheers!"
+          }
+        ],
+        "greetings.hello": [
+          {
+            "answer": "Hey there!"
+          },
+          {
+            "answer": "Hello"
+          },
+          {
+            "answer": "Hi"
+          },
+          {
+            "answer": "Greetings"
+          },
+          {
+            "answer": "Hi, how can I help you today?"
+          },
+          {
+            "answer": "Hello! How are you?"
+          },
+          {
+            "answer": "Hey! What's up?"
+          },
+          {
+            "answer": "Hi there, good to see you!"
+          },
+          {
+            "answer": "Howdy! How's it going?"
+          },
+          {
+            "answer": "Good morning! How are you today?"
+          },
+          {
+            "answer": "Good afternoon! How can I assist you?"
+          },
+          {
+            "answer": "Good evening! How can I help?"
+          },
+          {
+            "answer": "What's new with you?"
+          },
+          {
+            "answer": "Yo! How's everything?"
+          },
+          {
+            "answer": "Hiya! What's up?"
+          },
+          {
+            "answer": "Hello there! How are you doing?"
+          },
+          {
+            "answer": "Sup! How's it going?"
+          },
+          {
+            "answer": "Hey you! How are things?"
+          },
+          {
+            "answer": "Salutations! How can I help?"
+          },
+          {
+            "answer": "How are you today?"
+          },
+          {
+            "answer": "How are you doing today?"
+          },
+          {
+            "answer": "Howdy-do! How can I assist?"
+          },
+          {
+            "answer": "Hola! How can I help you?"
+          },
+          {
+            "answer": "Bonjour! How are you?"
+          },
+          {
+            "answer": "Hi everyone! What can I do for you?"
+          },
+          {
+            "answer": "G'day! How can I assist you?"
+          },
+          {
+            "answer": "Howdy partner! How can I help?"
+          }
+        ],
+        "matches.find": [
+          {
+            "answer": "Sure, let's find someone special for you. Please tell me more about your preferences."
+          },
+          {
+            "answer": "I can help with that. What kind of person are you looking for?"
+          },
+          {
+            "answer": "Let's see who's available. Can you specify any preferences?"
+          },
+          {
+            "answer": "Great! Tell me more about what you're looking for in a match."
+          },
+          {
+            "answer": "I can help find someone for you. What are your preferences?"
+          },
+          {
+            "answer": "Let's find someone you can connect with. What kind of person do you have in mind?"
+          },
+          {
+            "answer": "I'll show you some profiles. What are your preferences?"
+          },
+          {
+            "answer": "Let's see who we can find for you. Do you have any specific criteria?"
+          },
+          {
+            "answer": "I'll help you find someone to date. What are you looking for?"
+          },
+          {
+            "answer": "Let's find some people you might like. Tell me more about your ideal match."
+          },
+          {
+            "answer": "I'm really sorry to hear that. I'm here for you. Do you want to talk about it?"
+          },
+          {
+            "answer": "That sounds really tough. How can I help you feel better?"
+          },
+          {
+            "answer": "I'm here for you. What would you like to talk about?"
+          },
+          {
+            "answer": "Sure, let's chat. What's on your mind?"
+          },
+          {
+            "answer": "Of course! I'm here for you. What would you like to talk about?"
+          },
+          {
+            "answer": "That's great to hear! What made you happy today?"
+          },
+          {
+            "answer": "I'm all ears! What's the good news?"
+          },
+          {
+            "answer": "Let's try to lift your spirits. What usually makes you feel better?"
+          },
+          {
+            "answer": "Sure, let's talk about something fun. What do you enjoy doing?"
+          },
+          {
+            "answer": "Why don't scientists trust atoms? Because they make up everything!"
+          },
+          {
+            "answer": "I'm here with you. Want to talk about it?"
+          },
+          {
+            "answer": "I'm here to listen and help. What's going on in your relationship?"
+          },
+          {
+            "answer": "I'm here to help. What's troubling you?"
+          },
+          {
+            "answer": "Go ahead, let it all out. I'm listening."
+          },
+          {
+            "answer": "Absolutely! Let's have a nice chat. What's on your mind?"
+          },
+          {
+            "answer": "That's fantastic! What are you looking forward to?"
+          },
+          {
+            "answer": "Sure! What hobbies do you enjoy?"
+          },
+          {
+            "answer": "Did you know that honey never spoils? Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3000 years old and still edible!"
+          },
+          {
+            "answer": "Let's fill the day with some positive vibes! What's one good thing that happened today?"
+          },
+          {
+            "answer": "I'd love to hear about your day. How was it?"
+          },
+          {
+            "answer": "Sometimes, doing something you love can really help. What do you enjoy doing?"
+          },
+          {
+            "answer": "You got this! What's your goal?"
+          },
+          {
+            "answer": "Let's plan something exciting! Any ideas?"
+          },
+          {
+            "answer": "Absolutely. Let's take a few deep breaths together. How do you usually relax?"
+          }
+        ]
+      }
+    }
+  },
+  "actionManager": {
+    "settings": {
+      "tag": "action-manager"
+    },
+    "actions": {}
+  },
+  "slotManager": {}
+}

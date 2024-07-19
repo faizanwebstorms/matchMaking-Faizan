@@ -11,7 +11,7 @@ const ApiError = require("../../utils/ApiError");
 const Helper = require("../../utils/Helper");
 const messages = require("../../config/messages");
 const { UserPreference, OTP } = require("../../models");
-const { otpTypes } = require('../../config/otp');
+const { otpTypes } = require("../../config/otp");
 
 /**
  * Register User
@@ -106,7 +106,7 @@ const loginSocial = catchAsync(async (req, res) => {
  */
 const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
-  const user = await authService.login(email, password);
+  let user = await authService.login(email, password);
   if (!user) {
     throw new ApiError(
       httpStatus.UNAUTHORIZED,
@@ -124,7 +124,17 @@ const login = catchAsync(async (req, res) => {
       messages.api.internalServerError
     );
   }
-  user.isOnBordingCompleted = await UserPreference.count({ userId: user?._id });
+  if (user.matchedUser) {
+    user.isOnBordingCompleted = await UserPreference.count({
+      userId: user?._id,
+    });
+  } else {
+    const isOnBordingCompleted = await UserPreference.count({
+      userId: user?._id,
+    });
+    user = { ...user._doc, isOnBordingCompleted };
+  }
+
   res.send(
     Helper.apiResponse(httpStatus.OK, messages.api.success, {
       user,
@@ -152,7 +162,9 @@ const logout = catchAsync(async (req, res) => {
  * @type {(function(*, *, *): void)|*}
  */
 const forgotPassword = catchAsync(async (req, res) => {
-  const user = await userService.findByClause({ $or: [{ email: req?.body?.email }, { username: req?.body?.email }] });
+  const user = await userService.findByClause({
+    $or: [{ email: req?.body?.email }, { username: req?.body?.email }],
+  });
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, messages.api.emailNotFound);
   }
@@ -161,14 +173,24 @@ const forgotPassword = catchAsync(async (req, res) => {
 
   if (resetPasswordOTP) {
     // Send Reset Password OTP through Email (commented till email server implementation)
-    await emailService.changePasswordEmail(req.body.email, resetPasswordOTP.otp);
-    res
-      .status(httpStatus.OK)
-      .send(Helper.apiResponse(httpStatus.OK, messages.api.success, { userId: resetPasswordOTP.userId }));
+    await emailService.changePasswordEmail(
+      req.body.email,
+      resetPasswordOTP.otp
+    );
+    res.status(httpStatus.OK).send(
+      Helper.apiResponse(httpStatus.OK, messages.api.success, {
+        userId: resetPasswordOTP.userId,
+      })
+    );
   } else {
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .send(Helper.apiResponse(httpStatus.INTERNAL_SERVER_ERROR, messages.api.internalServerError));
+      .send(
+        Helper.apiResponse(
+          httpStatus.INTERNAL_SERVER_ERROR,
+          messages.api.internalServerError
+        )
+      );
   }
 });
 /**
@@ -176,7 +198,11 @@ const forgotPassword = catchAsync(async (req, res) => {
  * @type {(function(*, *, *): void)|*}
  */
 const verifyResetPasswordOTP = catchAsync(async (req, res) => {
-  const resetPasswordTokenDoc = await otpService.verifyOTP(req.body.otp, otpTypes.RESET_PASSWORD, req.body.userId);
+  const resetPasswordTokenDoc = await otpService.verifyOTP(
+    req.body.otp,
+    otpTypes.RESET_PASSWORD,
+    req.body.userId
+  );
   if (!resetPasswordTokenDoc) {
     throw new ApiError(httpStatus.BAD_REQUEST, messages.api.invalidUserOTP);
   }
@@ -189,8 +215,13 @@ const verifyResetPasswordOTP = catchAsync(async (req, res) => {
     await otpService.deleteById(resetPasswordTokenDoc._id);
     throw new ApiError(httpStatus.GONE, messages.api.codeExpired);
   }
-  await OTP.deleteMany({ userId: req.body.userId, type: otpTypes.RESET_PASSWORD });
-  res.status(httpStatus.OK).send(Helper.apiResponse(httpStatus.OK, messages.api.success));
+  await OTP.deleteMany({
+    userId: req.body.userId,
+    type: otpTypes.RESET_PASSWORD,
+  });
+  res
+    .status(httpStatus.OK)
+    .send(Helper.apiResponse(httpStatus.OK, messages.api.success));
 });
 
 /**
@@ -198,11 +229,19 @@ const verifyResetPasswordOTP = catchAsync(async (req, res) => {
  * @type {(function(*, *, *): void)|*}
  */
 const resetPassword = catchAsync(async (req, res) => {
-  const reset = await authService.resetPassword(req.body.userId, req.body.password);
+  const reset = await authService.resetPassword(
+    req.body.userId,
+    req.body.password
+  );
   if (!reset) {
-    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, messages.api.internalServerError);
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      messages.api.internalServerError
+    );
   }
-  res.status(httpStatus.OK).send(Helper.apiResponse(httpStatus.OK, messages.api.success));
+  res
+    .status(httpStatus.OK)
+    .send(Helper.apiResponse(httpStatus.OK, messages.api.success));
 });
 
 module.exports = {
@@ -212,5 +251,5 @@ module.exports = {
   logout,
   forgotPassword,
   verifyResetPasswordOTP,
-  resetPassword
+  resetPassword,
 };

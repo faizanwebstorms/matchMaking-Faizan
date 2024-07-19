@@ -18,6 +18,11 @@ const { otpTypes } = require("../config/otp");
 const axios = require("axios");
 const { handleReactionCreation } = require("./reaction.service");
 const locationHelper = require("../helpers/location");
+const { NlpManager } = require("node-nlp");
+
+// Load the NlpManager instance once
+const manager = new NlpManager({ languages: ["en"] });
+manager.load();
 
 /**
  * filter User Data from request
@@ -791,19 +796,37 @@ const unmatch = async (userId, unMatchedUserId) => {
     }
 
     const isMatchExists = await Match.findOne({
-      matchedBy: userId,
-      matchedTo: unMatchedUserId,
+      $or: [
+        { matchedBy: userId, matchedTo: unMatchedUserId },
+        { matchedBy: unMatchedUserId, matchedTo: userId },
+      ],
     });
     if (isMatchExists) {
       Object.assign(isMatchExists, { active: false });
-      isMatchExists.save();
+      await isMatchExists.save();
     }
+
     return { message: "User unmatched successfully" };
   } catch (error) {
     console.error("Error while unmatching user:", error);
     throw error;
   }
 };
+
+const chatBotResponse = async (body) => {
+  try {
+    const response = await manager.process("en", body.question);
+    if (response.answer == null) {
+      response.answer =
+        "I cannot answer this question. Please ask a valid question.";
+      return response.answer;
+    }
+    return response.answer;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   findByClause,
   findById,
@@ -822,4 +845,5 @@ module.exports = {
   unmatch,
   findMostMatchedPreference,
   findMostMatchedUser,
+  chatBotResponse,
 };

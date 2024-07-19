@@ -1,24 +1,44 @@
-const express = require('express');
-const validate = require('../../middlewares/validate');
-const userValidation = require('../../validations/user.validation');
-const userController = require('../../controllers/api/user.controller') 
-const auth = require('../../middlewares/auth');
+const express = require("express");
+const validate = require("../../middlewares/validate");
+const userValidation = require("../../validations/user.validation");
+const userController = require("../../controllers/api/user.controller");
+const auth = require("../../middlewares/auth");
 
 const router = express.Router();
 
-
-router.post('/questionnaireResponses', auth(),validate(userValidation.questionnaireResponse) ,  userController.createQuestionnaireResponse);
-router.post('/preferences', auth() ,validate(userValidation.createPreference) , userController.createUserPreference);
-router.route('/preferences/:userId').patch(auth() ,validate(userValidation.updatePreference) , userController.updatePreferences)
+router.post(
+  "/questionnaireResponses",
+  auth(),
+  validate(userValidation.questionnaireResponse),
+  userController.createQuestionnaireResponse
+);
+router.post(
+  "/preferences",
+  auth(),
+  validate(userValidation.createPreference),
+  userController.createUserPreference
+);
+router
+  .route("/preferences/:userId")
+  .patch(
+    auth(),
+    validate(userValidation.updatePreference),
+    userController.updatePreferences
+  );
 
 router
-  .route('/:userId')
+  .route("/:userId")
   // .get(auth(permissions.readOwn, resources.users), validate(userValidation.getUser), userController.getUser)
-  .patch(auth() ,validate(userValidation.updateUser), userController.updateUser)
-  // .delete(auth(permissions.delete, resources.users), validate(userValidation.deleteUser), userController.deleteUser);
-router.get('/all/homeScreen',auth(), userController.getAllUsers);
-router.get('/checkMatch',auth(), userController.checkMatch );
-router.patch('/unmatch/:userId',auth(), userController.unMatchAUser);
+  .patch(
+    auth(),
+    validate(userValidation.updateUser),
+    userController.updateUser
+  );
+// .delete(auth(permissions.delete, resources.users), validate(userValidation.deleteUser), userController.deleteUser);
+router.get("/all/homeScreen", auth(), userController.getAllUsers);
+router.get("/checkMatch", auth(), userController.checkMatch);
+router.patch("/unmatch/:userId", auth(), userController.unMatchAUser);
+router.post("/chatBot", auth(), userController.chatBot);
 module.exports = router;
 
 /**
@@ -45,8 +65,8 @@ module.exports = router;
  *             properties:
  *               educationProfession:
  *                 type: string
- *               hobbiesPassions: 
- *                 type: string   
+ *               hobbiesPassions:
+ *                 type: string
  *               kidsPets:
  *                 type: string
  *               valuesPersonality:
@@ -56,14 +76,14 @@ module.exports = router;
  *               redFlags:
  *                 type: string
  *             example:
- *               educationProfession: Sample text 
+ *               educationProfession: Sample text
  *               hobbiesPassions: Sample hobbies professions
  *               kidsPets: sample kids pets
  *               greenFlags: sample green flags
  *               redFlags: sample red flags
  *               valuesPersonality: sample relationship experiences
- * 
- * 
+ *
+ *
  *     responses:
  *       "200":
  *         $ref: '#components/responses/UserRegistered'
@@ -171,8 +191,8 @@ module.exports = router;
  *             properties:
  *               genderPreference:
  *                 type: number
- *               agePreference: 
- *                 type: number   
+ *               agePreference:
+ *                 type: number
  *               heightPreference:
  *                 type: number
  *               bmiPreference:
@@ -191,8 +211,8 @@ module.exports = router;
  *               religionPreference: 1
  *               locationPreference: 1
  *               relationshipIntention: 1
- * 
- * 
+ *
+ *
  *     responses:
  *       "200":
  *         $ref: '#components/responses/UserRegistered'
@@ -215,7 +235,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User Id 
+ *         description: User Id
  *     requestBody:
  *       required: true
  *       content:
@@ -225,8 +245,8 @@ module.exports = router;
  *             properties:
  *               genderPreference:
  *                 type: number
- *               agePreference: 
- *                 type: number   
+ *               agePreference:
+ *                 type: number
  *               heightPreference:
  *                 type: number
  *               bmiPreference:
@@ -309,7 +329,7 @@ module.exports = router;
  *         schema:
  *           type: string
  *         required: true
- *         description: MUser id of the user with whom current user wanna match 
+ *         description: MUser id of the user with whom current user wanna match
  *     responses:
  *       "200":
  *         $ref: '#/components/responses/MultipleUsersResponse'
@@ -346,4 +366,32 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ */
+/**
+ * @swagger
+ * /users/chatBot:
+ *   post:
+ *     summary: Get chatBot response
+ *     description: retrieve ChatBot response .
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               question:
+ *                 type: number
+ *             example:
+ *               question: 'Hello , How Are You'
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/MultipleUsersResponse'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
  */
