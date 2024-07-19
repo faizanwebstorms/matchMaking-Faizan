@@ -18,11 +18,13 @@ const { otpTypes } = require("../config/otp");
 const axios = require("axios");
 const { handleReactionCreation } = require("./reaction.service");
 const locationHelper = require("../helpers/location");
+const path = require("path");
 const { NlpManager } = require("node-nlp");
 
-// Load the NlpManager instance once
+const modelPath = path.resolve(__dirname, "../../model.nlp");
+
 const manager = new NlpManager({ languages: ["en"] });
-manager.load();
+manager.load(modelPath);
 
 /**
  * filter User Data from request
