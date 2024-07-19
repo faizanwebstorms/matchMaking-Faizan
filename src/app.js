@@ -62,15 +62,13 @@ if (config.env === "production") {
 
 // v1 api routes
 
-app.use('/v1', routes);
+app.use("/v1", routes);
 // app.get('/', function (req, res) {
 //   res.redirect('/v1/docs');
 // });
 
-
-
-app.get('/', (req, res) => {
-  res.send('Welcome to the API');
+app.get("/", (req, res) => {
+  res.send("Welcome to the API");
 });
 
 app.use((req, res, next) => {
@@ -108,14 +106,17 @@ process.on("SIGTERM", () => {
     server.close();
   }
 });
-
+const path = require("path");
 // Let's start with importing `NlpManager` from `node-nlp`. This will be responsible for training, saving, loading and processing.
 const { NlpManager } = require("node-nlp");
-console.log("Starting Chatbot ...");
+
 // Creating new Instance of NlpManager class.
+const modelPath = path.resolve(__dirname, "../model.nlp");
+
+console.log("Starting Chatbot ...");
 const manager = new NlpManager({ languages: ["en"] });
-// Loading our saved model
-manager.load();
+manager.load(modelPath); // Load the model from the specific path
+
 // // Loading a module readline, this will be able to take input from the terminal.
 // var readline = require("readline");
 // var rl = readline.createInterface(process.stdin, process.stdout);
