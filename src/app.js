@@ -103,13 +103,17 @@ process.on("SIGTERM", () => {
   }
 });
 
+const path = require("path");
 // Let's start with importing `NlpManager` from `node-nlp`. This will be responsible for training, saving, loading and processing.
 const { NlpManager } = require("node-nlp");
-console.log("Starting Chatbot ...");
+
 // Creating new Instance of NlpManager class.
+const modelPath = path.resolve(__dirname, "../model.nlp");
+
+console.log("Starting Chatbot ...");
 const manager = new NlpManager({ languages: ["en"] });
-// Loading our saved model
-manager.load();
+manager.load(modelPath); // Load the model from the specific path
+
 // // Loading a module readline, this will be able to take input from the terminal.
 // var readline = require("readline");
 // var rl = readline.createInterface(process.stdin, process.stdout);
