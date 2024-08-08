@@ -18,13 +18,16 @@ const { otpTypes } = require("../config/otp");
 const axios = require("axios");
 const { handleReactionCreation } = require("./reaction.service");
 const locationHelper = require("../helpers/location");
-const path = require("path");
-const { NlpManager } = require("node-nlp");
+// const path = require("path");
+// const { NlpManager } = require("node-nlp");
 
-const modelPath = path.resolve(__dirname, "../../model.nlp");
+// const modelPath = path.resolve(__dirname, "../../model.nlp");
 
-const manager = new NlpManager({ languages: ["en"] });
-manager.load(modelPath);
+// const manager = new NlpManager({ languages: ["en"] });
+// manager.load(modelPath);
+const OpenAI = require("openai");
+
+const openai = new OpenAI();
 
 /**
  * filter User Data from request
@@ -817,14 +820,20 @@ const unmatch = async (userId, unMatchedUserId) => {
 
 const chatBotResponse = async (body) => {
   try {
-    const response = await manager.process("en", body.question);
-    if (response.answer == null) {
-      response.answer =
-        "I cannot answer this question. Please ask a valid question.";
-      return response.answer;
-    }
-    return response.answer;
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "user",
+          content: body?.question,
+        },
+      ],
+    });
+    const answer = response.choices[0].message.content;
+    console.log(answer);
+    return answer;
   } catch (error) {
+    console.error("Error:", error);
     throw error;
   }
 };
