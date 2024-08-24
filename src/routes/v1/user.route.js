@@ -39,6 +39,7 @@ router.get("/all/homeScreen", auth(), userController.getAllUsers);
 router.get("/checkMatch", auth(), userController.checkMatch);
 router.patch("/unmatch/:userId", auth(), userController.unMatchAUser);
 router.post("/chatBot", auth(), userController.chatBot);
+router.post("/vendorEmbeddings", auth(), userController.createVectorEmbeddings);
 module.exports = router;
 
 /**
@@ -387,6 +388,38 @@ module.exports = router;
  *                 type: number
  *             example:
  *               question: 'Hello , How Are You'
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/MultipleUsersResponse'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ */
+
+/**
+ * @swagger
+ * /users/vendorEmbeddings:
+ *   post:
+ *     summary: Create vector embeddings
+ *     description: Create vector embeddings
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               texts:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example:
+ *                   - 'Hello'
+ *                   - 'How Are You'
  *     responses:
  *       "200":
  *         $ref: '#/components/responses/MultipleUsersResponse'

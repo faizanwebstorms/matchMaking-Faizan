@@ -408,6 +408,30 @@ const deleteRoomMessages = async (roomId) => {
     throw error;
   }
 };
+
+const tf = require("@tensorflow/tfjs-node");
+const use = require("@tensorflow-models/universal-sentence-encoder");
+const math = require("mathjs");
+
+// Function to get embeddings from TensorFlow.js
+async function getEmbeddings(texts) {
+  const model = await use.load();
+  const embeddings = await model.embed(texts);
+
+  const embeddingArray = embeddings.arraySync(); // Convert tensor to regular JavaScript array
+  return embeddingArray;
+}
+
+const getVectorEmbeddings = async (texts) => {
+  // Ensure the required parameters are present
+
+  // Get embeddings for the given texts
+  const embeddingArray = await getEmbeddings(texts);
+  console.log("embeddingArray", embeddingArray);
+  // Send response with embeddings and TF-IDF
+  return embeddingArray;
+};
+
 module.exports = {
   store,
   getMessageByRoomId,
@@ -422,4 +446,6 @@ module.exports = {
   seenAllUnseenMessageWhenRoomJoin,
   updateMessageSeenStatus,
   deleteRoomMessages,
+  getEmbeddings,
+  getVectorEmbeddings,
 };
