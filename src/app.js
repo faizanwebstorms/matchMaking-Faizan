@@ -47,15 +47,6 @@ app.use(mongoSanitize());
 // gzip compression
 app.use(compression());
 
-const corsOptions = {
-  origin: "*", // specify allowed origin
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // specify allowed methods
-  allowedHeaders: "Content-Type,Authorization", // specify allowed headers
-  credentials: true, // include credentials like cookies in the request
-};
-
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
 // enable cors
 app.use(cors());
 app.options("*", cors());
