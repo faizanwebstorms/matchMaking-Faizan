@@ -7,12 +7,12 @@ module.exports = {
       ignore_watch: ["node_modules"], // Ignore node_modules to prevent unnecessary restarts
       // env: {
       //   NODE_ENV: "development",
-      //   PORT: 3000,
+      //   PORT: 3001,
       //   // Add any other environment variables here
       // },
       env_production: {
         NODE_ENV: "production",
-        PORT: 3000,
+        PORT: 3001,
         // Add any production-specific environment variables here
       },
     },
