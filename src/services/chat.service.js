@@ -418,20 +418,103 @@ async function getEmbeddings(texts) {
   const model = await use.load();
   const embeddings = await model.embed(texts);
 
-  const embeddingArray = embeddings.arraySync(); // Convert tensor to regular JavaScript array
+  let embeddingArray = embeddings.arraySync(); // Convert tensor to regular JavaScript array
+
+  // Flatten the array of arrays into a single array
+  embeddingArray = embeddingArray.flat();
+
+  // Ensure the array has at most 300 elements
+  if (embeddingArray.length > 300) {
+    embeddingArray = embeddingArray.slice(0, 300);
+  }
+
   return embeddingArray;
 }
 
 const getVectorEmbeddings = async (texts) => {
-  // Ensure the required parameters are present
-
   // Get embeddings for the given texts
   const embeddingArray = await getEmbeddings(texts);
   console.log("embeddingArray", embeddingArray);
+  await createQdrantCollection(embeddingArray, texts);
   // Send response with embeddings and TF-IDF
   return embeddingArray;
 };
 
+const axios = require("axios");
+const { QdrantClient } = require("@qdrant/js-client-rest");
+async function createQdrantCollection(embeddingArray, texts) {
+  const client = new QdrantClient({
+    url: "https://e60f9787-9ad8-4177-b5d7-62a11e4fe223.europe-west3-0.gcp.cloud.qdrant.io:6333",
+    apiKey: "1lh_JNJlAHgzg-an5rkTirDV2w_kgNbZLgu9YO0hFP0k8nzaZ3Gwtg",
+  });
+
+  // Prepare the data to upsert
+  const points = [
+    {
+      id: 3, // Ensure this is unique or correct for your use case
+      vector: embeddingArray, // Ensure vector size matches the collection's dimension
+      payload: {
+        text: texts, // Optional payload data
+      },
+    },
+  ];
+
+  // Upsert points into the collection
+  client
+    .upsert("users", { points })
+    .then((response) => {
+      console.log("Upsert response:", response);
+    })
+    .catch((error) => {
+      console.error("Error upserting points:", error);
+    });
+  // const qdrantUrl =
+  //   "https://e60f9787-9ad8-4177-b5d7-62a11e4fe223.europe-west3-0.gcp.cloud.qdrant.io/collections/users";
+  // const collectionConfig = {
+  //   vectors: {
+  //     size: 300, // the dimension of your embeddings (e.g., 300 if using a model with 300-dim embeddings)
+  //     distance: "Cosine", // distance metric (Cosine, Euclidean, or Dot)
+  //   },
+  // };
+  // try {
+  //   const response = await axios.put(qdrantEndpoint, collectionConfig, {
+  //     headers: {
+  //       Authorization: `Bearer ${apiKey}`,
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
+  //   console.log("Qdrant collection creation response:", response.data);
+  // } catch (error) {
+  //   console.error("Error creating collection in Qdrant:", error);
+  //   throw error;
+  // }
+  // // Define the collection parameters
+  // const collectionParams = {
+  //   vectors: {
+  //     size: 300, // Size of the vector
+  //     distance: "Cosine", // Distance metric (Cosine, Euclidean, Dot)
+  //   },
+  // };
+  // // Make the PUT request to create the collection
+  // axios
+  //   .put(qdrantUrl, collectionParams, {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${"1lh_JNJlAHgzg-an5rkTirDV2w_kgNbZLgu9YO0hFP0k8nzaZ3Gwtg"}`, // Replace with your API key
+  //     },
+  //   })
+  //   .then((response) => {
+  //     console.log("Collection created successfully:", response.data);
+  //   })
+  //   .catch((error) => {
+  //     console.error(
+  //       "Error creating collection:",
+  //       error.response ? error.response.data : error.message
+  //     );
+  //   });
+}
+
+// createQdrantCollection();
 module.exports = {
   store,
   getMessageByRoomId,
@@ -448,4 +531,5 @@ module.exports = {
   deleteRoomMessages,
   getEmbeddings,
   getVectorEmbeddings,
+  createQdrantCollection,
 };
