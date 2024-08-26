@@ -9,7 +9,7 @@ const envVarsSchema = Joi.object()
     NODE_ENV: Joi.string()
       .valid("production", "development", "test")
       .required(),
-    PORT: Joi.number().default(3000),
+    PORT: Joi.number().default(3001),
     HOST: Joi.string().default("3.70.233.161"),
     MONGODB_URL: Joi.string().required().description("Mongo DB url"),
     JWT_SECRET: Joi.string().required().description("JWT secret key"),
