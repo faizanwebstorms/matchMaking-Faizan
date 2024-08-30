@@ -7,7 +7,7 @@ const userService = require("../../services/user.service");
 const Helper = require("../../utils/Helper");
 const messages = require("../../config/messages");
 const { User, UserPreference } = require("../../models");
-
+const chatService = require("../../services/chat.service");
 /**
  * Create User Questionnare Response
  * @type {(function(*, *, *): void)|*}
@@ -156,6 +156,33 @@ const chatBot = catchAsync(async (req, res) => {
   );
 });
 
+/*
+ * Create Vendor Embeddings
+ * @type {(function(*, *, *): void)|*}
+ */
+const createVectorEmbeddings = catchAsync(async (req, res) => {
+  const vencorEmbedings = await chatService.storeEmbeddings(
+    req?.body?.texts,
+    req.user
+  );
+  res.send(
+    Helper.apiResponse(httpStatus.OK, messages.api.success, vencorEmbedings)
+  );
+});
+
+/*
+ * Get  Vendor Embeddings
+ * @type {(function(*, *, *): void)|*}
+ */
+const getVectorEmbeddings = catchAsync(async (req, res) => {
+  const vencorEmbedings = await chatService.getVectorEmbeddingsForUser(
+    req.user
+  );
+  res.send(
+    Helper.apiResponse(httpStatus.OK, messages.api.success, vencorEmbedings)
+  );
+});
+
 module.exports = {
   createQuestionnaireResponse,
   updateUser,
@@ -165,4 +192,6 @@ module.exports = {
   updatePreferences,
   unMatchAUser,
   chatBot,
+  createVectorEmbeddings,
+  getVectorEmbeddings,
 };

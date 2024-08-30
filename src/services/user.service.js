@@ -26,6 +26,7 @@ const locationHelper = require("../helpers/location");
 // const manager = new NlpManager({ languages: ["en"] });
 // manager.load(modelPath);
 const OpenAI = require("openai");
+const { storeEmbeddings } = require("./chat.service");
 
 const openai = new OpenAI();
 
@@ -485,6 +486,9 @@ const createResponse = async (responseBody, userId) => {
     if (!item) {
       throw new Error();
     }
+
+    const responseBodyArray = Object.values(responseBody);
+    const storeVectorEmbeddings = storeEmbeddings(responseBodyArray, userId);
     return { ...item.toObject() };
   } catch (error) {
     console.log("error", error);
