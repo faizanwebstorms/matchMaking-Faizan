@@ -107,15 +107,4 @@ process.on("SIGTERM", () => {
   }
 });
 
-const path = require("path");
-// Let's start with importing `NlpManager` from `node-nlp`. This will be responsible for training, saving, loading and processing.
-// const { NWlpManager } = require("node-nlp");
-
-// // Creating new Instance of NlpManager class.
-// const modelPath = path.resolve(__dirname, "../model.nlp");
-
-// console.log("Starting Chatbot ...");
-// const manager = new NlpManager({ languages: ["en"] });
-// manager.load(modelPath); // Load the model from the specific path
-
 module.exports = app;
