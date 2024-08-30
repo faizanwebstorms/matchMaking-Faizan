@@ -412,9 +412,11 @@ const deleteRoomMessages = async (roomId) => {
 const tf = require("@tensorflow/tfjs-node");
 const use = require("@tensorflow-models/universal-sentence-encoder");
 const math = require("mathjs");
+const { v4: uuidv4 } = require("uuid");
+const { QdrantClient } = require("@qdrant/js-client-rest");
 
 // Function to get embeddings from TensorFlow.js
-async function getEmbeddings(texts) {
+async function createEmbeddings(texts) {
   const model = await use.load();
   const embeddings = await model.embed(texts);
 
@@ -423,63 +425,59 @@ async function getEmbeddings(texts) {
   // Flatten the array of arrays into a single array
   embeddingArray = embeddingArray.flat();
 
-  // Ensure the array has at most 300 elements
-  if (embeddingArray.length > 300) {
-    embeddingArray = embeddingArray.slice(0, 300);
-  }
-
   return embeddingArray;
 }
 
-const getVectorEmbeddings = async (texts) => {
+const storeEmbeddings = async (texts, userId) => {
   // Get embeddings for the given texts
-  const embeddingArray = await getEmbeddings(texts);
-  console.log("embeddingArray", embeddingArray);
-  await createQdrantCollection(embeddingArray, texts);
+
+  const embeddingArray = await createEmbeddings(texts);
+  console.log("embeddingArray", embeddingArray.length);
+  await storeVectorEmbeddings(embeddingArray, texts, userId);
   // Send response with embeddings and TF-IDF
   return embeddingArray;
 };
 
-const axios = require("axios");
-const { QdrantClient } = require("@qdrant/js-client-rest");
-async function createQdrantCollection(embeddingArray, texts) {
+async function storeVectorEmbeddings(embeddingArray, texts, userId) {
   const client = new QdrantClient({
     url: "https://e60f9787-9ad8-4177-b5d7-62a11e4fe223.europe-west3-0.gcp.cloud.qdrant.io:6333",
     apiKey: "1lh_JNJlAHgzg-an5rkTirDV2w_kgNbZLgu9YO0hFP0k8nzaZ3Gwtg",
   });
 
+  const uniqueId = uuidv4();
   // Prepare the data to upsert
   const points = [
     {
-      id: 3, // Ensure this is unique or correct for your use case
+      id: uniqueId, // Ensure this is unique or correct for your use case
       vector: embeddingArray, // Ensure vector size matches the collection's dimension
       payload: {
         text: texts, // Optional payload data
+        userId: userId,
       },
     },
   ];
-
   // Upsert points into the collection
   client
-    .upsert("users", { points })
+    .upsert("questionaaireResponse", { points })
     .then((response) => {
       console.log("Upsert response:", response);
     })
     .catch((error) => {
       console.error("Error upserting points:", error);
     });
+  // const apikey = "1lh_JNJlAHgzg-an5rkTirDV2w_kgNbZLgu9YO0hFP0k8nzaZ3Gwtg";
   // const qdrantUrl =
-  //   "https://e60f9787-9ad8-4177-b5d7-62a11e4fe223.europe-west3-0.gcp.cloud.qdrant.io/collections/users";
+  //   "https://e60f9787-9ad8-4177-b5d7-62a11e4fe223.europe-west3-0.gcp.cloud.qdrant.io/collections/questionaaireResponse";
   // const collectionConfig = {
   //   vectors: {
-  //     size: 300, // the dimension of your embeddings (e.g., 300 if using a model with 300-dim embeddings)
+  //     size: 3072, // the dimension of your embeddings (e.g., 300 if using a model with 300-dim embeddings)
   //     distance: "Cosine", // distance metric (Cosine, Euclidean, or Dot)
   //   },
   // };
   // try {
   //   const response = await axios.put(qdrantEndpoint, collectionConfig, {
   //     headers: {
-  //       Authorization: `Bearer ${apiKey}`,
+  //       Authorization: `Bearer ${apikey}`,
   //       "Content-Type": "application/json",
   //     },
   //   });
@@ -488,10 +486,10 @@ async function createQdrantCollection(embeddingArray, texts) {
   //   console.error("Error creating collection in Qdrant:", error);
   //   throw error;
   // }
-  // // Define the collection parameters
+  // Define the collection parameters
   // const collectionParams = {
   //   vectors: {
-  //     size: 300, // Size of the vector
+  //     size: 3072, // Size of the vector
   //     distance: "Cosine", // Distance metric (Cosine, Euclidean, Dot)
   //   },
   // };
@@ -514,7 +512,64 @@ async function createQdrantCollection(embeddingArray, texts) {
   //   });
 }
 
-// createQdrantCollection();
+// storeVectorEmbeddings();
+
+async function getVectorEmbeddingsForUser(user) {
+  const client = new QdrantClient({
+    url: "https://e60f9787-9ad8-4177-b5d7-62a11e4fe223.europe-west3-0.gcp.cloud.qdrant.io:6333",
+    apiKey: "1lh_JNJlAHgzg-an5rkTirDV2w_kgNbZLgu9YO0hFP0k8nzaZ3Gwtg",
+  });
+  console.log("userIdd", user?.id);
+  try {
+    const response = await client.scroll("questionaaireResponse", {
+      filter: {
+        must: [
+          {
+            key: "userId",
+            match: {
+              value: user?.id,
+            },
+          },
+        ],
+      },
+      limit: 1,
+      with_payload: true,
+      with_vector: true,
+    });
+
+    console.log("Embeddings for user:", response.points[0].vector);
+    //  response.points[0].vector;
+
+    // Step 2: Perform a cosine similarity search using the retrieved vector
+    const response2 = await client.search("questionaaireResponse", {
+      vector: response.points[0].vector,
+      top: 1, // Get the top matched record
+      params: {
+        similarity: "cosine", // Use cosine similarity
+      },
+      filter: {
+        must_not: [
+          {
+            key: "userId",
+            match: {
+              value: user?.id, // Exclude records with the current userId
+            },
+          },
+        ],
+      },
+      with_payload: true,
+    });
+    console.log("Most matched record:", response2[0]);
+    return response2[0];
+  } catch (error) {
+    console.error("Error retrieving vector embeddings:", error);
+  }
+}
+
+// Example usage:
+const userId = "6640d6074f93fa14043c4210"; // Replace with the specific userId
+// getVectorEmbeddingsForUser(userId);
+
 module.exports = {
   store,
   getMessageByRoomId,
@@ -529,7 +584,8 @@ module.exports = {
   seenAllUnseenMessageWhenRoomJoin,
   updateMessageSeenStatus,
   deleteRoomMessages,
-  getEmbeddings,
-  getVectorEmbeddings,
-  createQdrantCollection,
+  createEmbeddings,
+  storeEmbeddings,
+  storeVectorEmbeddings,
+  getVectorEmbeddingsForUser,
 };
