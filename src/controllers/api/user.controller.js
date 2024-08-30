@@ -161,8 +161,22 @@ const chatBot = catchAsync(async (req, res) => {
  * @type {(function(*, *, *): void)|*}
  */
 const createVectorEmbeddings = catchAsync(async (req, res) => {
-  const vencorEmbedings = await chatService.getVectorEmbeddings(
-    req?.body?.texts
+  const vencorEmbedings = await chatService.storeEmbeddings(
+    req?.body?.texts,
+    req.user
+  );
+  res.send(
+    Helper.apiResponse(httpStatus.OK, messages.api.success, vencorEmbedings)
+  );
+});
+
+/*
+ * Get  Vendor Embeddings
+ * @type {(function(*, *, *): void)|*}
+ */
+const getVectorEmbeddings = catchAsync(async (req, res) => {
+  const vencorEmbedings = await chatService.getVectorEmbeddingsForUser(
+    req.user
   );
   res.send(
     Helper.apiResponse(httpStatus.OK, messages.api.success, vencorEmbedings)
@@ -179,4 +193,5 @@ module.exports = {
   unMatchAUser,
   chatBot,
   createVectorEmbeddings,
+  getVectorEmbeddings,
 };
