@@ -409,9 +409,9 @@ const deleteRoomMessages = async (roomId) => {
   }
 };
 
-const tf = require("@tensorflow/tfjs-node");
+// const tf = require("@tensorflow/tfjs-node");
 const use = require("@tensorflow-models/universal-sentence-encoder");
-const math = require("mathjs");
+// const math = require("mathjs");
 const { v4: uuidv4 } = require("uuid");
 const { QdrantClient } = require("@qdrant/js-client-rest");
 
