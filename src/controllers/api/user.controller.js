@@ -175,9 +175,8 @@ const createVectorEmbeddings = catchAsync(async (req, res) => {
  * @type {(function(*, *, *): void)|*}
  */
 const getVectorEmbeddings = catchAsync(async (req, res) => {
-  const vencorEmbedings = await chatService.getVectorEmbeddingsForUser(
-    req.user
-  );
+  const vencorEmbedings = await chatService.getVectorMatchedUsers(req.user);
+
   res.send(
     Helper.apiResponse(httpStatus.OK, messages.api.success, vencorEmbedings)
   );

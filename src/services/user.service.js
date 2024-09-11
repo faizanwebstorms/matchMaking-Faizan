@@ -18,6 +18,7 @@ const { otpTypes } = require("../config/otp");
 const axios = require("axios");
 const { handleReactionCreation } = require("./reaction.service");
 const locationHelper = require("../helpers/location");
+const chatService = require("./chat.service");
 // const path = require("path");
 // const { NlpManager } = require("node-nlp");
 
@@ -27,6 +28,9 @@ const locationHelper = require("../helpers/location");
 // manager.load(modelPath);
 const OpenAI = require("openai");
 const { storeEmbeddings } = require("./chat.service");
+
+const chat = require("../models/chat");
+
 
 const openai = new OpenAI();
 
@@ -336,19 +340,24 @@ const calculateMatchScore = async (user, preference, loggedInUser) => {
   return matchScore;
 };
 
-const findMostMatchedUser = async (preference, loggedInUser) => {
+const findMostMatchedUser = async (
+  preference,
+  loggedInUser,
+  usersThroughVectors
+) => {
   try {
     let bestMatch = null;
     let highestMatchScore = -1;
     let validMatchFound = false;
 
-    const allUsers = await User.find({
-      _id: {
-        $ne: preference?.userId,
-        $nin: loggedInUser?.unMatchedUsers.map((id) => id),
-      },
-      $or: [{ inMatch: false }, { inMatch: { $exists: false } }],
-    });
+    // const allUsers = await User.find({
+    //   _id: {
+    //     $ne: preference?.userId,
+    //     $nin: loggedInUser?.unMatchedUsers.map((id) => id),
+    //   },
+    //   $or: [{ inMatch: false }, { inMatch: { $exists: false } }],
+    // });
+    const allUsers = usersThroughVectors;
 
     for (let user of allUsers) {
       // Calculate match score for each user
@@ -627,8 +636,14 @@ const createPreference = async (preferenceBody, user) => {
     if (!item) {
       throw new Error();
     }
-    const mostMatchedUser = await findMostMatchedUser(item, user);
-
+    const usersthroughVectors = await chatService.getVectorMatchedUsers(user);
+    console.log("usersthroughVectors", usersthroughVectors);
+    const mostMatchedUser = await findMostMatchedUser(
+      item,
+      user,
+      usersthroughVectors
+    );
+    console.log("mostMatchedUser", mostMatchedUser);
     // if (mostMatchedUser && mostMatchedUser.inMatch === true) {
     //   mostMatchedUser = null;
     // }
@@ -668,7 +683,15 @@ const updatePreference = async (preference, updateBody, loggedInUser) => {
   try {
     Object.assign(preference, updateBody);
     await preference.save();
-    const matchedUser = await findMostMatchedUser(preference, loggedInUser);
+    const usersthroughVectors = await chatService.getVectorMatchedUsers(
+      loggedInUser
+    );
+
+    const matchedUser = await findMostMatchedUser(
+      preference,
+      loggedInUser,
+      usersthroughVectors
+    );
 
     if (matchedUser && loggedInUser) {
       Object.assign(matchedUser, { inMatch: true });
@@ -690,7 +713,7 @@ const updatePreference = async (preference, updateBody, loggedInUser) => {
       matchedUser,
     };
   } catch (e) {
-    throw error;
+    throw e;
   }
 };
 
