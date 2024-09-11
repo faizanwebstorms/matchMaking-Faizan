@@ -421,7 +421,6 @@ async function createEmbeddings(texts) {
   console.log("model", model);
   const embeddings = await model.embed(texts);
   console.log("embeddings", embeddings);
-  const embeddings = await model.embed(texts);
 
   let embeddingArray = embeddings.arraySync(); // Convert tensor to regular JavaScript array
 
@@ -519,9 +518,6 @@ async function storeVectorEmbeddings(embeddingArray, texts, userId) {
 
 // storeVectorEmbeddings();
 
-
-const getVectorMatchedUsers = async (user) => {
-
 async function getVectorEmbeddingsForUser(user) {
   const client = new QdrantClient({
     url: "https://e60f9787-9ad8-4177-b5d7-62a11e4fe223.europe-west3-0.gcp.cloud.qdrant.io:6333",
@@ -530,10 +526,6 @@ async function getVectorEmbeddingsForUser(user) {
 
   console.log("userIdd", user?.id);
 
-  try {
-    // Step 1: Retrieve the vector for the current user
-
-  console.log("userIdd", user?.id);
   try {
     const response = await client.scroll("questionaaireResponse", {
       filter: {
@@ -589,8 +581,7 @@ async function getVectorEmbeddingsForUser(user) {
   } catch (error) {
     console.error("Error retrieving vector embeddings:", error);
   }
-};
-
+}
 
 // Example usage:
 const userId = "6640d6074f93fa14043c4210"; // Replace with the specific userId
@@ -614,5 +605,4 @@ module.exports = {
   storeEmbeddings,
   storeVectorEmbeddings,
   getVectorMatchedUsers,
-
 };
