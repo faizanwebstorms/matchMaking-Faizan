@@ -408,7 +408,7 @@ const deleteRoomMessages = async (roomId) => {
     throw error;
   }
 };
-const tf = require("@tensorflow/tfjs-node");
+// const tf = require("@tensorflow/tfjs-node");
 const use = require("@tensorflow-models/universal-sentence-encoder");
 // const math = require("mathjs");
 const { v4: uuidv4 } = require("uuid");
