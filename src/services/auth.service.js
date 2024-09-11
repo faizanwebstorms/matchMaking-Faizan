@@ -3,8 +3,8 @@ const userService = require("./user.service");
 const { Token, OTP, User, UserPreference, Match } = require("../models");
 const { tokenTypes } = require("../config/tokens");
 const { otpTypes } = require("../config/otp");
-const httpStatus = require("http-status");
-const ApiError = require("../utils/ApiError");
+const httpStatus = require('http-status');
+const ApiError = require('../utils/ApiError');
 
 /**
  * Login with username and password
@@ -18,10 +18,7 @@ const login = async (email, password) => {
       $or: [{ email }, { username: email }],
     });
     if (!user || !(await user.isPasswordMatch(password))) {
-      throw new ApiError(
-        httpStatus.UNAUTHORIZED,
-        "Incorrect email/username or password"
-      );
+      throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email/username or password");
     }
 
     //Get matchewd user
