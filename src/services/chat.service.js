@@ -1,6 +1,6 @@
 const { ObjectId } = require("mongodb");
 // const httpStatus = require('http-status');
-const { Chat } = require("../models");
+const { Chat, User } = require("../models");
 
 const getMessageByRoomId = async (filter, options) => {
   // eslint-disable-next-line no-useless-catch
@@ -409,7 +409,7 @@ const deleteRoomMessages = async (roomId) => {
   }
 };
 
-// const tf = require("@tensorflow/tfjs-node");
+const tf = require("@tensorflow/tfjs-node");
 const use = require("@tensorflow-models/universal-sentence-encoder");
 // const math = require("mathjs");
 const { v4: uuidv4 } = require("uuid");
@@ -418,19 +418,20 @@ const { QdrantClient } = require("@qdrant/js-client-rest");
 // Function to get embeddings from TensorFlow.js
 async function createEmbeddings(texts) {
   const model = await use.load();
+  console.log("model", model);
   const embeddings = await model.embed(texts);
-
+  console.log("embeddings", embeddings);
   let embeddingArray = embeddings.arraySync(); // Convert tensor to regular JavaScript array
 
   // Flatten the array of arrays into a single array
   embeddingArray = embeddingArray.flat();
-
+  console.log("embeddingArray", embeddingArray);
   return embeddingArray;
 }
 
 const storeEmbeddings = async (texts, userId) => {
   // Get embeddings for the given texts
-
+  console.log("texts", texts);
   const embeddingArray = await createEmbeddings(texts);
   console.log("embeddingArray", embeddingArray.length);
   await storeVectorEmbeddings(embeddingArray, texts, userId);
@@ -440,10 +441,10 @@ const storeEmbeddings = async (texts, userId) => {
 
 async function storeVectorEmbeddings(embeddingArray, texts, userId) {
   const client = new QdrantClient({
-    url: "https://e60f9787-9ad8-4177-b5d7-62a11e4fe223.europe-west3-0.gcp.cloud.qdrant.io:6333",
-    apiKey: "1lh_JNJlAHgzg-an5rkTirDV2w_kgNbZLgu9YO0hFP0k8nzaZ3Gwtg",
+    url: "https://804103d3-c981-40ea-9b76-00c9ec1d31d8.europe-west3-0.gcp.cloud.qdrant.io",
+    apiKey: "6lBCirQFqlaBLPtXm6n_rInYNIJyoAMxKiv3syab5dWSuW0AKdWfDQ",
   });
-
+  console.log("client", client);
   const uniqueId = uuidv4();
   // Prepare the data to upsert
   const points = [
@@ -456,6 +457,7 @@ async function storeVectorEmbeddings(embeddingArray, texts, userId) {
       },
     },
   ];
+  console.log("points", points);
   // Upsert points into the collection
   client
     .upsert("questionaaireResponse", { points })
@@ -514,13 +516,16 @@ async function storeVectorEmbeddings(embeddingArray, texts, userId) {
 
 // storeVectorEmbeddings();
 
-async function getVectorEmbeddingsForUser(user) {
+const getVectorMatchedUsers = async (user) => {
   const client = new QdrantClient({
     url: "https://e60f9787-9ad8-4177-b5d7-62a11e4fe223.europe-west3-0.gcp.cloud.qdrant.io:6333",
     apiKey: "1lh_JNJlAHgzg-an5rkTirDV2w_kgNbZLgu9YO0hFP0k8nzaZ3Gwtg",
   });
+
   console.log("userIdd", user?.id);
+
   try {
+    // Step 1: Retrieve the vector for the current user
     const response = await client.scroll("questionaaireResponse", {
       filter: {
         must: [
@@ -537,15 +542,16 @@ async function getVectorEmbeddingsForUser(user) {
       with_vector: true,
     });
 
-    console.log("Embeddings for user:", response.points[0].vector);
-    //  response.points[0].vector;
+    const userVector = response.points[0].vector;
+    console.log("Embeddings for user:", userVector);
 
-    // Step 2: Perform a cosine similarity search using the retrieved vector
+    // Step 2: Perform a similarity search for all users with more than 65% similarity
     const response2 = await client.search("questionaaireResponse", {
-      vector: response.points[0].vector,
-      top: 1, // Get the top matched record
+      vector: userVector,
+      top: 1000, // A high number to ensure you get all possible matches
       params: {
-        similarity: "cosine", // Use cosine similarity
+        similarity: "cosine",
+        threshold: 0.65, // Set the threshold to 0.65 for 65% similarity
       },
       filter: {
         must_not: [
@@ -559,12 +565,21 @@ async function getVectorEmbeddingsForUser(user) {
       },
       with_payload: true,
     });
-    console.log("Most matched record:", response2[0]);
-    return response2[0];
+    // Filter out all results below 65% similarity
+    const matchedVectors = response2.filter((result) => result.score >= 0.65);
+    const matchedUsers = await Promise.all(
+      matchedVectors?.map(async (item) => {
+        const user = await User.findOne({ _id: item?.payload?.userId });
+        return user;
+      })
+    );
+
+    console.log("Users with more than 65% similarity:", matchedUsers);
+    return matchedUsers;
   } catch (error) {
     console.error("Error retrieving vector embeddings:", error);
   }
-}
+};
 
 // Example usage:
 const userId = "6640d6074f93fa14043c4210"; // Replace with the specific userId
@@ -587,5 +602,5 @@ module.exports = {
   createEmbeddings,
   storeEmbeddings,
   storeVectorEmbeddings,
-  getVectorEmbeddingsForUser,
+  getVectorMatchedUsers,
 };
