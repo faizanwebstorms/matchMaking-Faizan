@@ -50,9 +50,6 @@
   ],
   "dependencies": {
     "@qdrant/js-client-rest": "^1.11.0",
-    "@tensorflow-models/universal-sentence-encoder": "^1.3.3",
-    "@tensorflow/tfjs-converter": "^3.21.0",
-    "@tensorflow/tfjs-node": "^4.21.0",
     "accesscontrol": "^2.2.1",
     "aws-sdk": "^2.1234.0",
     "axios": "^1.2.4",

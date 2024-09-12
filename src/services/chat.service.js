@@ -409,25 +409,54 @@ const deleteRoomMessages = async (roomId) => {
   }
 };
 
-const tf = require("@tensorflow/tfjs-node");
-const use = require("@tensorflow-models/universal-sentence-encoder");
+// const tf = require("@tensorflow/tfjs-node");
+// const use = require("@tensorflow-models/universal-sentence-encoder");
 // const math = require("mathjs");
 const { v4: uuidv4 } = require("uuid");
 const { QdrantClient } = require("@qdrant/js-client-rest");
+const OpenAI = require("openai");
+const openai = new OpenAI();
+// const axios = require("axios");
 
+const client = new QdrantClient({
+  url: "https://804103d3-c981-40ea-9b76-00c9ec1d31d8.europe-west3-0.gcp.cloud.qdrant.io",
+  apiKey: "6lBCirQFqlaBLPtXm6n_rInYNIJyoAMxKiv3syab5dWSuW0AKdWfDQ",
+});
+
+const collectionName = "questionaaireResponse";
 // Function to get embeddings from TensorFlow.js
-async function createEmbeddings(texts) {
-  const model = await use.load();
-  console.log("model", model);
-  const embeddings = await model.embed(texts);
-  console.log("embeddings", embeddings);
-  let embeddingArray = embeddings.arraySync(); // Convert tensor to regular JavaScript array
+const createEmbeddings = async (texts) => {
+  // const model = await use.load();
 
-  // Flatten the array of arrays into a single array
-  embeddingArray = embeddingArray.flat();
-  console.log("embeddingArray", embeddingArray);
-  return embeddingArray;
-}
+  // console.log("model", model);
+  // const embeddings = await model.embed(texts);
+  // console.log("embeddings", embeddings);
+
+  // let embeddingArray = embeddings.arraySync(); // Convert tensor to regular JavaScript array
+
+  // // Flatten the array of arrays into a single array
+  // embeddingArray = embeddingArray.flat();
+
+  // console.log("embeddingArray", embeddingArray);
+  // console.log("texts", texts);
+
+  const embeddingResponse = await openai.embeddings.create({
+    model: "text-embedding-ada-002", // Use a valid embedding model like "text-embedding-ada-002"
+    input: texts, // Array of text strings
+    encoding_format: "float", // Optional, but if needed
+  });
+  console.log("objeembeddingResponsect", embeddingResponse);
+  // Extract embeddings for each text from the response
+  const embeddings = embeddingResponse.data.map((entry) => entry.embedding);
+
+  // Flatten the embeddings into a single array
+  const flattenedEmbeddings = embeddings.flat();
+  console.log("flattenedEmbeddings.length", flattenedEmbeddings.length);
+  console.log("Flattened Embeddings:", flattenedEmbeddings);
+  return flattenedEmbeddings;
+
+  // return embeddingArray;
+};
 
 const storeEmbeddings = async (texts, userId) => {
   // Get embeddings for the given texts
@@ -440,10 +469,6 @@ const storeEmbeddings = async (texts, userId) => {
 };
 
 async function storeVectorEmbeddings(embeddingArray, texts, userId) {
-  const client = new QdrantClient({
-    url: "https://804103d3-c981-40ea-9b76-00c9ec1d31d8.europe-west3-0.gcp.cloud.qdrant.io",
-    apiKey: "6lBCirQFqlaBLPtXm6n_rInYNIJyoAMxKiv3syab5dWSuW0AKdWfDQ",
-  });
   console.log("client", client);
   const uniqueId = uuidv4();
   // Prepare the data to upsert
@@ -460,19 +485,19 @@ async function storeVectorEmbeddings(embeddingArray, texts, userId) {
   console.log("points", points);
   // Upsert points into the collection
   client
-    .upsert("questionaaireResponse", { points })
+    .upsert(collectionName, { points })
     .then((response) => {
       console.log("Upsert response:", response);
     })
     .catch((error) => {
       console.error("Error upserting points:", error);
     });
-  // const apikey = "1lh_JNJlAHgzg-an5rkTirDV2w_kgNbZLgu9YO0hFP0k8nzaZ3Gwtg";
-  // const qdrantUrl =
-  //   "https://e60f9787-9ad8-4177-b5d7-62a11e4fe223.europe-west3-0.gcp.cloud.qdrant.io/collections/questionaaireResponse";
+  const apikey = "1lh_JNJlAHgzg-an5rkTirDV2w_kgNbZLgu9YO0hFP0k8nzaZ3Gwtg";
+  const qdrantUrl =
+    "https://e60f9787-9ad8-4177-b5d7-62a11e4fe223.europe-west3-0.gcp.cloud.qdrant.io:6333/collections/questionaaireResponseOpenAi";
   // const collectionConfig = {
   //   vectors: {
-  //     size: 3072, // the dimension of your embeddings (e.g., 300 if using a model with 300-dim embeddings)
+  //     size: 9216, // the dimension of your embeddings (e.g., 300 if using a model with 300-dim embeddings)
   //     distance: "Cosine", // distance metric (Cosine, Euclidean, or Dot)
   //   },
   // };
@@ -491,7 +516,7 @@ async function storeVectorEmbeddings(embeddingArray, texts, userId) {
   // Define the collection parameters
   // const collectionParams = {
   //   vectors: {
-  //     size: 3072, // Size of the vector
+  //     size: 9216, // Size of the vector
   //     distance: "Cosine", // Distance metric (Cosine, Euclidean, Dot)
   //   },
   // };
@@ -500,7 +525,7 @@ async function storeVectorEmbeddings(embeddingArray, texts, userId) {
   //   .put(qdrantUrl, collectionParams, {
   //     headers: {
   //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${"1lh_JNJlAHgzg-an5rkTirDV2w_kgNbZLgu9YO0hFP0k8nzaZ3Gwtg"}`, // Replace with your API key
+  //       Authorization: `Bearer ${apikey}`, // Replace with your API key
   //     },
   //   })
   //   .then((response) => {
@@ -517,16 +542,15 @@ async function storeVectorEmbeddings(embeddingArray, texts, userId) {
 // storeVectorEmbeddings();
 
 const getVectorMatchedUsers = async (user) => {
-  const client = new QdrantClient({
-    url: "https://e60f9787-9ad8-4177-b5d7-62a11e4fe223.europe-west3-0.gcp.cloud.qdrant.io:6333",
-    apiKey: "1lh_JNJlAHgzg-an5rkTirDV2w_kgNbZLgu9YO0hFP0k8nzaZ3Gwtg",
-  });
-
+  // const client = new QdrantClient({
+  //   url: "https://804103d3-c981-40ea-9b76-00c9ec1d31d8.europe-west3-0.gcp.cloud.qdrant.io",
+  //   apiKey: "6lBCirQFqlaBLPtXm6n_rInYNIJyoAMxKiv3syab5dWSuW0AKdWfDQ",
+  // });
   console.log("userIdd", user?.id);
 
   try {
     // Step 1: Retrieve the vector for the current user
-    const response = await client.scroll("questionaaireResponse", {
+    const response = await client.scroll(collectionName, {
       filter: {
         must: [
           {
@@ -542,16 +566,16 @@ const getVectorMatchedUsers = async (user) => {
       with_vector: true,
     });
 
-    const userVector = response.points[0].vector;
+    const userVector = response.points[0]?.vector;
     console.log("Embeddings for user:", userVector);
 
     // Step 2: Perform a similarity search for all users with more than 65% similarity
-    const response2 = await client.search("questionaaireResponse", {
+    const response2 = await client.search(collectionName, {
       vector: userVector,
       top: 1000, // A high number to ensure you get all possible matches
       params: {
         similarity: "cosine",
-        threshold: 0.65, // Set the threshold to 0.65 for 65% similarity
+        threshold: 0.86, // Set the threshold to 0.86 for 86% similarity
       },
       filter: {
         must_not: [
@@ -565,8 +589,9 @@ const getVectorMatchedUsers = async (user) => {
       },
       with_payload: true,
     });
-    // Filter out all results below 65% similarity
-    const matchedVectors = response2.filter((result) => result.score >= 0.65);
+    // Filter out all results below 86% similarity
+
+    const matchedVectors = response2.filter((result) => result.score >= 0.86);
     const matchedUsers = await Promise.all(
       matchedVectors?.map(async (item) => {
         const user = await User.findOne({ _id: item?.payload?.userId });
