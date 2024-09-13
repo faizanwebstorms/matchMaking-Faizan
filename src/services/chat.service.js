@@ -575,7 +575,7 @@ const getVectorMatchedUsers = async (user) => {
       top: 1000, // A high number to ensure you get all possible matches
       params: {
         similarity: "cosine",
-        threshold: 0.86, // Set the threshold to 0.86 for 86% similarity
+        threshold: 0.8, // Set the threshold to 0.86 for 86% similarity
       },
       filter: {
         must_not: [
@@ -591,7 +591,7 @@ const getVectorMatchedUsers = async (user) => {
     });
     // Filter out all results below 86% similarity
 
-    const matchedVectors = response2.filter((result) => result.score >= 0.86);
+    const matchedVectors = response2.filter((result) => result.score >= 0.8);
     const matchedUsers = await Promise.all(
       matchedVectors?.map(async (item) => {
         const user = await User.findOne({ _id: item?.payload?.userId });
