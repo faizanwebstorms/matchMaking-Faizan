@@ -547,7 +547,6 @@ const getVectorMatchedUsers = async (user) => {
   //   apiKey: "6lBCirQFqlaBLPtXm6n_rInYNIJyoAMxKiv3syab5dWSuW0AKdWfDQ",
   // });
   console.log("userIdd", user?.id);
-
   try {
     // Step 1: Retrieve the vector for the current user
     const response = await client.scroll(collectionName, {
@@ -610,6 +609,20 @@ const getVectorMatchedUsers = async (user) => {
 const userId = "6640d6074f93fa14043c4210"; // Replace with the specific userId
 // getVectorEmbeddingsForUser(userId);
 
+// Step 2: Delete all points in the questionnaire response collection
+const deleteAllPoints = async () => {
+  try {
+    const response = await client.delete(collectionName, {
+      filter: {}, // Empty filter will match all points
+    });
+
+    console.log("Deleted all points:", response);
+  } catch (error) {
+    console.error("Error deleting points from collection:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   store,
   getMessageByRoomId,
@@ -628,4 +641,5 @@ module.exports = {
   storeEmbeddings,
   storeVectorEmbeddings,
   getVectorMatchedUsers,
+  deleteAllPoints,
 };

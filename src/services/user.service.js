@@ -357,19 +357,21 @@ const findMostMatchedUser = async (
     // });
     const allUsers = usersThroughVectors;
 
-    for (let user of allUsers) {
-      // Calculate match score for each user
-      const matchScore = await calculateMatchScore(
-        user,
-        preference,
-        loggedInUser
-      );
-      // If a valid match score is found, update the best match
-      if (matchScore !== null) {
-        validMatchFound = true;
-        if (matchScore > highestMatchScore) {
-          highestMatchScore = matchScore;
-          bestMatch = user;
+    if (allUsers && allUsers.length) {
+      for (let user of allUsers) {
+        // Calculate match score for each user
+        const matchScore = await calculateMatchScore(
+          user,
+          preference,
+          loggedInUser
+        );
+        // If a valid match score is found, update the best match
+        if (matchScore !== null) {
+          validMatchFound = true;
+          if (matchScore > highestMatchScore) {
+            highestMatchScore = matchScore;
+            bestMatch = user;
+          }
         }
       }
     }
