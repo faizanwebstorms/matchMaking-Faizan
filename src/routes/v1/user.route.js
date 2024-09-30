@@ -123,7 +123,7 @@ module.exports = router;
  *               age:
  *                  type: integer
  *               height:
- *                  type: float
+ *                  type: string
  *               weight:
  *                  type: float
  *               city:
@@ -149,7 +149,7 @@ module.exports = router;
  *               firstName: update name
  *               lastName: update last name
  *               age: 22
- *               height: 24.5
+ *               height: 6'8"
  *               weight: 54.6
  *               city: Lahore
  *               postalCode: "20456"

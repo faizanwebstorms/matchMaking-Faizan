@@ -5,7 +5,7 @@ const uuid = require("uuid");
 const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 const { toJSON, paginate } = require("./plugins");
 const userConfig = require("../config/user");
-const { pointSchema } = require('./schemas.model');
+const { pointSchema } = require("./schemas.model");
 
 const socialsSchema = mongoose.Schema({
   instagram: String,
@@ -63,7 +63,7 @@ const userSchema = mongoose.Schema(
       type: Number,
     },
     height: {
-      type: Number,
+      type: String,
     },
     weight: {
       type: Number,
@@ -97,7 +97,7 @@ const userSchema = mongoose.Schema(
       type: pointSchema,
     },
     personalityVector: [String],
-    unMatchedUsers: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'User' }],
+    unMatchedUsers: [{ type: mongoose.SchemaTypes.ObjectId, ref: "User" }],
 
     inMatch: {
       type: Boolean,

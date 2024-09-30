@@ -429,28 +429,33 @@ const findByClause = async (filters, multiple = false) => {
 };
 
 /**
- * Caclute BMI and body type
- * @param filters
- * @param multiple
- * @returns {Promise<*>}
+ * Convert height (feet and inches) and weight (pounds) to BMI and determine body type
+ * @param weightInPounds - The weight in pounds
+ * @param heightInFeet - The height as a string, e.g., '5\'8"' for 5 feet 8 inches
+ * @returns {Object} bmi and bodyType
  */
-const calculateBMI = (weight, height) => {
+const calculateBMI = (weightInPounds, heightInFeet) => {
   try {
-    const bmi = weight / (height / 100) ** 2;
+    // Convert weight from pounds to kilograms
+    const weightInKg = weightInPounds * 0.453592;
+
+    // Convert height (feet and inches) to centimeters
+    const [feet, inches] = heightInFeet.split("'").map(Number);
+
+    const heightInCm = feet * 30.48 + inches * 2.54;
+    // Calculate BMI using the metric formula: weight (kg) / [height (m)]^2
+    const bmi = weightInKg / (heightInCm / 100) ** 2;
+
     // Determine body type based on BMI
     let bodyType;
-    switch (true) {
-      case bmi < 18.5:
-        return (bodyType = userConfig.bodyType.UNDERWEIGHT);
-
-      case bmi >= 18.5 && bmi < 25:
-        bodyType = userConfig.bodyType.NORMALWEIGHT;
-        break;
-      case bmi >= 25 && bmi < 30:
-        bodyType = userConfig.bodyType.OVERWEIGHT;
-        break;
-      default:
-        bodyType = userConfig.bodyType.OBESE;
+    if (bmi < 18.5) {
+      bodyType = userConfig.bodyType.UNDERWEIGHT;
+    } else if (bmi >= 18.5 && bmi < 25) {
+      bodyType = userConfig.bodyType.NORMALWEIGHT;
+    } else if (bmi >= 25 && bmi < 30) {
+      bodyType = userConfig.bodyType.OVERWEIGHT;
+    } else {
+      bodyType = userConfig.bodyType.OBESE;
     }
 
     return { bmi, bodyType };
