@@ -546,7 +546,7 @@ const getVectorMatchedUsers = async (user) => {
   //   url: "https://804103d3-c981-40ea-9b76-00c9ec1d31d8.europe-west3-0.gcp.cloud.qdrant.io",
   //   apiKey: "6lBCirQFqlaBLPtXm6n_rInYNIJyoAMxKiv3syab5dWSuW0AKdWfDQ",
   // });
-  console.log("userIdd", user?.id);
+
   try {
     // Step 1: Retrieve the vector for the current user
     const response = await client.scroll(collectionName, {
@@ -574,7 +574,7 @@ const getVectorMatchedUsers = async (user) => {
       top: 1000, // A high number to ensure you get all possible matches
       params: {
         similarity: "cosine",
-        threshold: 0.8, // Set the threshold to 0.86 for 86% similarity
+        threshold: 0.65, // Set the threshold to 0.65 for 65% similarity
       },
       filter: {
         must_not: [
@@ -588,9 +588,9 @@ const getVectorMatchedUsers = async (user) => {
       },
       with_payload: true,
     });
-    // Filter out all results below 86% similarity
+    // Filter out all results below 65% similarity
 
-    const matchedVectors = response2.filter((result) => result.score >= 0.8);
+    const matchedVectors = response2.filter((result) => result.score >= 0.65);
     const matchedUsers = await Promise.all(
       matchedVectors?.map(async (item) => {
         const user = await User.findOne({ _id: item?.payload?.userId });
